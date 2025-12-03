@@ -21,30 +21,9 @@
             crossorigin="anonymous"></script>
     <link rel="stylesheet" href="<?= $link->asset('css/styl.css') ?>">
     <script src="<?= $link->asset('js/script.js') ?>"></script>
+
 </head>
 <body>
-<nav class="navbar navbar-expand-sm bg-light">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="<?= $link->url('home.index') ?>">
-            <img src="<?= $link->asset('images/vaiicko_logo.png') ?>" title="<?= App\Configuration::APP_NAME ?>" alt="Framework Logo">
-        </a>
-        <ul class="navbar-nav me-auto">
-            <li class="nav-item">
-                <a class="nav-link" href="<?= $link->url('home.contact') ?>">Contact</a>
-            </li>
-        </ul>
-        <?php if ($user->isLoggedIn()) { ?>
-            <span class="navbar-text">Logged in user: <b><?= $user->getName() ?></b></span>
-            <ul class="navbar-nav ms-auto">
-                <li class="nav-item">
-                    <a class="nav-link" href="<?= $link->url('auth.logout') ?>">Log out</a>
-                </li>
-            </ul>
-        <?php } else { ?>
-
-        <?php } ?>
-    </div>
-</nav>
 <div class="container-fluid mt-3">
     <div class="web-content">
         <?= $contentHTML ?>

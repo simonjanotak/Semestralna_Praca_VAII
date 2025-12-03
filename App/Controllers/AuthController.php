@@ -69,7 +69,6 @@ class AuthController extends BaseController
         $message = $logged === false ? 'Bad username or password' : null;
         return $this->html(compact("message"));
     }
-
     /**
      * Logs out the current user.
      *

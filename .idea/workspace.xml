@@ -1,10 +1,81 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;settings.editor.selected.configurable&quot;: &quot;Errors&quot;
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="3ccddef7-0eb4-421a-b898-a22c0e3fca64" name="Changes" comment="zreparovane">
+      <change afterPath="$PROJECT_DIR$/App/Views/Home/forum.view.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/public/js/login.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/public/js/register.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/App/Controllers/AuthController.php" beforeDir="false" afterPath="$PROJECT_DIR$/App/Controllers/AuthController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/App/Controllers/HomeController.php" beforeDir="false" afterPath="$PROJECT_DIR$/App/Controllers/HomeController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/App/Views/Auth/login.view.php" beforeDir="false" afterPath="$PROJECT_DIR$/App/Views/Auth/login.view.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/App/Views/Home/index.view.php" beforeDir="false" afterPath="$PROJECT_DIR$/App/Views/Home/index.view.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/App/Views/Layouts/root.layout.view.php" beforeDir="false" afterPath="$PROJECT_DIR$/App/Views/Layouts/root.layout.view.php" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ComposerSettings">
+    <execution />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="PHP File" />
+        <option value="JavaScript File" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
+  "lastFilter": {
+    "state": "OPEN",
+    "assignee": "simonjanotak"
   }
-}</component>
+}]]></component>
+  <component name="GithubPullRequestsUISettings"><![CDATA[{
+  "selectedUrlAndAccountId": {
+    "url": "https://github.com/simonjanotak/Semestralna_Praca_VAII.git",
+    "accountId": "24c45b1e-6492-4990-a5ba-08d62b6b777c"
+  }
+}]]></component>
+  <component name="ProjectColorInfo"><![CDATA[{
+  "associatedIndex": 0
+}]]></component>
+  <component name="ProjectId" id="36LV1lSrPakdgER7TdycsDJlXjD" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Docker.docker: Compose Deployment.executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "git-widget-placeholder": "main",
+    "ignore.virus.scanning.warn.message": "true",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "Errors",
+    "vue.rearranger.settings.migration": "true"
+  }
+}]]></component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\simon\PhpstormProjects\Semestralna_Praca_VAII\public\js" />
+    </key>
+  </component>
   <component name="RunManager">
     <configuration default="true" type="docker-deploy" factoryName="docker-compose.yml" temporary="true">
       <deployment type="docker-compose.yml" />
@@ -23,5 +94,40 @@
         <item itemvalue="Docker.docker: Compose Deployment" />
       </list>
     </recent_temporary>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-js-predefined-d6986cc7102b-9c94529fcfe0-JavaScript-PS-252.26199.163" />
+        <option value="bundled-php-predefined-a98d8de5180a-f0a8ef430dfa-com.jetbrains.php.sharedIndexes-PS-252.26199.163" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="3ccddef7-0eb4-421a-b898-a22c0e3fca64" name="Changes" comment="" />
+      <created>1764785625746</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1764785625746</updated>
+      <workItem from="1764785626966" duration="2763000" />
+    </task>
+    <task id="LOCAL-00001" summary="zreparovane">
+      <option name="closed" value="true" />
+      <created>1764785778088</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1764785778088</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="zreparovane" />
+    <option name="LAST_COMMIT_MESSAGE" value="zreparovane" />
   </component>
 </project>

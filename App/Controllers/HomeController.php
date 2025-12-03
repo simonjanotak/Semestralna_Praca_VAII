@@ -41,7 +41,6 @@ class HomeController extends BaseController
     {
         return $this->html();
     }
-
     /**
      * Displays the contact page.
      *
@@ -54,4 +53,9 @@ class HomeController extends BaseController
     {
         return $this->html();
     }
+    public function forum(Request $request): Response
+    {
+        return $this->html();
+    }
+
 }
