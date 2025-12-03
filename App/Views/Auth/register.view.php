@@ -60,20 +60,10 @@ $view->setLayout('auth');
                                            minlength="6">
                                     <div class="invalid-feedback" id="confirmError">Heslá sa nezhodujú.</div>
                                 </div>
-
-                                <div class="col-12">
-                                    <div class="form-check">
-                                        <input id="terms" class="form-check-input" type="checkbox" required>
-                                        <label class="form-check-label" for="terms">Súhlasím s podmienkami</label>
-                                        <div class="invalid-feedback">Musíte súhlasiť s podmienkami.</div>
-                                    </div>
-                                </div>
-
                                 <div class="col-12 d-grid">
                                     <button id="submitBtn" type="submit" class="btn btn-dark btn-lg">Registrovať sa
                                     </button>
                                 </div>
-
                                 <div class="col-12 text-center mt-3">
                                     <a href="login.html" class="btn btn-outline-secondary me-2">Prihlásiť sa</a>
                                     <a href="<?= $link->url('home.index') ?>" class="btn btn-outline-secondary">Späť</a>
@@ -90,3 +80,4 @@ $view->setLayout('auth');
         </div>
     </div>
 </section>
+<script src="<?= $link->asset('js/register.js') ?>"></script>
