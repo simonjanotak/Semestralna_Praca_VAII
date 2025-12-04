@@ -12,9 +12,9 @@
             Domov
         </a>
 
-        <button class="btn btn-orange" type="button" data-bs-toggle="modal" data-bs-target="#addPostModal">
+        <a href="<?= $link->url("post.index") ?>"class="btn btn-orange" title="Pridaj prispevok" aria-label="Pridaj prispevok">
             + Pridať príspevok
-        </button>
+        </a>
     </div>
 </div>
 
@@ -40,38 +40,5 @@
         </div>
     </main>
 </div>
-<div class="modal fade" id="addPostModal" tabindex="-1" aria-labelledby="addPostModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg modal-dialog-centered">
-        <div class="modal-content">
-            <form method="post" action="<?= $link->url('home.post.create') ?>">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="addPostModalLabel">Nový príspevok</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Zavrieť"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="mb-3">
-                        <label for="post-title" class="form-label">Názov</label>
-                        <input id="post-title" name="title" type="text" class="form-control" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="post-category" class="form-label">Kategória</label>
-                        <select id="post-category" name="category" class="form-select" required>
-                            <option value="">Vybrať kategóriu</option>
-                            <option value="tech">Technické problémy</option>
-                            <option value="autoservisy">Autoservisy</option>
-                            <option value="tuning">Tuning a modifikácie</option>
-                        </select>
-                    </div>
-                    <div class="mb-3">
-                        <label for="post-content" class="form-label">Text</label>
-                        <textarea id="post-content" name="content" class="form-control" rows="6" required></textarea>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Zavrieť</button>
-                        <button type="submit" class="btn btn-orange">Vytvoriť príspevok</button>
-                    </div>
-            </form>
-        </div>
-    </div>
-</div>
+
 
