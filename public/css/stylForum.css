@@ -1,0 +1,38 @@
+body{
+    background-color: snow;
+}
+.btn-orange {
+    background-color: #ff6a00;
+    border-color: #ff6a00;
+    color: #fff;
+}
+.btn-orange:hover {
+    background-color: #d35400;
+    border-color: #d35400;
+}
+
+.badge-orange {
+    background-color: #ff6a00;
+    color: #fff;
+}
+
+.card-orange {
+    border: 1px solid rgba(255, 106, 0, 0.12);
+}
+
+.sidebar .list-group-item.active {
+    background-color: #ff6a00 !important;
+    border-color: #ff6a00;
+    color: #fff;
+}
+
+.fab-orange {
+    background-color: #ff6a00;
+    color: #fff;
+    border: none;
+}
+.fab-orange:hover {
+    background-color: #d35400;
+}
+
+

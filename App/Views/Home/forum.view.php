@@ -1,24 +1,44 @@
-<?php
+<?php /** @var \Framework\Support\LinkGenerator $link */ ?>
 
-/** @var \Framework\Support\LinkGenerator $link */
-?>
+<header>
+    <link rel="stylesheet" href="<?= $link->asset('css/stylForum.css') ?>">
+</header>
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h5 class="mb-0">Všetky príspevky</h5>
+
+    <div>
+        <a href="<?= $link->url('home.index') ?>" class="btn btn-outline-secondary me-2" title="Domov" aria-label="Domov">
+            Domov
+        </a>
+
+        <button class="btn btn-orange" type="button" data-bs-toggle="modal" data-bs-target="#addPostModal">
+            + Pridať príspevok
+        </button>
+    </div>
+</div>
 
 <div class="row">
-    <div class="col">
-        <h3>Faculty of Management Science and Informatics</h3>
-        <strong>Address</strong>: Univerzitná 8215/1, 010 26 Žilina, Slovakia<br>
-        <strong>Tel. number</strong>: +421/41 513 4121<br>
+    <aside class="col-md-4 mb-4 sidebar">
+        <div class="card card-orange shadow-sm">
+            <div class="card-body p-2">
+                <h6 class="mb-3">Kategórie</h6>
+                <div class="list-group">
+                    <a class="list-group-item list-group-item-action active" href="#">Všetky príspevky <span class="badge badge-orange float-end">...</span></a>
+                    <a class="list-group-item list-group-item-action" href="#"><span class="me-2">🔧</span>Technické problémy <span class="badge bg-light text-dark float-end">...</span></a>
+                    <a class="list-group-item list-group-item-action" href="#"><span class="me-2">🛠️</span>Autoservisy <span class="badge bg-light text-dark float-end">...</span></a>
+                    <a class="list-group-item list-group-item-action" href="#"><span class="me-2">⚙️</span>Tuning a modifikácie <span class="badge bg-light text-dark float-end">...</span></a>
+                </div>
+            </div>
+        </div>
+    </aside>
 
-        <strong>GPS</strong>: 49°12'6,4"N 18°45'42,6"E
-    </div>
+    <main class="col-md-8">
+        <div class="card card-orange shadow-sm">
+            <div class="card-body">
+
+            </div>
+        </div>
+    </main>
 </div>
-<div class="row mt-3">
-    <div class="col">
-        <iframe width="100%" height="300" src="https://www.openstreetmap.org/export/embed.html?bbox=18.747396469116214%2C49.193792384417996%2C18.776578903198246%2C49.210336337994846&amp;layer=mapnik&amp;marker=49.202065053033984%2C18.761987686157227"></iframe>
-    </div>
-</div>
-<div class="row mt-3">
-    <div class="col">
-        <a href="<?= $link->url("home.index") ?>">Back to main page</a>
-    </div>
-</div>
+

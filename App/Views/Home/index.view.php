@@ -28,7 +28,6 @@
                 </div>
             </div>
             <div class="col-lg-6">
-                <!-- use asset helper -->
                 <img src="<?= $link->asset('images/porsak.png') ?>" alt="auto" class="hero-image">
             </div>
         </div>
