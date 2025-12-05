@@ -5,6 +5,7 @@ namespace App\Controllers;
 use Framework\Core\BaseController;
 use Framework\Http\Request;
 use Framework\Http\Responses\Response;
+use App\Models\Post;
 
 /**
  * Class HomeController
@@ -55,7 +56,9 @@ class HomeController extends BaseController
     }
     public function forum(Request $request): Response
     {
-        return $this->html();
+        // fetch all posts and pass them to the forum view
+        $posts = Post::getAll();
+        return $this->html(['posts' => $posts], 'forum');
     }
 
 }

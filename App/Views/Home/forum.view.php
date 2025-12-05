@@ -4,6 +4,8 @@
     <link rel="stylesheet" href="<?= $link->asset('css/stylForum.css') ?>">
 </header>
 
+
+
 <div class="d-flex justify-content-between align-items-center mb-3">
     <h5 class="mb-0">Všetky príspevky</h5>
 
@@ -12,7 +14,7 @@
             Domov
         </a>
 
-        <a href="<?= $link->url("post.index") ?>"class="btn btn-orange" title="Pridaj prispevok" aria-label="Pridaj prispevok">
+        <a href="<?= $link->url('post.add') ?>" class="btn btn-orange" title="Pridaj prispevok" aria-label="Pridaj prispevok">
             + Pridať príspevok
         </a>
     </div>
@@ -36,9 +38,39 @@
         <div class="card card-orange shadow-sm">
             <div class="card-body">
 
+                <?php /** @var \App\Models\Post[] $posts */ ?>
+                <?php if (!empty($posts)): ?>
+                    <?php foreach ($posts as $post): ?>
+                        <article class="mb-4 p-3 border rounded bg-white shadow-sm">
+                            <div class="d-flex justify-content-between align-items-start">
+                                <h5 class="mb-1 text-orange"><?= htmlspecialchars($post->getTitle()) ?></h5>
+                                <div class="btn-group btn-group-sm" role="group" aria-label="Actions">
+                                    <a href="<?= $link->url('post.edit', ['id' => $post->getId()]) ?>" class="btn btn-outline-secondary" title="Upraviť">Upraviť</a>
+                                    <form method="post" action="<?= $link->url('post.delete') ?>" style="display:inline;margin:0;">
+                                        <input type="hidden" name="id" value="<?= htmlspecialchars((string)$post->getId()) ?>">
+                                        <button type="submit" class="btn btn-danger" onclick="return confirm('Naozaj zmazať tento príspevok?');">Zmazať</button>
+                                    </form>
+                                </div>
+                            </div>
+
+                            <div class="text-muted small mb-2">
+                                <?= htmlspecialchars($post->getCategory()) ?> • <?= htmlspecialchars($post->getCreatedAt() ? date('j.n.Y', strtotime($post->getCreatedAt())) : date('j.n.Y')) ?>
+                            </div>
+
+                            <?php if ($post->getPicture()): ?>
+                                <div class="mb-2">
+                                    <img src="<?= htmlspecialchars($post->getPicture()) ?>" alt="" class="img-fluid">
+                                </div>
+                            <?php endif; ?>
+
+                            <p><?= nl2br(htmlspecialchars($post->getContent())) ?></p>
+                        </article>
+                    <?php endforeach; ?>
+                <?php else: ?>
+                    <p class="text-muted">Zatiaľ tu nie sú žiadne príspevky.</p>
+                <?php endif; ?>
+
             </div>
         </div>
     </main>
 </div>
-
-

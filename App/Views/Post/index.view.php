@@ -1,37 +1,82 @@
 <?php
 /** @var Framework\Support\LinkGenerator $link */
+/** @var array|null|\App\Models\Post $post  // ['title' => string, 'category' => string, 'content' => string, 'picture' => string, 'id' => int] */
+
+$titleVal = '';
+$categoryVal = '';
+$contentVal = '';
+$pictureVal = '';
+$idVal = null;
+
+
+if (is_array($post)) {
+$titleVal = $post['title'] ?? '';
+$categoryVal = $post['category'] ?? '';
+$contentVal = $post['content'] ?? '';
+$pictureVal = $post['picture'] ?? '';
+$idVal = $post['id'] ?? null;
+} elseif ($post instanceof \App\Models\Post) {
+    $titleVal = $post->getTitle() ?? '';
+    $categoryVal = $post->getCategory() ?? '';
+    $contentVal = $post->getContent() ?? '';
+    $pictureVal = $post->getPicture() ?? '';
+    $idVal = $post->getId();
+}
+$formAction = $idVal !== null ? $link->url('post.save') : $link->url('post.save');
 ?>
+
+<?php if (!empty($errors)) { ?>
+    <div class="alert alert-danger">
+        <ul>
+            <?php foreach ($errors as $err) { ?>
+                <li><?= htmlspecialchars($err) ?></li>
+            <?php } ?>
+        </ul>
+    </div>
+<?php } ?>
+
 <header>
     <link rel="stylesheet" href="<?= $link->asset('css/stylForum.css') ?>">
+</header>
+
 <div class="container mt-4">
-    <h2>Nový príspevok</h2>
-    <form method="post" action="<?= $link->url('home.post.create') ?>" enctype="multipart/form-data">
+    <h2><?= $idVal ? 'Upraviť príspevok' : 'Pridať príspevok' ?></h2>
+    <form method="post" action="<?= $formAction ?>" enctype="multipart/form-data">
+        <?php if ($idVal !== null) { ?>
+            <input type="hidden" name="id" value="<?= htmlspecialchars((string)$idVal) ?>">
+        <?php } ?>
+
         <div class="mb-3">
             <label for="post-title" class="form-label">Názov</label>
-            <input id="post-title" name="title" type="text" class="form-control" required>
+            <input id="post-title" name="title" type="text" class="form-control" required
+                   value="<?= htmlspecialchars($titleVal) ?>">
         </div>
 
         <div class="mb-3">
             <label for="post-category" class="form-label">Kategória</label>
             <select id="post-category" name="category" class="form-select" required>
                 <option value="">Vybrať kategóriu</option>
-                <option value="tech">Technické problémy</option>
-                <option value="autoservisy">Autoservisy</option>
-                <option value="tuning">Tuning a modifikácie</option>
+                <option value="tech" <?= $categoryVal === 'tech' ? 'selected' : '' ?>>Technické problémy</option>
+                <option value="autoservisy" <?= $categoryVal === 'autoservisy' ? 'selected' : '' ?>>Autoservisy</option>
+                <option value="tuning" <?= $categoryVal === 'tuning' ? 'selected' : '' ?>>Tuning a modifikácie</option>
             </select>
         </div>
 
         <div class="mb-3">
             <label for="post-content" class="form-label">Text</label>
-            <textarea id="post-content" name="content" class="form-control" rows="6" required></textarea>
+            <textarea id="post-content" name="content" class="form-control" rows="6" required><?= htmlspecialchars($contentVal) ?></textarea>
         </div>
 
         <div class="mb-3">
             <label for="post-picture" class="form-label">Obrázok (voliteľné)</label>
-            <input id="post-picture" name="picture" type="file" class="form-control">
+            <!-- file input name must match controller expectation: picture_file -->
+            <input id="post-picture" name="picture_file" type="file" class="form-control">
+            <?php if ($pictureVal) { ?>
+                <small>Aktuálny obrázok: <a href="<?= htmlspecialchars($pictureVal) ?>" target="_blank">zobraziť</a></small>
+            <?php } ?>
         </div>
 
-        <button type="submit" class="btn btn-orange">Vytvoriť príspevok</button>
-        <a href="<?= $link->url('home.index') ?>" class="btn btn-outline-secondary">Zrušiť</a>
+        <button type="submit" class="btn btn-orange"><?= $idVal ? 'Uložiť zmeny' : 'Vytvoriť príspevok' ?></button>
+        <a href="<?= $link->url('home.forum') ?>" class="btn btn-outline-secondary">Zrušiť</a>
     </form>
 </div>
