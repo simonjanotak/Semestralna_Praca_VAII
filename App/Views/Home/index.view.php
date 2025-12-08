@@ -28,7 +28,7 @@
                 </div>
             </div>
             <div class="col-lg-6">
-                <img src="<?= $link->asset('images/porsak.png') ?>" alt="auto" class="hero-image">
+                <img src="<?= $link->asset('images/porsak2.png') ?>" alt="auto" class="hero-image">
             </div>
         </div>
     </div>

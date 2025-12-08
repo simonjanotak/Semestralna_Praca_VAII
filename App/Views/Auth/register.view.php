@@ -75,7 +75,7 @@ $view->setLayout('auth');
                 </div>
             </div>
             <div class="col-lg-4 d-none d-lg-flex justify-content-center">
-                <img src="images/porsak.png" alt="auto" class="img-fluid" style="max-height:260px; opacity:0.95;">
+                <img src="images/porsak2.png" alt="auto" class="img-fluid" style="max-height:260px; opacity:0.95;">
             </div>
         </div>
     </div>
