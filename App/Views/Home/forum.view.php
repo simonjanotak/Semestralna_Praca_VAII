@@ -44,8 +44,8 @@
                         <article class="mb-4 p-3 border rounded bg-white shadow-sm">
                             <div class="d-flex justify-content-between align-items-start">
                                 <h5 class="mb-1 text-orange"><?= htmlspecialchars($post->getTitle()) ?></h5>
-                                <div class="btn-group btn-group-sm" role="group" aria-label="Actions">
-                                    <a href="<?= $link->url('post.edit', ['id' => $post->getId()]) ?>" class="btn btn-outline-secondary" title="Upraviť">Upraviť</a>
+                                <div class="btn-group btn-group-sm me-3" role="group" aria-label="Actions">
+                                    <a href="<?= $link->url('post.edit', ['id' => $post->getId()]) ?>" class="btn btn-success me-1" title="Upraviť">Upraviť</a>
                                     <form method="post" action="<?= $link->url('post.delete') ?>" style="display:inline;margin:0;">
                                         <input type="hidden" name="id" value="<?= htmlspecialchars((string)$post->getId()) ?>">
                                         <button type="submit" class="btn btn-danger" onclick="return confirm('Naozaj zmazať tento príspevok?');">Zmazať</button>

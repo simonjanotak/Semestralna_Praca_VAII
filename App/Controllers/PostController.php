@@ -11,17 +11,13 @@ class PostController extends BaseController
     // Zobrazenie formulára na pridanie nového príspevku
     public function add(Request $request): Response
     {
-        return $this->html([
-            'post' => null,
-            'errors' => [],
-        ], 'add');
+        $view = $this->preparePostData(null, []);
+        return $this->html(['post' => $view['post'], 'errors' => $view['errors']], 'add');
     }
 
-    // Zobrazenie formulára pre editáciu existujúceho príspevku
     public function edit(Request $request): Response
     {
         $id = $request->get('id') ?? $request->post('id') ?? null;
-
         if ($id === null) {
             return $this->redirect($this->url('post.index'));
         }
@@ -31,10 +27,33 @@ class PostController extends BaseController
             return $this->redirect($this->url('post.index'));
         }
 
-        return $this->html([
-            'post' => $post,
-            'errors' => [],
-        ], 'add');
+        $view = $this->preparePostData($post, []);
+        return $this->html(['post' => $view['post'], 'errors' => $view['errors']], 'edit');
+    }
+
+    private function preparePostData($post, array $errors): array
+    {
+        $postArr = [
+            'title' => '',
+            'category' => '',
+            'content' => '',
+            'picture' => '',
+            'id' => null,
+        ];
+
+        if (is_array($post)) {
+            $postArr = array_merge($postArr, $post);
+        } elseif ($post instanceof \App\Models\Post) {
+            $postArr = [
+                'title' => $post->getTitle() ?? '',
+                'category' => $post->getCategory() ?? '',
+                'content' => $post->getContent() ?? '',
+                'picture' => $post->getPicture() ?? '',
+                'id' => $post->getId(),
+            ];
+        }
+
+        return ['post' => $postArr, 'errors' => $errors];
     }
 
     // Uloženie príspevku (pridanie alebo editácia)
@@ -159,7 +178,6 @@ class PostController extends BaseController
         if (trim($category) === '') {
             $errors[] = 'Vyber kategóriu.';
         }
-
         // Voliteľný obrázok: kontrolujeme len ak súbor existuje
         // Use isOk() and getSize() from UploadedFile
         if ($uploaded && method_exists($uploaded, 'isOk') && $uploaded->isOk() && $uploaded->getSize() > 0) {

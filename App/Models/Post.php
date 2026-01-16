@@ -5,7 +5,6 @@ use Framework\Core\Model;
 
 class Post extends Model
 {
-    // override table name used by framework
     protected static ?string $tableName = 'posts';
 
     protected ?int $id = null;

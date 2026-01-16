@@ -1,29 +1,16 @@
+
 <?php
+/** @var array $post  // keys: title, category, content, picture, id */
 /** @var Framework\Support\LinkGenerator $link */
-/** @var array|null|\App\Models\Post $post  // ['title' => string, 'category' => string, 'content' => string, 'picture' => string, 'id' => int] */
 
-$titleVal = '';
-$categoryVal = '';
-$contentVal = '';
-$pictureVal = '';
-$idVal = null;
-
-
-if (is_array($post)) {
 $titleVal = $post['title'] ?? '';
 $categoryVal = $post['category'] ?? '';
 $contentVal = $post['content'] ?? '';
 $pictureVal = $post['picture'] ?? '';
 $idVal = $post['id'] ?? null;
-} elseif ($post instanceof \App\Models\Post) {
-    $titleVal = $post->getTitle() ?? '';
-    $categoryVal = $post->getCategory() ?? '';
-    $contentVal = $post->getContent() ?? '';
-    $pictureVal = $post->getPicture() ?? '';
-    $idVal = $post->getId();
-}
 $formAction = $idVal !== null ? $link->url('post.save') : $link->url('post.save');
 ?>
+
 
 <?php if (!empty($errors)) { ?>
     <div class="alert alert-danger">

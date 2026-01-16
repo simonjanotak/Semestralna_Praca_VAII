@@ -4,6 +4,4 @@
 /** @var Framework\Support\LinkGenerator $link */
 
 ?>
-    <h2>Uprav prispevok</h2>
-
 <?php include __DIR__ . '/index.view.php';
