@@ -87,21 +87,7 @@ class PostController extends BaseController
         // Upload obrázka
         if ($pictureFile && $pictureFile->isOk() && $pictureFile->getSize() > 0) {
 
-            $uploadDir = dirname(__DIR__, 3) . '/public/uploads/';
-
-            if (!is_dir($uploadDir)) {
-                if (!@mkdir($uploadDir, 0755, true)) {
-                    $postData = [
-                        'id' => $id,
-                        'title' => $title,
-                        'category' => $category,
-                        'content' => $content,
-                    ];
-                    $errors = ['Nepodarilo sa vytvoriť priečinok pre nahrávanie súborov. Skontrolujte práva na serveri.'];
-                    return $this->html(['post' => $postData, 'errors' => $errors], 'add');
-                }
-            }
-
+            $uploadDir = dirname(__DIR__, 3) . '/html/public/uploads/';
             $ext = pathinfo($pictureFile->getName(), PATHINFO_EXTENSION) ?: 'jpg';
             $filename = 'img_' . uniqid() . '.' . $ext;
             $destination = $uploadDir . $filename;

@@ -4,13 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="3ccddef7-0eb4-421a-b898-a22c0e3fca64" name="Changes" comment="spravny obrazok">
+    <list default="true" id="3ccddef7-0eb4-421a-b898-a22c0e3fca64" name="Changes" comment="upratanie logiky do kontrolera">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/App/Controllers/PostController.php" beforeDir="false" afterPath="$PROJECT_DIR$/App/Controllers/PostController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/App/Models/Post.php" beforeDir="false" afterPath="$PROJECT_DIR$/App/Models/Post.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/App/Views/Home/forum.view.php" beforeDir="false" afterPath="$PROJECT_DIR$/App/Views/Home/forum.view.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/App/Views/Post/edit.view.php" beforeDir="false" afterPath="$PROJECT_DIR$/App/Views/Post/edit.view.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/App/Views/Post/index.view.php" beforeDir="false" afterPath="$PROJECT_DIR$/App/Views/Post/index.view.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -121,7 +117,7 @@
       <workItem from="1765284789305" duration="927000" />
       <workItem from="1765661691220" duration="294000" />
       <workItem from="1766164783156" duration="7000" />
-      <workItem from="1768576008345" duration="3064000" />
+      <workItem from="1768576008345" duration="3967000" />
     </task>
     <task id="LOCAL-00001" summary="zreparovane">
       <option name="closed" value="true" />
@@ -195,7 +191,15 @@
       <option name="project" value="LOCAL" />
       <updated>1765186851809</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="upratanie logiky do kontrolera">
+      <option name="closed" value="true" />
+      <created>1768579205844</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1768579205844</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -211,6 +215,7 @@
     <MESSAGE value="pridavanie mazanie edit prispevkov" />
     <MESSAGE value="aa" />
     <MESSAGE value="spravny obrazok" />
-    <option name="LAST_COMMIT_MESSAGE" value="spravny obrazok" />
+    <MESSAGE value="upratanie logiky do kontrolera" />
+    <option name="LAST_COMMIT_MESSAGE" value="upratanie logiky do kontrolera" />
   </component>
 </project>
