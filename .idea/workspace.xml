@@ -4,9 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="3ccddef7-0eb4-421a-b898-a22c0e3fca64" name="Changes" comment="upratanie logiky do kontrolera">
+    <list default="true" id="3ccddef7-0eb4-421a-b898-a22c0e3fca64" name="Changes" comment="fixnuty upload obrazka">
+      <change afterPath="$PROJECT_DIR$/App/Models/User.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker/sql/create_users.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/App/Controllers/PostController.php" beforeDir="false" afterPath="$PROJECT_DIR$/App/Controllers/PostController.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -73,7 +75,12 @@
       <recent name="C:\Users\simon\PhpstormProjects\Semestralna_Praca_VAII\public\js" />
     </key>
   </component>
-  <component name="RunManager">
+  <component name="RunManager" selected="Database Script.create_users.sql">
+    <configuration name="create_users.sql" type="DatabaseScript" editBeforeRun="true" temporary="true" nameIsGenerated="true">
+      <script-file value="$PROJECT_DIR$/docker/sql/create_users.sql" />
+      <script-mode>FILE</script-mode>
+      <method v="2" />
+    </configuration>
     <configuration default="true" type="docker-deploy" factoryName="docker-compose.yml" temporary="true">
       <deployment type="docker-compose.yml">
         <settings />
@@ -90,6 +97,7 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Database Script.create_users.sql" />
         <item itemvalue="Docker.docker: Compose Deployment" />
       </list>
     </recent_temporary>
@@ -117,7 +125,8 @@
       <workItem from="1765284789305" duration="927000" />
       <workItem from="1765661691220" duration="294000" />
       <workItem from="1766164783156" duration="7000" />
-      <workItem from="1768576008345" duration="3967000" />
+      <workItem from="1768576008345" duration="5099000" />
+      <workItem from="1768639121687" duration="2934000" />
     </task>
     <task id="LOCAL-00001" summary="zreparovane">
       <option name="closed" value="true" />
@@ -199,7 +208,15 @@
       <option name="project" value="LOCAL" />
       <updated>1768579205844</updated>
     </task>
-    <option name="localTasksCounter" value="11" />
+    <task id="LOCAL-00011" summary="fixnuty upload obrazka">
+      <option name="closed" value="true" />
+      <created>1768580083685</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1768580083685</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -216,6 +233,7 @@
     <MESSAGE value="aa" />
     <MESSAGE value="spravny obrazok" />
     <MESSAGE value="upratanie logiky do kontrolera" />
-    <option name="LAST_COMMIT_MESSAGE" value="upratanie logiky do kontrolera" />
+    <MESSAGE value="fixnuty upload obrazka" />
+    <option name="LAST_COMMIT_MESSAGE" value="fixnuty upload obrazka" />
   </component>
 </project>
