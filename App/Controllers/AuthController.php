@@ -47,16 +47,49 @@ class AuthController extends BaseController
      */
     public function login(Request $request): Response
     {
-        $logged = null;
+        $message = null;
         if ($request->hasValue('submit')) {
-            $logged = $this->app->getAuthenticator()->login($request->value('username'), $request->value('password'));
-            if ($logged) {
-                return $this->redirect($this->url("admin.index"));
+            $email = trim((string)$request->value('email'));
+            $password = (string)$request->value('password');
+
+            if ($email === '' || $password === '') {
+                $message = 'Zadajte email a heslo.';
+                return $this->html(compact('message'));
             }
+
+            $user = User::findByEmail($email);
+            if ($user === null) {
+                $message = 'Nesprávny email alebo heslo.';
+                return $this->html(compact('message'));
+            }
+
+            // Normal check: verify hashed password
+            if ($user->verifyPassword($password)) {
+                // ok
+            } else {
+                // Fallback for legacy/hand-inserted plaintext passwords in DB:
+                // Detect common bcrypt prefix. If stored value does NOT look like a bcrypt hash,
+                // and equals the provided password, upgrade it to a proper hash and allow login.
+                $stored = $user->getPasswordHash();
+                $looksHashed = (bool)preg_match('/^\$2[aby]\$[0-9]{2}\$/', $stored);
+                if (!$looksHashed && $stored !== '' && hash_equals((string)$stored, $password)) {
+                    // Re-hash and save securely so next login uses password_verify
+                    $user->setPassword($password);
+                    try { $user->save(); } catch (\Throwable $e) { /* ignore save error, continue to login */ }
+                } else {
+                    $message = 'Nesprávny email alebo heslo.';
+                    return $this->html(compact('message'));
+                }
+            }
+            // Successful login: create identity and store in session
+            $identity = new UserIdentity((int)$user->getId(), $user->getUsername(), $user->getRole(), $user->getEmail());
+            $this->app->getSession()->set(Configuration::IDENTITY_SESSION_KEY, $identity);
+
+            // redirect to forum/home
+            return $this->redirect($this->url('home.forum'));
         }
 
-        $message = $logged === false ? 'Bad username or password' : null;
-        return $this->html(compact("message"));
+        return $this->html(compact('message'));
     }
     public function register(Request $request): Response
     {

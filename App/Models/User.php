@@ -67,4 +67,26 @@ class User extends Model
         if ($this->id === null) return [];
         return Post::getAll('user_id = ?', [$this->id]);
     }
+
+    /**
+     * Find user by email. Returns User instance or null.
+     * @param string $email
+     * @return static|null
+     */
+    public static function findByEmail(string $email): ?static
+    {
+        $items = static::getAll('email = ?', [$email], null, 1);
+        return $items[0] ?? null;
+    }
+
+    /**
+     * Find user by username. Returns User instance or null.
+     * @param string $username
+     * @return static|null
+     */
+    public static function findByUsername(string $username): ?static
+    {
+        $items = static::getAll('username = ?', [$username], null, 1);
+        return $items[0] ?? null;
+    }
 }

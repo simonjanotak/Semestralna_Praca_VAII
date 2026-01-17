@@ -4,7 +4,19 @@
     <link rel="stylesheet" href="<?= $link->asset('css/stylForum.css') ?>">
 </header>
 
-
+<?php
+// Display flash message from session (set by controllers) and then clear it
+if (session_status() !== PHP_SESSION_ACTIVE) { @session_start(); }
+if (!empty($_SESSION['flash_message'])): ?>
+    <div class="container-fluid">
+        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+            <?= htmlspecialchars($_SESSION['flash_message']) ?>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    </div>
+    <?php unset($_SESSION['flash_message']);
+endif;
+?>
 
 <div class="row align-items-center mb-3">
     <div class="col-12 col-md-6">

@@ -12,6 +12,11 @@ class PostController extends BaseController
     // Zobrazenie formulára na pridanie nového príspevku
     public function add(Request $request): Response
     {
+        $currentUserId = $this->getCurrentUserId();
+        if ($currentUserId === null) {
+            try { $this->app->getSession()->set('flash_message', 'Musíte byť prihlásený, aby ste mohli pridávať príspevky.'); } catch (\Throwable $e) {}
+            return $this->redirect($this->url('home.forum'));
+        }
         $view = $this->preparePostData(null, []);
         return $this->html(['post' => $view['post'], 'errors' => $view['errors']], 'add');
     }
@@ -32,7 +37,9 @@ class PostController extends BaseController
         $currentUserId = $this->getCurrentUserId();
         $isAdmin = $this->isCurrentUserAdmin();
         if (!$isAdmin && ($currentUserId === null || $post->getUserId() !== $currentUserId)) {
-            return $this->redirect($this->url('post.index'));
+            // set flash message and redirect to forum
+            try { $this->app->getSession()->set('flash_message', 'Nemáte oprávnenie upravovať tento príspevok.'); } catch (\Throwable $e) {}
+            return $this->redirect($this->url('home.forum'));
         }
 
         $view = $this->preparePostData($post, []);
@@ -148,7 +155,9 @@ class PostController extends BaseController
         $currentUserId = $this->getCurrentUserId();
         $isAdmin = $this->isCurrentUserAdmin();
         if (!$isAdmin && ($currentUserId === null || $post->getUserId() !== $currentUserId)) {
-            return $this->redirect($this->url('post.index'));
+            // set flash message and redirect to forum
+            try { $this->app->getSession()->set('flash_message', 'Nemáte oprávnenie zmazať tento príspevok.'); } catch (\Throwable $e) {}
+            return $this->redirect($this->url('home.forum'));
         }
 
         // Odstráni lokálny obrázok, ak existuje

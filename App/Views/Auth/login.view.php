@@ -22,7 +22,11 @@ $view->setLayout('auth');
                             <p class="text-muted small mb-3">Prihláste sa do svojho účtu na PitStop.sk</p>
                         </div>
 
-                        <form class="needs-validation" novalidate method="post" action="#">
+                        <form class="needs-validation" novalidate method="post" action="<?= $link->url('auth.login') ?>">
+                            <input type="hidden" name="submit" value="1">
+                            <?php if (!empty($message)): ?>
+                                <div class="alert alert-danger"><?= $message ?></div>
+                            <?php endif; ?>
                             <div class="mb-3">
                                 <label for="email" class="form-label">Email</label>
                                 <input id="email" name="email" type="email" class="form-control" placeholder="you@example.com" required>
