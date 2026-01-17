@@ -6,11 +6,17 @@
 
 
 
-<div class="d-flex justify-content-between align-items-center mb-3">
-    <h5 class="mb-0">Všetky príspevky</h5>
+<div class="row align-items-center mb-3">
+    <div class="col-12 col-md-6">
+        <h5 class="mb-0">Všetky príspevky</h5>
+    </div>
+    <div class="col-12 col-md-6 text-md-end mt-2 mt-md-0">
+        <!-- small-screen toggle to show/hide sidebar categories -->
+        <button class="btn btn-outline-secondary d-md-none me-2" type="button" data-bs-toggle="collapse" data-bs-target="#forumSidebar" aria-expanded="false" aria-controls="forumSidebar">
+            Kategórie
+        </button>
 
-    <div>
-        <a href="<?= $link->url('home.index') ?>" class="btn btn-outline-secondary me-2" title="Domov" aria-label="Domov">
+        <a href="<?= $link->url('home.index') ?>" class="btn btn-outline-secondary me-2 d-none d-md-inline" title="Domov" aria-label="Domov">
             Domov
         </a>
 
@@ -21,19 +27,23 @@
 </div>
 
 <div class="row">
-    <aside class="col-md-4 mb-4 sidebar">
-        <div class="card card-orange shadow-sm">
-            <div class="card-body p-2">
-                <h6 class="mb-3">Kategórie</h6>
-                <div class="list-group">
-                    <a class="list-group-item list-group-item-action active" href="#">Všetky príspevky <span class="badge badge-orange float-end">...</span></a>
-                    <a class="list-group-item list-group-item-action" href="#"><span class="me-2">🔧</span>Technické problémy <span class="badge bg-light text-dark float-end">...</span></a>
-                    <a class="list-group-item list-group-item-action" href="#"><span class="me-2">🛠️</span>Autoservisy <span class="badge bg-light text-dark float-end">...</span></a>
-                    <a class="list-group-item list-group-item-action" href="#"><span class="me-2">⚙️</span>Tuning a modifikácie <span class="badge bg-light text-dark float-end">...</span></a>
+    <div class="col-md-4 mb-4">
+        <div class="collapse d-md-block" id="forumSidebar">
+            <aside class="sidebar">
+                <div class="card card-orange shadow-sm">
+                    <div class="card-body p-2">
+                        <h6 class="mb-3">Kategórie</h6>
+                        <div class="list-group">
+                            <a class="list-group-item list-group-item-action active" href="#">Všetky príspevky <span class="badge badge-orange float-end">...</span></a>
+                            <a class="list-group-item list-group-item-action" href="#"><span class="me-2">🔧</span>Technické problémy <span class="badge bg-light text-dark float-end">...</span></a>
+                            <a class="list-group-item list-group-item-action" href="#"><span class="me-2">🛠️</span>Autoservisy <span class="badge bg-light text-dark float-end">...</span></a>
+                            <a class="list-group-item list-group-item-action" href="#"><span class="me-2">⚙️</span>Tuning a modifikácie <span class="badge bg-light text-dark float-end">...</span></a>
+                        </div>
+                    </div>
                 </div>
-            </div>
+            </aside>
         </div>
-    </aside>
+    </div>
     <main class="col-md-8">
         <div class="card card-orange shadow-sm">
             <div class="card-body">
@@ -42,14 +52,18 @@
                 <?php if (!empty($posts)): ?>
                     <?php foreach ($posts as $post): ?>
                         <article class="mb-4 p-3 border rounded bg-white shadow-sm">
-                            <div class="d-flex justify-content-between align-items-start">
-                                <h5 class="mb-1 text-orange"><?= htmlspecialchars($post->getTitle()) ?></h5>
-                                <div class="btn-group btn-group-sm me-3" role="group" aria-label="Actions">
-                                    <a href="<?= $link->url('post.edit', ['id' => $post->getId()]) ?>" class="btn btn-success me-1" title="Upraviť">Upraviť</a>
-                                    <form method="post" action="<?= $link->url('post.delete') ?>" style="display:inline;margin:0;">
-                                        <input type="hidden" name="id" value="<?= htmlspecialchars((string)$post->getId()) ?>">
-                                        <button type="submit" class="btn btn-danger" onclick="return confirm('Naozaj zmazať tento príspevok?');">Zmazať</button>
-                                    </form>
+                            <div class="row g-2 align-items-start">
+                                <div class="col-12 col-md">
+                                    <h5 class="mb-1 text-orange"><?= htmlspecialchars($post->getTitle()) ?></h5>
+                                </div>
+                                <div class="col-12 col-md-auto text-md-end">
+                                    <div class="btn-group btn-group-sm me-3" role="group" aria-label="Actions">
+                                        <a href="<?= $link->url('post.edit', ['id' => $post->getId()]) ?>" class="btn btn-success me-1 rounded" title="Upraviť">Upraviť</a>
+                                        <form method="post" action="<?= $link->url('post.delete') ?>" style="display:inline;margin:0;">
+                                            <input type="hidden" name="id" value="<?= htmlspecialchars((string)$post->getId()) ?>">
+                                            <button type="submit" class="btn btn-danger rounded" onclick="return confirm('Naozaj zmazať tento príspevok?');">Zmazať</button>
+                                        </form>
+                                    </div>
                                 </div>
                             </div>
 

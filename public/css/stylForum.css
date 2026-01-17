@@ -18,6 +18,7 @@ body{
 
 .card-orange {
     border: 1px solid rgba(255, 106, 0, 0.12);
+    border-radius: 10px !important;
 }
 
 .sidebar .list-group-item.active {
@@ -25,7 +26,10 @@ body{
     border-color: #ff6a00;
     color: #fff;
 }
-
+.btn-success.me-1{
+    /* fix: correct selector syntax and increase specificity so Bootstrap doesn't override it */
+    border-radius: 10px !important;
+}
 .fab-orange {
     background-color: #ff6a00;
     color: #fff;
@@ -33,6 +37,11 @@ body{
 }
 .fab-orange:hover {
     background-color: #d35400;
+}
+
+/* add rounded corners for orange-styled cards and buttons (targeted, minimal use of !important) */
+.btn-orange, .btn-register, .btn-success {
+    border-radius: 8px !important;
 }
 
 .empty-cta {
@@ -43,4 +52,8 @@ body{
     flex-direction: column;
     gap: 12px;
 }
+
+
+
+
 

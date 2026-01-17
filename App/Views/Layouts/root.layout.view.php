@@ -24,6 +24,20 @@
 
 </head>
 <body>
+<nav class="navbar navbar-expand-lg navbar-light bg-light mb-3">
+    <div class="container-fluid">
+        <div class="d-flex ms-auto">
+            <?php if (isset($user) && $user->isLoggedIn()): ?>
+                <div class="me-3 align-self-center">Prihlásený: <strong><?= htmlspecialchars($user->getName() ?? '') ?></strong></div>
+                <form method="post" action="<?= $link->url('auth.logout') ?>" style="margin:0;">
+                    <button type="submit" class="btn btn-outline-secondary btn-sm">Odhlásiť sa</button>
+                </form>
+            <?php else: ?>
+
+            <?php endif; ?>
+         </div>
+     </div>
+ </nav>
 <div class="container-fluid mt-3">
     <div class="web-content">
         <?= $contentHTML ?>
