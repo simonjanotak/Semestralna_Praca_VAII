@@ -22,20 +22,17 @@ $view->setLayout('auth');
                             <p class="text-muted small mb-3">Vytvorte si účet na PitStop.sk</p>
                         </div>
 
-                        <form id="registerForm" class="needs-validation" novalidate method="post" action="#">
+                        <form id="registerForm" class="needs-validation" novalidate method="post" action="<?= $link->url('auth.register') ?>">
+                            <input type="hidden" name="submit" value="1">
+                            <?php if (!empty($message)): ?>
+                                <div class="alert alert-danger"><?= $message ?></div>
+                            <?php endif; ?>
                             <div class="row g-3">
-                                <div class="col-md-6">
-                                    <label for="firstName" class="form-label">Meno</label>
-                                    <input id="firstName" name="firstName" type="text" class="form-control"
-                                           placeholder="Ján" required>
-                                    <div class="invalid-feedback">Zadajte svoje meno.</div>
-                                </div>
-
-                                <div class="col-md-6">
-                                    <label for="lastName" class="form-label">Priezvisko</label>
-                                    <input id="lastName" name="lastName" type="text" class="form-control"
-                                           placeholder="Novák" required>
-                                    <div class="invalid-feedback">Zadajte svoje priezvisko.</div>
+                                <div class="col-12">
+                                    <label for="username" class="form-label">Užívateľské meno</label>
+                                    <input id="username" name="username" type="text" class="form-control"
+                                           placeholder="petr123" required minlength="3">
+                                    <div class="invalid-feedback">Zadajte užívateľské meno (aspoň 3 znaky).</div>
                                 </div>
 
                                 <div class="col-12">

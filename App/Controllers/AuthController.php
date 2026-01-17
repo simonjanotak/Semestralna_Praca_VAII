@@ -8,6 +8,8 @@ use Framework\Core\BaseController;
 use Framework\Http\Request;
 use Framework\Http\Responses\Response;
 use Framework\Http\Responses\ViewResponse;
+use App\Models\User;
+use Framework\Auth\UserIdentity;
 
 /**
  * Class AuthController
@@ -58,16 +60,55 @@ class AuthController extends BaseController
     }
     public function register(Request $request): Response
     {
-        $logged = null;
+        $message = null;
         if ($request->hasValue('submit')) {
-            $logged = $this->app->getAuthenticator()->login($request->value('username'), $request->value('password'));
-            if ($logged) {
-                return $this->redirect($this->url("admin.index"));
+            $username = trim((string)$request->value('username'));
+            $email = trim((string)$request->value('email'));
+            $password = (string)$request->value('password');
+            $passwordConfirm = (string)$request->value('passwordConfirm');
+
+            $errors = [];
+            // basic validation
+            if ($username === '' || mb_strlen($username) < 3) {
+                $errors[] = 'Username musí obsahovať aspoň 3 znaky.';
             }
+            if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                $errors[] = 'Neplatný e-mail.';
+            }
+            if ($password === '' || mb_strlen($password) < 6) {
+                $errors[] = 'Heslo musí obsahovať aspoň 6 znakov.';
+            }
+            if ($password !== $passwordConfirm) {
+                $errors[] = 'Heslá sa nezhodujú.';
+            }
+
+            // Unique checks
+            if (User::getCount('username = ?', [$username]) > 0) {
+                $errors[] = 'Užívateľské meno už existuje.';
+            }
+            if (User::getCount('email = ?', [$email]) > 0) {
+                $errors[] = 'E-mail už je registrovaný.';
+            }
+
+            if (empty($errors)) {
+                $user = new User();
+                $user->setUsername($username);
+                $user->setEmail($email);
+                $user->setPassword($password); // hashes with password_hash
+                $user->setRole('user');
+                $user->save();
+
+                // auto-login: create identity and store in session
+                $identity = new UserIdentity((int)$user->getId(), $user->getUsername(), $user->getRole(), $user->getEmail());
+                $this->app->getSession()->set(Configuration::IDENTITY_SESSION_KEY, $identity);
+
+                return $this->redirect($this->url('home.forum'));
+            }
+
+            $message = implode('<br>', $errors);
         }
 
-        $message = $logged === false ? 'Bad username or password' : null;
-        return $this->html(compact("message"));
+        return $this->html(compact('message'));
     }
     /**
      * Logs out the current user.

@@ -4,13 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="3ccddef7-0eb4-421a-b898-a22c0e3fca64" name="Changes" comment="users tabulka a model">
-      <change afterPath="$PROJECT_DIR$/docker/sql/alter_posts_add_user.sql" afterDir="false" />
+    <list default="true" id="3ccddef7-0eb4-421a-b898-a22c0e3fca64" name="Changes" comment="prihlasenie dalsie kroky">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/App/Controllers/PostController.php" beforeDir="false" afterPath="$PROJECT_DIR$/App/Controllers/PostController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/App/Models/Post.php" beforeDir="false" afterPath="$PROJECT_DIR$/App/Models/Post.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/App/Models/User.php" beforeDir="false" afterPath="$PROJECT_DIR$/App/Models/User.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docker/sql/create_posts.sql" beforeDir="false" afterPath="$PROJECT_DIR$/docker/sql/create_posts.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/App/Controllers/AuthController.php" beforeDir="false" afterPath="$PROJECT_DIR$/App/Controllers/AuthController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/App/Views/Auth/register.view.php" beforeDir="false" afterPath="$PROJECT_DIR$/App/Views/Auth/register.view.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -128,7 +125,7 @@
       <workItem from="1765661691220" duration="294000" />
       <workItem from="1766164783156" duration="7000" />
       <workItem from="1768576008345" duration="5099000" />
-      <workItem from="1768639121687" duration="4144000" />
+      <workItem from="1768639121687" duration="5720000" />
     </task>
     <task id="LOCAL-00001" summary="zreparovane">
       <option name="closed" value="true" />
@@ -226,7 +223,15 @@
       <option name="project" value="LOCAL" />
       <updated>1768644037901</updated>
     </task>
-    <option name="localTasksCounter" value="13" />
+    <task id="LOCAL-00013" summary="prihlasenie dalsie kroky">
+      <option name="closed" value="true" />
+      <created>1768645553556</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1768645553556</updated>
+    </task>
+    <option name="localTasksCounter" value="14" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -245,6 +250,7 @@
     <MESSAGE value="upratanie logiky do kontrolera" />
     <MESSAGE value="fixnuty upload obrazka" />
     <MESSAGE value="users tabulka a model" />
-    <option name="LAST_COMMIT_MESSAGE" value="users tabulka a model" />
+    <MESSAGE value="prihlasenie dalsie kroky" />
+    <option name="LAST_COMMIT_MESSAGE" value="prihlasenie dalsie kroky" />
   </component>
 </project>
