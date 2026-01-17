@@ -8,6 +8,8 @@ class Post extends Model
     protected static ?string $tableName = 'posts';
 
     protected ?int $id = null;
+    // foreign key to users.id
+    protected ?int $user_id = null;
     protected string $picture = '';
     protected string $title = '';
     protected string $content = '';
@@ -24,4 +26,19 @@ class Post extends Model
     public function getTitle(): string { return $this->title; }
     public function setTitle(string $title): void { $this->title = $title; }
     public function getCreatedAt(): ?string { return $this->created_at; }
+
+    // user_id accessors
+    public function getUserId(): ?int { return $this->user_id; }
+    public function setUserId(?int $userId): void { $this->user_id = $userId; }
+
+    // Relations
+    /**
+     * Return owner User of this Post
+     * @return \App\Models\User|null
+     */
+    public function getUser(): ?User
+    {
+        if ($this->user_id === null) return null;
+        return User::getOne($this->user_id);
+    }
 }

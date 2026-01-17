@@ -5,6 +5,7 @@ use Framework\Core\BaseController;
 use Framework\Http\Request;
 use Framework\Http\Responses\Response;
 use App\Models\Post;
+use App\Models\User;
 
 class PostController extends BaseController
 {
@@ -24,6 +25,13 @@ class PostController extends BaseController
 
         $post = Post::getOne($id);
         if ($post === null) {
+            return $this->redirect($this->url('post.index'));
+        }
+
+        // Authorization: only owner or admin can edit
+        $currentUserId = $this->getCurrentUserId();
+        $isAdmin = $this->isCurrentUserAdmin();
+        if (!$isAdmin && ($currentUserId === null || $post->getUserId() !== $currentUserId)) {
             return $this->redirect($this->url('post.index'));
         }
 
@@ -84,6 +92,12 @@ class PostController extends BaseController
         $post->setCategory($category);
         $post->setContent($content);
 
+        // Set owner when creating a new post (if user is logged in)
+        $currentUserId = $this->getCurrentUserId();
+        if (!$id && $currentUserId !== null) {
+            $post->setUserId($currentUserId);
+        }
+
         // Upload obrázka
         if ($pictureFile && $pictureFile->isOk() && $pictureFile->getSize() > 0) {
 
@@ -127,6 +141,13 @@ class PostController extends BaseController
 
         $post = Post::getOne($id);
         if ($post === null) {
+            return $this->redirect($this->url('post.index'));
+        }
+
+        // Authorization: only owner or admin can delete
+        $currentUserId = $this->getCurrentUserId();
+        $isAdmin = $this->isCurrentUserAdmin();
+        if (!$isAdmin && ($currentUserId === null || $post->getUserId() !== $currentUserId)) {
             return $this->redirect($this->url('post.index'));
         }
 
@@ -193,6 +214,53 @@ class PostController extends BaseController
         return null;
     }
 
+    // Helper: try to read current user id from AppUser/identity
+    private function getCurrentUserId(): ?int
+    {
+        try {
+            if ($this->user->isLoggedIn()) {
+                $identity = $this->user->getIdentity();
+                if (is_object($identity)) {
+                    if (method_exists($identity, 'getId')) {
+                        return (int)$identity->getId();
+                    }
+                    if (property_exists($identity, 'id')) {
+                        return (int)$identity->id;
+                    }
+                }
+                // fallback to forwarded call (AppUser->__call)
+                if (method_exists($this->user, 'getId')) {
+                    return (int)$this->user->getId();
+                }
+            }
+        } catch (\Throwable $e) {
+            // ignore and return null
+        }
+        return null;
+    }
 
+    // Helper: check if current user has role 'admin'
+    private function isCurrentUserAdmin(): bool
+    {
+        try {
+            if ($this->user->isLoggedIn()) {
+                $identity = $this->user->getIdentity();
+                if (is_object($identity)) {
+                    if (method_exists($identity, 'getRole')) {
+                        return ($identity->getRole() === 'admin');
+                    }
+                    if (property_exists($identity, 'role')) {
+                        return ($identity->role === 'admin');
+                    }
+                }
+                if (method_exists($this->user, 'getRole')) {
+                    return ($this->user->getRole() === 'admin');
+                }
+            }
+        } catch (\Throwable $e) {
+            // ignore
+        }
+        return false;
+    }
 
 }

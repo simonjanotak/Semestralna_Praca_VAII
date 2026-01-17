@@ -4,11 +4,13 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="3ccddef7-0eb4-421a-b898-a22c0e3fca64" name="Changes" comment="fixnuty upload obrazka">
-      <change afterPath="$PROJECT_DIR$/App/Models/User.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docker/sql/create_users.sql" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
+    <list default="true" id="3ccddef7-0eb4-421a-b898-a22c0e3fca64" name="Changes" comment="users tabulka a model">
+      <change afterPath="$PROJECT_DIR$/docker/sql/alter_posts_add_user.sql" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/App/Controllers/PostController.php" beforeDir="false" afterPath="$PROJECT_DIR$/App/Controllers/PostController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/App/Models/Post.php" beforeDir="false" afterPath="$PROJECT_DIR$/App/Models/Post.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/App/Models/User.php" beforeDir="false" afterPath="$PROJECT_DIR$/App/Models/User.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docker/sql/create_posts.sql" beforeDir="false" afterPath="$PROJECT_DIR$/docker/sql/create_posts.sql" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -126,7 +128,7 @@
       <workItem from="1765661691220" duration="294000" />
       <workItem from="1766164783156" duration="7000" />
       <workItem from="1768576008345" duration="5099000" />
-      <workItem from="1768639121687" duration="2934000" />
+      <workItem from="1768639121687" duration="4144000" />
     </task>
     <task id="LOCAL-00001" summary="zreparovane">
       <option name="closed" value="true" />
@@ -216,7 +218,15 @@
       <option name="project" value="LOCAL" />
       <updated>1768580083685</updated>
     </task>
-    <option name="localTasksCounter" value="12" />
+    <task id="LOCAL-00012" summary="users tabulka a model">
+      <option name="closed" value="true" />
+      <created>1768644037900</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1768644037901</updated>
+    </task>
+    <option name="localTasksCounter" value="13" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -234,6 +244,7 @@
     <MESSAGE value="spravny obrazok" />
     <MESSAGE value="upratanie logiky do kontrolera" />
     <MESSAGE value="fixnuty upload obrazka" />
-    <option name="LAST_COMMIT_MESSAGE" value="fixnuty upload obrazka" />
+    <MESSAGE value="users tabulka a model" />
+    <option name="LAST_COMMIT_MESSAGE" value="users tabulka a model" />
   </component>
 </project>

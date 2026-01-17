@@ -8,13 +8,14 @@ class User extends Model
     // explicitly set table name
     protected static ?string $tableName = 'users';
 
+    // properties must match DB column names (DefaultConventions)
     protected ?int $id = null;
     protected string $username = '';
     protected string $email = '';
-    protected string $passwordHash = '';
+    protected string $password_hash = '';
     protected string $role = 'user';
-    protected ?string $createdAt = null;
-    protected ?string $updatedAt = null;
+    protected ?string $created_at = null;
+    protected ?string $updated_at = null;
 
     // --- getters / setters ---
     public function getId(): ?int { return $this->id; }
@@ -25,21 +26,19 @@ class User extends Model
     public function getEmail(): string { return $this->email; }
     public function setEmail(string $email): void { $this->email = $email; }
 
-    // passwordHash is stored in DB as `password_hash` (snake_case) and maps to $passwordHash
-    public function getPasswordHash(): string { return $this->passwordHash; }
-    public function setPasswordHash(string $hash): void { $this->passwordHash = $hash; }
 
-    // convenience: set raw password (will be hashed)
+    public function getPasswordHash(): string { return $this->password_hash; }
+    public function setPasswordHash(string $hash): void { $this->password_hash = $hash; }
+
     public function setPassword(string $password): void
     {
-        $this->passwordHash = password_hash($password, PASSWORD_BCRYPT);
+        $this->password_hash = password_hash($password, PASSWORD_BCRYPT);
     }
 
-    // verify raw password against stored hash
     public function verifyPassword(string $password): bool
     {
-        if ($this->passwordHash === '') return false;
-        return password_verify($password, $this->passwordHash);
+        if ($this->password_hash === '') return false;
+        return password_verify($password, $this->password_hash);
     }
 
     public function getRole(): string { return $this->role; }
@@ -52,10 +51,20 @@ class User extends Model
         $this->role = $role;
     }
 
-    public function getCreatedAt(): ?string { return $this->createdAt; }
-    public function setCreatedAt(?string $createdAt): void { $this->createdAt = $createdAt; }
+    public function getCreatedAt(): ?string { return $this->created_at; }
+    public function setCreatedAt(?string $createdAt): void { $this->created_at = $createdAt; }
 
-    public function getUpdatedAt(): ?string { return $this->updatedAt; }
-    public function setUpdatedAt(?string $updatedAt): void { $this->updatedAt = $updatedAt; }
+    public function getUpdatedAt(): ?string { return $this->updated_at; }
+    public function setUpdatedAt(?string $updatedAt): void { $this->updated_at = $updatedAt; }
+
+    // Relations
+    /**
+     * Return posts belonging to this user (1:N)
+     * @return \App\Models\Post[]
+     */
+    public function getPosts(): array
+    {
+        if ($this->id === null) return [];
+        return Post::getAll('user_id = ?', [$this->id]);
+    }
 }
-
