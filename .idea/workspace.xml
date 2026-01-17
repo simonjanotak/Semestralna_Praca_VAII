@@ -4,13 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="3ccddef7-0eb4-421a-b898-a22c0e3fca64" name="Changes" comment="stylovanie">
+    <list default="true" id="3ccddef7-0eb4-421a-b898-a22c0e3fca64" name="Changes" comment="prihlasenie uzivatela,hashovanie admin hesla">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/App/Controllers/AuthController.php" beforeDir="false" afterPath="$PROJECT_DIR$/App/Controllers/AuthController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/App/Controllers/PostController.php" beforeDir="false" afterPath="$PROJECT_DIR$/App/Controllers/PostController.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/App/Models/User.php" beforeDir="false" afterPath="$PROJECT_DIR$/App/Models/User.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/App/Views/Auth/login.view.php" beforeDir="false" afterPath="$PROJECT_DIR$/App/Views/Auth/login.view.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/App/Views/Home/forum.view.php" beforeDir="false" afterPath="$PROJECT_DIR$/App/Views/Home/forum.view.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/App/Views/Auth/register.view.php" beforeDir="false" afterPath="$PROJECT_DIR$/App/Views/Auth/register.view.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/js/register.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/js/register.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -128,7 +127,7 @@
       <workItem from="1765661691220" duration="294000" />
       <workItem from="1766164783156" duration="7000" />
       <workItem from="1768576008345" duration="5099000" />
-      <workItem from="1768639121687" duration="11266000" />
+      <workItem from="1768639121687" duration="21243000" />
     </task>
     <task id="LOCAL-00001" summary="zreparovane">
       <option name="closed" value="true" />
@@ -258,7 +257,15 @@
       <option name="project" value="LOCAL" />
       <updated>1768649580941</updated>
     </task>
-    <option name="localTasksCounter" value="17" />
+    <task id="LOCAL-00017" summary="prihlasenie uzivatela,hashovanie admin hesla">
+      <option name="closed" value="true" />
+      <created>1768654711902</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1768654711902</updated>
+    </task>
+    <option name="localTasksCounter" value="18" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -281,6 +288,7 @@
     <MESSAGE value="validacia pri registracii, vyhodenie priezviska" />
     <MESSAGE value="autor prispevkov" />
     <MESSAGE value="stylovanie" />
-    <option name="LAST_COMMIT_MESSAGE" value="stylovanie" />
+    <MESSAGE value="prihlasenie uzivatela,hashovanie admin hesla" />
+    <option name="LAST_COMMIT_MESSAGE" value="prihlasenie uzivatela,hashovanie admin hesla" />
   </component>
 </project>

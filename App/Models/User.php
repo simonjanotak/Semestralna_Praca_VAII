@@ -89,4 +89,16 @@ class User extends Model
         $items = static::getAll('username = ?', [$username], null, 1);
         return $items[0] ?? null;
     }
+
+    /**
+     * Check whether a username exists (case-insensitive).
+     * @param string $username
+     * @return bool
+     */
+    public static function existsByUsername(string $username): bool
+    {
+        // Use LOWER(...) to ensure case-insensitive comparison regardless of DB collation
+        $count = static::getCount('LOWER(username) = LOWER(?)', [$username]);
+        return $count > 0;
+    }
 }

@@ -63,10 +63,8 @@ class AuthController extends BaseController
                 return $this->html(compact('message'));
             }
 
-            // Normal check: verify hashed password
-            if ($user->verifyPassword($password)) {
-                // ok
-            } else {
+            // Normal check: verify hashed password. Handle failure (including legacy plaintext) inside the if
+            if (!$user->verifyPassword($password)) {
                 // Fallback for legacy/hand-inserted plaintext passwords in DB:
                 // Detect common bcrypt prefix. If stored value does NOT look like a bcrypt hash,
                 // and equals the provided password, upgrade it to a proper hash and allow login.
@@ -155,5 +153,34 @@ class AuthController extends BaseController
     {
         $this->app->getAuthenticator()->logout();
         return $this->redirect($this->url('home.index'));
+    }
+
+    /**
+     * AJAX: check if a username is available (case-insensitive).
+     * GET param q
+     * Returns JSON: { available: bool, message: string }
+     */
+    public function checkUsernameAvailability(Request $request): \Framework\Http\Responses\JsonResponse
+    {
+        $q = trim((string)$request->value('q'));
+        if ($q === '' || mb_strlen($q) < 2) {
+            return new \Framework\Http\Responses\JsonResponse([
+                'available' => false,
+                'message' => 'Zadajte aspoň 2 znaky'
+            ]);
+        }
+
+        $exists = User::existsByUsername($q);
+        if ($exists) {
+            return new \Framework\Http\Responses\JsonResponse([
+                'available' => false,
+                'message' => 'Používateľské meno je obsadené'
+            ]);
+        }
+
+        return new \Framework\Http\Responses\JsonResponse([
+            'available' => true,
+            'message' => 'Používateľské meno je voľné'
+        ]);
     }
 }

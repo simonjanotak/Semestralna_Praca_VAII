@@ -33,6 +33,10 @@ $view->setLayout('auth');
                                     <input id="username" name="username" type="text" class="form-control"
                                            placeholder="petr123" required minlength="3">
                                     <div class="invalid-feedback">Zadajte užívateľské meno (aspoň 3 znaky).</div>
+
+                                    <!-- Username availability status (updated by JS) -->
+                                    <div id="usernameStatus" class="form-text mt-1" style="display:block; color:green;">Takéto meno ešte neexistuje ✔</div>
+                                    <div id="usernameDebug" class="form-text text-muted mt-1" style="display:block; color:#666; font-size:0.9em;"></div>
                                 </div>
 
                                 <div class="col-12">
@@ -77,4 +81,45 @@ $view->setLayout('auth');
         </div>
     </div>
 </section>
-<script src="<?= $link->asset('js/register.js') ?>"></script>
+    <script>
+        (function(){
+        const usernameInput = document.getElementById('username');
+        const statusEl = document.getElementById('usernameStatus');
+        if (!usernameInput || !statusEl) return;
+
+        let timer = null;
+
+        function clearStatus() {
+        statusEl.textContent = '';
+        statusEl.style.color = '';
+    }
+
+        async function checkUsername(q) {
+        const url = window.location.origin + '/?c=auth&a=checkUsernameAvailability&q=' + encodeURIComponent(q);
+
+        try {
+        const resp = await fetch(url, { headers: { 'Accept': 'application/json' } });
+        if (!resp.ok) { clearStatus(); return; }
+
+        const json = await resp.json();
+        if (json && typeof json.available !== 'undefined') {
+        statusEl.textContent = json.message || (json.available ? 'Takéto meno ešte neexistuje ✔' : 'Používateľské meno už existuje ✖');
+        statusEl.style.color = json.available ? 'green' : 'red';
+    } else {
+        clearStatus();
+    }
+    } catch (e) {
+        clearStatus();
+    }
+    }
+        usernameInput.addEventListener('input', function() {
+        const q = this.value.trim();
+        if (q.length < 2) { clearTimeout(timer); clearStatus(); return; }
+
+        clearTimeout(timer);
+        timer = setTimeout(() => checkUsername(q), 300);
+    });
+    })();
+    </script>
+
+<script src="<?= $link->asset('js/register.js', true) ?>" ></script>
