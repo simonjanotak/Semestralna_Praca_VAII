@@ -55,6 +55,21 @@
 
                             <div class="text-muted small mb-2">
                                 <?= htmlspecialchars($post->getCategory()) ?> • <?= htmlspecialchars($post->getCreatedAt() ? date('j.n.Y', strtotime($post->getCreatedAt())) : date('j.n.Y')) ?>
+                                <?php
+                                // Prefer using preloaded $userMap (avoids N+1). Fallback to $post->getUser().
+                                $author = null;
+                                if (isset($userMap) && is_array($userMap) && $post->getUserId() !== null) {
+                                    $uid = $post->getUserId();
+                                    $author = $userMap[$uid] ?? null;
+                                }
+                                if ($author === null) {
+                                    try { $author = $post->getUser(); } catch (\Throwable $e) { $author = null; }
+                                }
+                                if ($author !== null) : ?>
+                                    • Autor: <?= htmlspecialchars($author->getUsername()) ?>
+                                <?php else: ?>
+                                    • Autor: <span class="text-muted">Neznámy</span>
+                                <?php endif; ?>
                             </div>
 
                             <?php if ($post->getPicture()): ?>
