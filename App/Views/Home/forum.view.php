@@ -56,9 +56,20 @@ endif;
             </aside>
         </div>
     </div>
+
     <main class="col-md-8">
         <div class="card card-orange shadow-sm">
             <div class="card-body">
+
+                <!-- Search input: filters posts by title via AJAX -->
+                <div class="mb-3">
+                    <label for="postSearch" class="form-label">Hľadať podľa názvu:</label>
+                    <input id="postSearch" class="form-control" type="search" placeholder="Zadajte hľadaný text..." aria-label="Hľadať podľa názvu">
+                    <div id="postSearchInfo" class="form-text text-muted"></div>
+                </div>
+
+                <!-- Container for posts (initial server-side rendering remains here) -->
+                <div id="postsContainer">
 
                 <?php /** @var \App\Models\Post[] $posts */ ?>
                 <?php if (!empty($posts)): ?>
@@ -110,6 +121,14 @@ endif;
                 <?php else: ?>
                     <p class="text-muted">Zatiaľ tu nie sú žiadne príspevky.</p>
                 <?php endif; ?>
+
+                </div> <!-- /#postsContainer -->
+
+                <script>
+                    // expose server-generated absolute AJAX endpoint for the external forum.js
+                    window.SEARCH_URL = "<?= $link->url('home.searchPosts', [], true) ?>";
+                </script>
+                <script src="<?= $link->asset('js/forum.js', true) ?>"></script>
 
             </div>
         </div>

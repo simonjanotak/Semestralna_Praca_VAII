@@ -61,4 +61,32 @@ class HomeController extends BaseController
         return $this->html(['posts' => $posts], 'forum');
     }
 
+    /**
+     * AJAX: search posts by title (GET param q)
+     * Returns JSON array: [{id,title,content},...]
+     */
+    public function searchPosts(Request $request): \Framework\Http\Responses\JsonResponse
+    {
+        $q = trim((string)$request->value('q'));
+        if ($q === '') {
+            return new \Framework\Http\Responses\JsonResponse([]);
+        }
+        $like = '%' . $q . '%';
+        try {
+            $posts = Post::getAll('title LIKE ?', [$like], 'created_at DESC', 50);
+        } catch (\Throwable $e) {
+            return new \Framework\Http\Responses\JsonResponse([]);
+        }
+
+        $out = array_map(function($p) {
+            return [
+                'id' => $p->getId(),
+                'title' => $p->getTitle(),
+                'content' => $p->getContent(),
+            ];
+        }, $posts);
+
+        return new \Framework\Http\Responses\JsonResponse($out);
+    }
+
 }
