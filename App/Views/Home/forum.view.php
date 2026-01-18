@@ -84,7 +84,7 @@ endif;
                 <?php if (!empty($posts)): ?>
                     <?php foreach ($posts as $post): ?>
                         <!-- normalized data-category on each article for client filtering -->
-                        <article class="mb-4 p-3 border rounded bg-white shadow-sm" data-category="<?= cat_slug($post->getCategory()) ?>">
+                        <article class="mb-4 p-3 border rounded bg-white shadow-sm" data-category="<?= cat_slug($post->getCategory()) ?>" data-post-id="<?= (int)$post->getId() ?>">
                             <div class="row g-2 align-items-start">
                                 <div class="col-12 col-md">
                                     <h5 class="mb-1 text-orange"><?= htmlspecialchars($post->getTitle()) ?></h5>
@@ -126,9 +126,26 @@ endif;
                             <?php endif; ?>
 
                             <p><?= nl2br(htmlspecialchars($post->getContent())) ?></p>
-                        </article>
-                    <?php endforeach; ?>
-                <?php else: ?>
+
+                        <!-- Comments block: will be loaded and managed by public/js/comments.js -->
+                        <div class="comments mt-3" data-post-id="<?= (int)$post->getId() ?>">
+                            <h6 class="mb-2">Komentáre</h6>
+                            <div id="comments-list-<?= (int)$post->getId() ?>" class="comments-list mb-2">
+                                <!-- comments will be loaded via AJAX -->
+                            </div>
+                            <form class="comment-form" method="post" action="<?= $link->url('comment.create') ?>">
+                                <input type="hidden" name="post_id" value="<?= (int)$post->getId() ?>">
+                                <div class="mb-2">
+                                    <textarea name="content" class="form-control" rows="2" placeholder="Napíšte komentár..."></textarea>
+                                </div>
+                                <div class="text-end">
+                                    <button type="submit" class="btn btn-sm btn-outline-secondary">Pridať komentár</button>
+                                </div>
+                            </form>
+                        </div>
+                     </article>
+                     <?php endforeach; ?>
+                 <?php else: ?>
                     <p class="text-muted">Zatiaľ tu nie sú žiadne príspevky.</p>
                 <?php endif; ?>
 
@@ -137,8 +154,13 @@ endif;
                 <script>
                     // expose server-generated absolute AJAX endpoint for the external forum.js
                     window.SEARCH_URL = "<?= $link->url('home.searchPosts', [], true) ?>";
+                   // comment endpoints for comments.js
+                   window.COMMENT_URL_LIST = "<?= $link->url('comment.list', [], true) ?>";
+                   window.COMMENT_URL_CREATE = "<?= $link->url('comment.create', [], true) ?>";
+                   window.COMMENT_URL_DELETE = "<?= $link->url('comment.delete', [], true) ?>";
                 </script>
                 <script src="<?= $link->asset('js/forum.js', true) ?>"></script>
+                <script src="<?= $link->asset('js/comments.js', true) ?>"></script>
 
             </div>
         </div>
