@@ -63,7 +63,7 @@ class HomeController extends BaseController
 
     /**
      * AJAX: search posts by title (GET param q)
-     * Returns JSON array: [{id,title,content},...]
+     * Returns JSON array: [{id,title,content,category,created_at},...]
      */
     public function searchPosts(Request $request): \Framework\Http\Responses\JsonResponse
     {
@@ -83,6 +83,8 @@ class HomeController extends BaseController
                 'id' => $p->getId(),
                 'title' => $p->getTitle(),
                 'content' => $p->getContent(),
+                'category' => $p->getCategory(),
+                'created_at' => $p->getCreatedAt(),
             ];
         }, $posts);
 

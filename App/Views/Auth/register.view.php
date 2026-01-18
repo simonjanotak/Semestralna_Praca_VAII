@@ -66,7 +66,7 @@ $view->setLayout('auth');
                                     </button>
                                 </div>
                                 <div class="col-12 text-center mt-3">
-                                    <a href="login.html" class="btn btn-outline-secondary me-2">Prihlásiť sa</a>
+                                    <a href="<?= $link->url('auth.login')?>" class="btn btn-outline-secondary me-2">Prihlásiť sa</a>
                                     <a href="<?= $link->url('home.index') ?>" class="btn btn-outline-secondary">Späť</a>
                                 </div>
                             </div>

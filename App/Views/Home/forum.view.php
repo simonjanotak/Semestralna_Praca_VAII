@@ -5,6 +5,14 @@
 </header>
 
 <?php
+// helper to create normalized category slug for data-category attributes
+if (!function_exists('cat_slug')) {
+    function cat_slug($s) {
+        // mb_strtolower for UTF-8-safe lowercase, trim whitespace
+        return htmlspecialchars(mb_strtolower(trim((string)$s), 'UTF-8'));
+    }
+}
+
 // Display flash message from session (set by controllers) and then clear it
 if (session_status() !== PHP_SESSION_ACTIVE) { @session_start(); }
 if (!empty($_SESSION['flash_message'])): ?>
@@ -46,10 +54,11 @@ endif;
                     <div class="card-body p-2">
                         <h6 class="mb-3">Kategórie</h6>
                         <div class="list-group">
-                            <a class="list-group-item list-group-item-action active" href="#">Všetky príspevky <span class="badge badge-orange float-end">...</span></a>
-                            <a class="list-group-item list-group-item-action" href="#"><span class="me-2">🔧</span>Technické problémy <span class="badge bg-light text-dark float-end">...</span></a>
-                            <a class="list-group-item list-group-item-action" href="#"><span class="me-2">🛠️</span>Autoservisy <span class="badge bg-light text-dark float-end">...</span></a>
-                            <a class="list-group-item list-group-item-action" href="#"><span class="me-2">⚙️</span>Tuning a modifikácie <span class="badge bg-light text-dark float-end">...</span></a>
+                            <!-- normalized data-category values (lowercase) -->
+                            <a class="list-group-item list-group-item-action active" href="#" data-category="all">Všetky príspevky <span class="badge badge-orange float-end">...</span></a>
+                            <a class="list-group-item list-group-item-action" href="#" data-category="<?= cat_slug('tech') ?>"><span class="me-2">🔧</span>Technické problémy <span class="badge bg-light text-dark float-end">...</span></a>
+                            <a class="list-group-item list-group-item-action" href="#" data-category="<?= cat_slug('Autoservisy') ?>"><span class="me-2">🛠️</span>Autoservisy <span class="badge bg-light text-dark float-end">...</span></a>
+                            <a class="list-group-item list-group-item-action" href="#" data-category="<?= cat_slug('tuning') ?>"><span class="me-2">⚙️</span>Tuning a modifikácie <span class="badge bg-light text-dark float-end">...</span></a>
                         </div>
                     </div>
                 </div>
@@ -74,7 +83,8 @@ endif;
                 <?php /** @var \App\Models\Post[] $posts */ ?>
                 <?php if (!empty($posts)): ?>
                     <?php foreach ($posts as $post): ?>
-                        <article class="mb-4 p-3 border rounded bg-white shadow-sm">
+                        <!-- normalized data-category on each article for client filtering -->
+                        <article class="mb-4 p-3 border rounded bg-white shadow-sm" data-category="<?= cat_slug($post->getCategory()) ?>">
                             <div class="row g-2 align-items-start">
                                 <div class="col-12 col-md">
                                     <h5 class="mb-1 text-orange"><?= htmlspecialchars($post->getTitle()) ?></h5>
