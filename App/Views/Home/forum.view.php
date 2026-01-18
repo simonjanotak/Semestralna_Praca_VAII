@@ -80,20 +80,20 @@ endif;
                 <!-- Container for posts (initial server-side rendering remains here) -->
                 <div id="postsContainer">
 
-                <?php /** @var \App\Models\Post[] $posts */ ?>
-                <?php if (!empty($posts)): ?>
+                <?php /** @var array[] $posts (presentation-only: id,title,content,category,created_at,picture,author) */ ?>
+                <?php if (!empty($posts) && is_array($posts)): ?>
                     <?php foreach ($posts as $post): ?>
                         <!-- normalized data-category on each article for client filtering -->
-                        <article class="mb-4 p-3 border rounded bg-white shadow-sm" data-category="<?= cat_slug($post->getCategory()) ?>" data-post-id="<?= (int)$post->getId() ?>">
+                        <article class="mb-4 p-3 border rounded bg-white shadow-sm" data-category="<?= htmlspecialchars($post['category']) ?>" data-post-id="<?= (int)$post['id'] ?>">
                             <div class="row g-2 align-items-start">
                                 <div class="col-12 col-md">
-                                    <h5 class="mb-1 text-orange"><?= htmlspecialchars($post->getTitle()) ?></h5>
+                                    <h5 class="mb-1 text-orange"><?= htmlspecialchars($post['title']) ?></h5>
                                 </div>
                                 <div class="col-12 col-md-auto text-md-end">
                                     <div class="btn-group btn-group-sm me-3" role="group" aria-label="Actions">
-                                        <a href="<?= $link->url('post.edit', ['id' => $post->getId()]) ?>" class="btn btn-success me-1 rounded" title="Upraviť">Upraviť</a>
+                                        <a href="<?= $link->url('post.edit', ['id' => $post['id']]) ?>" class="btn btn-success me-1 rounded" title="Upraviť">Upraviť</a>
                                         <form method="post" action="<?= $link->url('post.delete') ?>" style="display:inline;margin:0;">
-                                            <input type="hidden" name="id" value="<?= htmlspecialchars((string)$post->getId()) ?>">
+                                            <input type="hidden" name="id" value="<?= htmlspecialchars((string)$post['id']) ?>">
                                             <button type="submit" class="btn btn-danger rounded" onclick="return confirm('Naozaj zmazať tento príspevok?');">Zmazať</button>
                                         </form>
                                     </div>
@@ -101,42 +101,55 @@ endif;
                             </div>
 
                             <div class="text-muted small mb-2">
-                                <?= htmlspecialchars($post->getCategory()) ?> • <?= htmlspecialchars($post->getCreatedAt() ? date('j.n.Y', strtotime($post->getCreatedAt())) : date('j.n.Y')) ?>
-                                <?php
-                                // Prefer using preloaded $userMap (avoids N+1). Fallback to $post->getUser().
-                                $author = null;
-                                if (isset($userMap) && is_array($userMap) && $post->getUserId() !== null) {
-                                    $uid = $post->getUserId();
-                                    $author = $userMap[$uid] ?? null;
-                                }
-                                if ($author === null) {
-                                    try { $author = $post->getUser(); } catch (\Throwable $e) { $author = null; }
-                                }
-                                if ($author !== null) : ?>
-                                    • Autor: <?= htmlspecialchars($author->getUsername()) ?>
-                                <?php else: ?>
-                                    • Autor: <span class="text-muted">Neznámy</span>
-                                <?php endif; ?>
+                                <?= htmlspecialchars($post['category']) ?> • <?= htmlspecialchars($post['created_at'] ? date('j.n.Y', strtotime($post['created_at'])) : date('j.n.Y')) ?>
+                                • Autor: <?= htmlspecialchars($post['author'] ?? 'Neznámy') ?>
                             </div>
 
-                            <?php if ($post->getPicture()): ?>
+                            <?php if (!empty($post['picture'])): ?>
                                 <div class="mb-2">
-                                    <img src="<?= htmlspecialchars($post->getPicture()) ?>" alt="" class="img-fluid">
+                                    <img src="<?= htmlspecialchars($post['picture']) ?>" alt="" class="img-fluid">
                                 </div>
                             <?php endif; ?>
 
-                            <p><?= nl2br(htmlspecialchars($post->getContent())) ?></p>
+                            <p><?= nl2br(htmlspecialchars($post['content'])) ?></p>
 
-                        <!-- Comments block: will be loaded and managed by public/js/comments.js -->
-                        <div class="comments mt-3" data-post-id="<?= (int)$post->getId() ?>">
+                        <!-- Comments block: purely presentational. Controller should supply $commentsMap/currentUserId/isPrivileged -->
+                        <div class="comments mt-3" data-post-id="<?= (int)$post['id'] ?>">
                             <h6 class="mb-2">Komentáre</h6>
-                            <div id="comments-list-<?= (int)$post->getId() ?>" class="comments-list mb-2">
-                                <!-- comments will be loaded via AJAX -->
-                            </div>
+                            <div id="comments-list-<?= (int)$post['id'] ?>" class="comments-list mb-2">
+                                <?php
+                                // Presentation only: controller must provide $commentsMap (postId => list of comment arrays)
+                                $postId = (int)$post['id'];
+                                $commentsForPost = isset($commentsMap[$postId]) && is_array($commentsMap[$postId]) ? $commentsMap[$postId] : [];
+                                if (!empty($commentsForPost)) {
+                                    foreach ($commentsForPost as $c) {
+                                        ?>
+                                        <div class="comment mb-2 p-2 border rounded" data-id="<?= (int)$c['id'] ?>">
+                                            <div class="small text-muted mb-1">
+                                                <?= htmlspecialchars($c['user']) ?> • <?= htmlspecialchars((string)$c['created_at']) ?>
+                                                <?php if (!empty($c['can_edit'])): ?>
+                                                    <a href="<?= $link->url('comment.edit', ['id' => $c['id']]) ?>" class="btn btn-sm btn-outline-primary ms-2">Upraviť</a>
+                                                <?php endif; ?>
+                                                <?php if (!empty($c['can_delete'])): ?>
+                                                    <form method="post" action="<?= $link->url('comment.delete') ?>" style="display:inline;margin:0;" onsubmit="return confirm('Naozaj zmazať tento komentár?');">
+                                                        <input type="hidden" name="id" value="<?= (int)$c['id'] ?>">
+                                                        <button type="submit" class="btn btn-sm btn-outline-danger ms-2">Zmazať</button>
+                                                    </form>
+                                                <?php endif; ?>
+                                            </div>
+                                            <div class="comment-body"><?= nl2br(htmlspecialchars($c['content'])) ?></div>
+                                        </div>
+                                    <?php }
+                                } else {
+                                    ?>
+                                    <p class="text-muted">Žiadne komentáre.</p>
+                                <?php } ?>
+                             </div>
                             <form class="comment-form" method="post" action="<?= $link->url('comment.create') ?>">
-                                <input type="hidden" name="post_id" value="<?= (int)$post->getId() ?>">
+                                <input type="hidden" name="post_id" value="<?= (int)$post['id'] ?>">
                                 <div class="mb-2">
-                                    <textarea name="content" class="form-control" rows="2" placeholder="Napíšte komentár..."></textarea>
+                                    <label for="comment-content-<?= (int)$post['id'] ?>" class="visually-hidden">Komentár</label>
+                                    <textarea id="comment-content-<?= (int)$post['id'] ?>" name="content" class="form-control" rows="2" placeholder="Napíšte komentár..."></textarea>
                                 </div>
                                 <div class="text-end">
                                     <button type="submit" class="btn btn-sm btn-outline-secondary">Pridať komentár</button>
@@ -144,8 +157,8 @@ endif;
                             </form>
                         </div>
                      </article>
-                     <?php endforeach; ?>
-                 <?php else: ?>
+                    <?php endforeach; ?>
+                <?php else: ?>
                     <p class="text-muted">Zatiaľ tu nie sú žiadne príspevky.</p>
                 <?php endif; ?>
 
@@ -158,6 +171,7 @@ endif;
                    window.COMMENT_URL_LIST = "<?= $link->url('comment.list', [], true) ?>";
                    window.COMMENT_URL_CREATE = "<?= $link->url('comment.create', [], true) ?>";
                    window.COMMENT_URL_DELETE = "<?= $link->url('comment.delete', [], true) ?>";
+                  window.COMMENT_URL_EDIT = "<?= $link->url('comment.edit', [], true) ?>";
                 </script>
                 <script src="<?= $link->asset('js/forum.js', true) ?>"></script>
                 <script src="<?= $link->asset('js/comments.js', true) ?>"></script>
@@ -166,3 +180,11 @@ endif;
         </div>
     </main>
 </div>
+
+<?php
+// Optional debug output: show captured comments loading error when developer exceptions are enabled
+// Removed debug output to avoid exposing internal errors in the view.
+// if (isset($commentsError) && \App\Configuration::SHOW_EXCEPTION_DETAILS) {
+//     echo "<div class=\"container mt-3\"><div class=\"alert alert-danger\">Chyba pri načítaní komentárov: " . htmlspecialchars($commentsError) . "</div></div>";
+// }
+?>

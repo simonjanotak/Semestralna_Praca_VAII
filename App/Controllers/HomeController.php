@@ -6,6 +6,7 @@ use Framework\Core\BaseController;
 use Framework\Http\Request;
 use Framework\Http\Responses\Response;
 use App\Models\Post;
+use App\Models\Comment;
 
 /**
  * Class HomeController
@@ -56,9 +57,94 @@ class HomeController extends BaseController
     }
     public function forum(Request $request): Response
     {
-        // fetch all posts and pass them to the forum view
+        // fetch all posts (models)
         $posts = Post::getAll();
-        return $this->html(['posts' => $posts], 'forum');
+
+        // compute current user id and privileged flag (admin/moderator)
+        $currentUserId = null;
+        $isPrivileged = false;
+        try {
+            if (isset($this->user) && $this->user->isLoggedIn()) {
+                $identity = $this->user->getIdentity();
+                if (is_object($identity)) {
+                    if (method_exists($identity, 'getId')) {
+                        $currentUserId = (int)$identity->getId();
+                    } elseif (property_exists($identity, 'id')) {
+                        $currentUserId = (int)$identity->id;
+                    }
+                    if (method_exists($identity, 'getRole')) {
+                        $role = $identity->getRole();
+                    } elseif (property_exists($identity, 'role')) {
+                        $role = $identity->role ?? null;
+                    }
+                } else {
+                    if (method_exists($this->user, 'getId')) {
+                        $currentUserId = (int)$this->user->getId();
+                    }
+                    if (method_exists($this->user, 'getRole')) {
+                        $role = $this->user->getRole();
+                    }
+                }
+
+                if (isset($role) && ($role === 'admin' || $role === 'moderator')) {
+                    $isPrivileged = true;
+                }
+            }
+        } catch (\Throwable $_) {
+            // swallow - view will render without privileged features
+        }
+
+        // prepare comments map: postId => [ {id, content, created_at, user, user_id, can_delete}, ... ]
+        $commentsMap = [];
+        foreach ($posts as $post) {
+            $pid = (int)$post->getId();
+            try {
+                $rawComments = Comment::getByPost($pid);
+            } catch (\Throwable $_) {
+                $rawComments = [];
+            }
+
+            foreach ($rawComments as $c) {
+                $cUser = null;
+                try { $cUser = $c->getUser(); } catch (\Throwable $_) { $cUser = null; }
+                $uid = $c->getUserId();
+                $canDelete = $isPrivileged || ($currentUserId !== null && $uid === $currentUserId);
+
+                $commentsMap[$pid][] = [
+                    'id' => (int)$c->getId(),
+                    'content' => (string)$c->getContent(),
+                    'created_at' => (string)$c->getCreatedAt(),
+                    'user' => $cUser ? $cUser->getUsername() : 'Neznámy',
+                    'user_id' => $uid,
+                    'can_delete' => $canDelete,
+                    'can_edit' => $canDelete,
+                ];
+            }
+        }
+
+        // prepare presentation-only posts array to avoid any model/logic in the view
+        $postsView = [];
+        foreach ($posts as $post) {
+            $authorName = null;
+            try { $author = $post->getUser(); $authorName = $author ? $author->getUsername() : 'Neznámy'; } catch (\Throwable $_) { $authorName = 'Neznámy'; }
+
+            $postsView[] = [
+                'id' => (int)$post->getId(),
+                'title' => $post->getTitle(),
+                'content' => $post->getContent(),
+                'category' => $post->getCategory(),
+                'created_at' => $post->getCreatedAt(),
+                'picture' => $post->getPicture(),
+                'author' => $authorName,
+            ];
+        }
+
+        return $this->html([
+            'posts' => $postsView,
+            'commentsMap' => $commentsMap,
+            'currentUserId' => $currentUserId,
+            'isPrivileged' => $isPrivileged,
+        ], 'forum');
     }
 
     /**

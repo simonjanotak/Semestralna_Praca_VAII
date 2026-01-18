@@ -8,6 +8,15 @@ class Comment extends Model
     // explicit table name
     protected static ?string $tableName = 'comments';
 
+    // map DB columns that may exist in the database but don't match model property names
+    // this handles common camelCase variants (postId, userId, createdAt) or alternate names
+    protected static array $columnsMap = [
+        'postId'    => 'post_id',
+        'userId'    => 'user_id',
+        'createdAt' => 'created_at',
+        'created'   => 'created_at',
+    ];
+
     protected ?int $id = null;
     protected ?int $post_id = null;
     protected ?int $user_id = null; // allow NULL for SET NULL semantics
