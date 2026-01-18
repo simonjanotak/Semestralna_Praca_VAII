@@ -13,8 +13,13 @@ class Post extends Model
     protected string $picture = '';
     protected string $title = '';
     protected string $content = '';
+    // legacy string category (keeps compatibility with existing DB schema)
     protected string $category = '';
+
+    // new fields to support normalized relationship-based model
+    protected ?int $category_id = null;
     protected ?string $created_at = null;
+    protected ?string $updated_at = null;
 
     public function getCategory(): string { return $this->category; }
     public function setCategory(string $category): void { $this->category = $category; }
@@ -26,6 +31,12 @@ class Post extends Model
     public function getTitle(): string { return $this->title; }
     public function setTitle(string $title): void { $this->title = $title; }
     public function getCreatedAt(): ?string { return $this->created_at; }
+    public function getUpdatedAt(): ?string { return $this->updated_at; }
+    public function setUpdatedAt(?string $dt): void { $this->updated_at = $dt; }
+
+    // category_id accessors (nullable to allow SET NULL semantics)
+    public function getCategoryId(): ?int { return $this->category_id; }
+    public function setCategoryId(?int $id): void { $this->category_id = $id; }
 
     // user_id accessors
     public function getUserId(): ?int { return $this->user_id; }
@@ -40,5 +51,26 @@ class Post extends Model
     {
         if ($this->user_id === null) return null;
         return User::getOne($this->user_id);
+    }
+
+    /**
+     * Return Category entity (if category_id is set)
+     * Falls back to null if category_id is not available.
+     * @return \App\Models\Category|null
+     */
+    public function getCategoryEntity(): ?Category
+    {
+        if ($this->category_id === null) return null;
+        return Category::getOne($this->category_id);
+    }
+
+    /**
+     * Return comments for this post (1:N)
+     * @return \App\Models\Comment[]
+     */
+    public function getComments(): array
+    {
+        if ($this->id === null) return [];
+        return Comment::getByPost($this->id);
     }
 }

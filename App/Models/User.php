@@ -69,6 +69,16 @@ class User extends Model
     }
 
     /**
+     * Return comments belonging to this user (1:N)
+     * @return \App\Models\Comment[]
+     */
+    public function getComments(): array
+    {
+        if ($this->id === null) return [];
+        return Comment::getAll('user_id = ?', [$this->id]);
+    }
+
+    /**
      * Find user by email. Returns User instance or null.
      * @param string $email
      * @return static|null

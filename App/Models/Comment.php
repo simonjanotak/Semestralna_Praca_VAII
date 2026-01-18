@@ -10,9 +10,19 @@ class Comment extends Model
 
     protected ?int $id = null;
     protected ?int $post_id = null;
-    protected ?int $user_id = null;
+    protected ?int $user_id = null; // allow NULL for SET NULL semantics
     protected string $content = '';
     protected ?string $created_at = null;
+
+    // Optional simple constructor to initialize properties
+    public function __construct(array $data = [])
+    {
+        foreach ($data as $k => $v) {
+            if (property_exists($this, $k)) {
+                $this->{$k} = $v;
+            }
+        }
+    }
 
     public function getId(): ?int { return $this->id; }
     public function getPostId(): ?int { return $this->post_id; }
@@ -34,6 +44,16 @@ class Comment extends Model
     }
 
     /**
+     * Return the Post this comment belongs to
+     * @return \App\Models\Post|null
+     */
+    public function getPost(): ?Post
+    {
+        if ($this->post_id === null) return null;
+        return Post::getOne($this->post_id);
+    }
+
+    /**
      * Convenience: load comments for a post
      * @param int $postId
      * @return static[]
@@ -43,4 +63,3 @@ class Comment extends Model
         return static::getAll('post_id = ?', [$postId], 'created_at DESC');
     }
 }
-
