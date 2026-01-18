@@ -71,17 +71,4 @@ document.addEventListener('DOMContentLoaded', function() {
             pwdConfirm.classList.remove('is-valid');
         }
     });
-
-    // --- Username availability AJAX (debounced) ---
-    console.log('[register.js] username availability check initialized');
-
-    // debug expose
-    console.log('[register.js] window.registerAvailabilityUrl =', window.registerAvailabilityUrl);
-
-    let timer = null;
-
-    function clearStatus() {
-        statusEl.textContent = '';
-        statusEl.style.color = '';
-    }
 });
