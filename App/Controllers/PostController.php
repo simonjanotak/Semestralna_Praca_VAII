@@ -6,6 +6,7 @@ use Framework\Http\Request;
 use Framework\Http\Responses\Response;
 use App\Models\Post;
 use App\Models\User;
+use App\Models\Category;
 
 class PostController extends BaseController
 {
@@ -18,7 +19,9 @@ class PostController extends BaseController
             return $this->redirect($this->url('home.forum'));
         }
         $view = $this->preparePostData(null, []);
-        return $this->html(['post' => $view['post'], 'errors' => $view['errors']], 'add');
+        // load categories and pass to view
+        $categories = $this->loadCategories();
+        return $this->html(['post' => $view['post'], 'errors' => $view['errors'], 'categories' => $categories], 'add');
     }
 
     public function edit(Request $request): Response
@@ -43,25 +46,32 @@ class PostController extends BaseController
         }
 
         $view = $this->preparePostData($post, []);
-        return $this->html(['post' => $view['post'], 'errors' => $view['errors']], 'edit');
+        $categories = $this->loadCategories();
+        return $this->html(['post' => $view['post'], 'errors' => $view['errors'], 'categories' => $categories], 'edit');
     }
 
     private function preparePostData($post, array $errors): array
     {
         $postArr = [
             'title' => '',
-            'category' => '',
+            // now use category_id (int or null)
+            'category_id' => null,
             'content' => '',
             'picture' => '',
             'id' => null,
         ];
 
         if (is_array($post)) {
+            // merge and ensure category_id exists
             $postArr = array_merge($postArr, $post);
+            if (array_key_exists('category', $post) && !array_key_exists('category_id', $post)) {
+                // keep backward compatibility if controller passes category string
+                $postArr['category'] = $post['category'];
+            }
         } elseif ($post instanceof \App\Models\Post) {
             $postArr = [
                 'title' => $post->getTitle() ?? '',
-                'category' => $post->getCategory() ?? '',
+                'category_id' => $post->getCategoryId() ?? null,
                 'content' => $post->getContent() ?? '',
                 'picture' => $post->getPicture() ?? '',
                 'id' => $post->getId(),
@@ -75,28 +85,32 @@ class PostController extends BaseController
     public function save(Request $request): Response
     {
         $title = trim($request->post('title') ?? '');
-        $category = trim($request->post('category') ?? '');
+        // read category_id instead of category text
+        $categoryIdRaw = $request->post('category_id') ?? '';
+        $categoryId = ($categoryIdRaw === '' ? null : (int)$categoryIdRaw);
         $content = trim($request->post('content') ?? '');
         $pictureFile = $request->file('picture_file');
         $id = $request->post('id') ?? null;
 
         // Validácia
-        $errors = $this->validateForm($title, $content, $category, $pictureFile);
+        $errors = $this->validateForm($title, $content, $categoryId, $pictureFile);
 
         if (!empty($errors)) {
             $postData = [
                 'id' => $id,
                 'title' => $title,
-                'category' => $category,
+                'category_id' => $categoryId,
                 'content' => $content,
             ];
-            return $this->html(['post' => $postData, 'errors' => $errors], 'add');
+            $categories = $this->loadCategories();
+            return $this->html(['post' => $postData, 'errors' => $errors, 'categories' => $categories], 'add');
         }
 
         // Update alebo nový príspevok
         $post = $id ? Post::getOne($id) : new Post();
         $post->setTitle($title);
-        $post->setCategory($category);
+        // set normalized category id
+        $post->setCategoryId($categoryId);
         $post->setContent($content);
 
         // Set owner when creating a new post (if user is logged in)
@@ -118,11 +132,12 @@ class PostController extends BaseController
                 $postData = [
                     'id' => $id,
                     'title' => $title,
-                    'category' => $category,
+                    'category_id' => $categoryId,
                     'content' => $content,
                 ];
                 $errors = ['Nahrávanie súboru sa nepodarilo. Skontrolujte práva na priečinok uploads alebo konfiguráciu PHP.'];
-                return $this->html(['post' => $postData, 'errors' => $errors], 'add');
+                $categories = $this->loadCategories();
+                return $this->html(['post' => $postData, 'errors' => $errors, 'categories' => $categories], 'add');
             }
 
             $post->setPicture('/uploads/' . $filename);
@@ -181,7 +196,7 @@ class PostController extends BaseController
     }
 
     // Pomocná validácia formulára
-    private function validateForm(string $title, string $content, string $category, $uploaded): array
+    private function validateForm(string $title, string $content, $categoryId, $uploaded): array
     {
         $errors = [];
 
@@ -191,7 +206,8 @@ class PostController extends BaseController
         if (trim($content) === '' || mb_strlen(trim($content)) < 5) {
             $errors[] = 'Text príspevku musí obsahovať aspoň 5 znakov.';
         }
-        if (trim($category) === '') {
+        // categoryId must be numeric and not null
+        if ($categoryId === null || !is_int($categoryId) || $categoryId <= 0) {
             $errors[] = 'Vyber kategóriu.';
         }
         // Voliteľný obrázok: kontrolujeme len ak súbor existuje
@@ -270,6 +286,19 @@ class PostController extends BaseController
             // ignore
         }
         return false;
+    }
+
+    // Load categories as id => name map for views
+    private function loadCategories(): array
+    {
+        $items = Category::getAll();
+        $map = [];
+        foreach ($items as $c) {
+            if (is_object($c) && method_exists($c, 'getId')) {
+                $map[$c->getId()] = $c->getName();
+            }
+        }
+        return $map;
     }
 
 }

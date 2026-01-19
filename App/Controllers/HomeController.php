@@ -128,11 +128,24 @@ class HomeController extends BaseController
             $authorName = null;
             try { $author = $post->getUser(); $authorName = $author ? $author->getUsername() : 'Neznámy'; } catch (\Throwable $_) { $authorName = 'Neznámy'; }
 
+            // derive category name from relation if available, otherwise fallback to legacy string
+            $catName = '';
+            try {
+                $cat = $post->getCategoryEntity();
+                if ($cat !== null) {
+                    $catName = $cat->getName();
+                } else {
+                    $catName = $post->getCategory();
+                }
+            } catch (\Throwable $_) {
+                $catName = $post->getCategory();
+            }
+
             $postsView[] = [
                 'id' => (int)$post->getId(),
                 'title' => $post->getTitle(),
                 'content' => $post->getContent(),
-                'category' => $post->getCategory(),
+                'category' => $catName,
                 'created_at' => $post->getCreatedAt(),
                 'picture' => $post->getPicture(),
                 'author' => $authorName,
@@ -165,11 +178,23 @@ class HomeController extends BaseController
         }
 
         $out = array_map(function($p) {
+            $catName = '';
+            try {
+                $cat = $p->getCategoryEntity();
+                if ($cat !== null) {
+                    $catName = $cat->getName();
+                } else {
+                    $catName = $p->getCategory();
+                }
+            } catch (\Throwable $_) {
+                $catName = $p->getCategory();
+            }
+
             return [
                 'id' => $p->getId(),
                 'title' => $p->getTitle(),
                 'content' => $p->getContent(),
-                'category' => $p->getCategory(),
+                'category' => $catName,
                 'created_at' => $p->getCreatedAt(),
             ];
         }, $posts);

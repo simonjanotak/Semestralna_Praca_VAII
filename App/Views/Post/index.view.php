@@ -1,10 +1,9 @@
-
 <?php
-/** @var array $post  // keys: title, category, content, picture, id */
+/** @var array $post  // keys: title, category_id, content, picture, id */
 /** @var Framework\Support\LinkGenerator $link */
 
 $titleVal = $post['title'] ?? '';
-$categoryVal = $post['category'] ?? '';
+$categoryIdVal = $post['category_id'] ?? null;
 $contentVal = $post['content'] ?? '';
 $pictureVal = $post['picture'] ?? '';
 $idVal = $post['id'] ?? null;
@@ -41,11 +40,20 @@ $formAction = $idVal !== null ? $link->url('post.save') : $link->url('post.save'
 
         <div class="mb-3">
             <label for="post-category" class="form-label">Kategória</label>
-            <select id="post-category" name="category" class="form-select" required>
+            <select id="post-category" name="category_id" class="form-select" required>
                 <option value="">Vybrať kategóriu</option>
-                <option value="tech" <?= $categoryVal === 'tech' ? 'selected' : '' ?>>Technické problémy</option>
-                <option value="autoservisy" <?= $categoryVal === 'autoservisy' ? 'selected' : '' ?>>Autoservisy</option>
-                <option value="tuning" <?= $categoryVal === 'tuning' ? 'selected' : '' ?>>Tuning a modifikácie</option>
+                <?php if (!empty($categories) && is_array($categories)) {
+                    foreach ($categories as $cid => $cname) {
+                        $selected = ((string)$cid === (string)$categoryIdVal) ? 'selected' : '';
+                        echo '<option value="' . htmlspecialchars((string)$cid) . '" ' . $selected . '>' . htmlspecialchars($cname) . '</option>';
+                    }
+                } else {
+                    // fallback static options if categories not provided
+                    ?>
+                    <option value="tech" <?= $categoryIdVal === 'tech' ? 'selected' : '' ?>>Technické problémy</option>
+                    <option value="autoservisy" <?= $categoryIdVal === 'autoservisy' ? 'selected' : '' ?>>Autoservisy</option>
+                    <option value="tuning" <?= $categoryIdVal === 'tuning' ? 'selected' : '' ?>>Tuning a modifikácie</option>
+                <?php } ?>
             </select>
         </div>
 
