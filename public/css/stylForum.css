@@ -52,8 +52,132 @@ body{
     flex-direction: column;
     gap: 12px;
 }
+/* make layout elements fluid */
+*{box-sizing:border-box;}
 
+.container {
+    width: 100%;
+    max-width: 920px; /* desktop max */
+    margin: 0 auto;
+    padding: 0 16px;
+}
 
+/* form controls fill available width */
+.form-control,
+.form-select,
+input[type="file"],
+textarea {
+    width: 100%;
+    max-width: 100%;
+    display: block;
+}
 
+/* responsive images */
+img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+}
 
+/* buttons stacked on small screens for easier tapping */
+.btn {
+    white-space: normal;
+}
 
+@media (max-width: 576px) {
+    .container { padding: 0 12px; }
+    .btn { width: 100%; display: block; margin-bottom: 8px; }
+    .mb-3 { margin-bottom: 12px; }
+    h2 { font-size: 1.25rem; }
+}
+
+/* avoid fixed-width elements */
+.fixed-width, .card, .some-sidebar {
+    max-width: 100%;
+    overflow-wrap: break-word;
+}
+
+/* --- Responsive fixes to avoid horizontal scrolling and force stacking on small screens --- */
+/* Ensure Bootstrap rows wrap when columns can't fit */
+.row {
+    flex-wrap: wrap !important;
+}
+
+/* Allow columns to shrink below their content width so they stack instead of forcing horizontal scroll */
+[class*="col-"] {
+    min-width: 0;
+}
+
+/* Prevent the page from creating horizontal scrollbar by default (safe guard) */
+html, body {
+    max-width: 100%;
+    overflow-x: hidden;
+}
+
+/* Ensure containers and the main content don't exceed viewport */
+.container, .container-fluid, .web-content {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    overflow-wrap: break-word; /* break long words/URLs */
+    word-break: break-word;
+}
+
+/* Make cards and columns break very long words or unbroken strings instead of expanding */
+.card, .col, .web-content {
+    overflow-wrap: break-word;
+    word-break: break-word;
+    -webkit-hyphens: auto;
+    -ms-hyphens: auto;
+    hyphens: auto;
+}
+
+/* Tables / preformatted text: allow horizontal scrolling inside element rather than page scroll */
+table, pre, code {
+    max-width: 100%;
+    overflow-x: auto;
+    display: block;
+}
+
+/* Keep images fluid (already present but re-assert to be safe) */
+img, iframe, embed, object {
+    max-width: 100%;
+    height: auto;
+}
+
+/* Small screen tweaks: stack buttons and reduce paddings */
+@media (max-width: 576px) {
+    .btn { width: 100%; display: block; margin-bottom: 8px; }
+    .container { padding-left: 12px; padding-right: 12px; }
+}
+
+/* Make button groups wrap on small screens so action buttons stack instead of overflowing */
+.btn-group {
+    flex-wrap: wrap !important;
+}
+.btn-group .btn {
+    min-width: 0;
+    margin-bottom: 6px; /* small gap when stacked */
+}
+
+/* Ensure article and card elements don't create overflow */
+article, .card, .card-body {
+    box-sizing: border-box;
+    width: 100%;
+    max-width: 100%;
+}
+
+/* list-group items: allow badges and long texts to wrap instead of forcing width */
+.list-group-item {
+    white-space: normal;
+    word-break: break-word;
+    overflow-wrap: break-word;
+}
+
+/* Small tweak: make the articles' inner rows not create overflow */
+article .row {
+    margin-left: 0;
+    margin-right: 0;
+}
+
+/* End extra small-screen fixes */

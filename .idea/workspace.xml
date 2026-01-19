@@ -4,12 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="3ccddef7-0eb4-421a-b898-a22c0e3fca64" name="Changes" comment="komentare pod prispevky">
+    <list default="true" id="3ccddef7-0eb4-421a-b898-a22c0e3fca64" name="Changes" comment="tabulka categories potrebne zmeny">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/App/Controllers/CommentController.php" beforeDir="false" afterPath="$PROJECT_DIR$/App/Controllers/CommentController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/App/Controllers/HomeController.php" beforeDir="false" afterPath="$PROJECT_DIR$/App/Controllers/HomeController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/App/Controllers/PostController.php" beforeDir="false" afterPath="$PROJECT_DIR$/App/Controllers/PostController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/App/Views/Post/index.view.php" beforeDir="false" afterPath="$PROJECT_DIR$/App/Views/Post/index.view.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/App/Views/Home/contact.view.php" beforeDir="false" afterPath="$PROJECT_DIR$/App/Views/Home/contact.view.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/App/Views/Layouts/auth.layout.view.php" beforeDir="false" afterPath="$PROJECT_DIR$/App/Views/Layouts/auth.layout.view.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/App/Views/Layouts/root.layout.view.php" beforeDir="false" afterPath="$PROJECT_DIR$/App/Views/Layouts/root.layout.view.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/css/stylForum.css" beforeDir="false" afterPath="$PROJECT_DIR$/public/css/stylForum.css" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -129,7 +129,7 @@
       <workItem from="1768576008345" duration="5099000" />
       <workItem from="1768639121687" duration="25176000" />
       <workItem from="1768727501264" duration="18171000" />
-      <workItem from="1768853166509" duration="1929000" />
+      <workItem from="1768853166509" duration="3767000" />
     </task>
     <task id="LOCAL-00001" summary="zreparovane">
       <option name="closed" value="true" />
@@ -323,7 +323,15 @@
       <option name="project" value="LOCAL" />
       <updated>1768747222383</updated>
     </task>
-    <option name="localTasksCounter" value="25" />
+    <task id="LOCAL-00025" summary="tabulka categories potrebne zmeny">
+      <option name="closed" value="true" />
+      <created>1768855341573</created>
+      <option name="number" value="00025" />
+      <option name="presentableId" value="LOCAL-00025" />
+      <option name="project" value="LOCAL" />
+      <updated>1768855341573</updated>
+    </task>
+    <option name="localTasksCounter" value="26" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -354,6 +362,7 @@
     <MESSAGE value="comments tabulka" />
     <MESSAGE value="category tabulka" />
     <MESSAGE value="komentare pod prispevky" />
-    <option name="LAST_COMMIT_MESSAGE" value="komentare pod prispevky" />
+    <MESSAGE value="tabulka categories potrebne zmeny" />
+    <option name="LAST_COMMIT_MESSAGE" value="tabulka categories potrebne zmeny" />
   </component>
 </project>

@@ -8,6 +8,8 @@
 <html lang="sk">
 <head>
     <title><?= App\Configuration::APP_NAME ?></title>
+    <!-- ensure responsive on mobile devices -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- Favicons -->
     <link rel="apple-touch-icon" sizes="180x180" href="<?= $link->asset('favicons/apple-touch-icon.png') ?>">
     <link rel="icon" type="image/png" sizes="32x32" href="<?= $link->asset('favicons/favicon-32x32.png') ?>">
