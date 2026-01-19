@@ -5,6 +5,7 @@
 <!-- Put the file at: `public/css/style.css` -->
 <head>
     <link rel="stylesheet" href="/css/styl.css?v=1.0">
+    <link rel="stylesheet" href="<?= $link->asset('css/contact.css') ?>">
 </head>
 
 <section class="hero">
@@ -20,6 +21,7 @@
                 <a class="btn btn-dark btn-lg me-2" href="<?= $link->url('home.forum') ?>">Vstúpiť do fóra</a>
                 <a class="btn btn-outline-light btn-lg" href="<?= $link->url('auth.register') ?>">Registrovať sa</a>
                 <a class="btn btn-outline-light btn-lg ms-2" href="<?= $link->url('auth.login') ?>">Prihlásiť sa</a>
+                <a class="btn btn-outline-light btn-lg ms-2" href="<?= $link->url('home.contact') ?>">Kontakt</a>
 
                 <div class="d-flex gap-4 mt-4 stats-box">
                     <div><span>2,500+</span><br>Členov</div>
