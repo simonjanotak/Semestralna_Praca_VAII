@@ -10,9 +10,26 @@ use App\Models\Category;
 
 class PostController extends BaseController
 {
+
+    private function denyIfCannotAdd(): ?Response
+    {
+        $currentUserId = $this->getCurrentUserId();
+        if ($currentUserId === null) {
+            try {
+                $this->app->getSession()->set('flash_error', 'Pre túto akciu musíte byť prihlásený.');
+            } catch (\Throwable $e) {
+                // ignorovať chyby session
+            }
+            return $this->redirect($this->url('home.forum'));
+        }
+        return null;
+    }
     // Zobrazenie formulára na pridanie nového príspevku
     public function add(Request $request): Response
     {
+        if ($resp = $this->denyIfCannotAdd()) {
+            return $resp;
+        }
         $currentUserId = $this->getCurrentUserId();
         if ($currentUserId === null) {
             try { $this->app->getSession()->set('flash_message', 'Musíte byť prihlásený, aby ste mohli pridávať príspevky.'); } catch (\Throwable $e) {}
@@ -26,6 +43,9 @@ class PostController extends BaseController
 
     public function edit(Request $request): Response
     {
+        if ($resp = $this->denyIfCannotAdd()) {
+            return $resp;
+        }
         $id = $request->get('id') ?? $request->post('id') ?? null;
         if ($id === null) {
             return $this->redirect($this->url('post.index'));
@@ -84,6 +104,12 @@ class PostController extends BaseController
     // Uloženie príspevku (pridanie alebo editácia)
     public function save(Request $request): Response
     {
+        $id = $request->post('id') ?? null;
+        if (!$id) { // creation flow
+            if ($resp = $this->denyIfCannotAdd()) {
+                return $resp;
+            }
+        }
 
         $title = trim($request->post('title') ?? '');
         // read category_id instead of category text
@@ -159,6 +185,9 @@ class PostController extends BaseController
     // Zmazanie príspevku
     public function delete(Request $request): Response
     {
+        if ($resp = $this->denyIfCannotAdd()) {
+            return $resp;
+        }
         // Only allow POST and require id; otherwise show forum with message
         if (!$request->isPost()) {
             return $this->redirect($this->url('home.forum'));

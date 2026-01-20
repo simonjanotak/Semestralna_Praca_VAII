@@ -15,21 +15,18 @@ if (!function_exists('cat_slug')) {
         return htmlspecialchars(mb_strtolower(trim((string)$s), 'UTF-8'));
     }
 }
-
-// Zobrazenie "flash" správy zo session (napr. "Príspevok pridaný") a následné vymazanie
-$flashMessage = null;
-if (session_status() === PHP_SESSION_ACTIVE && !empty($_SESSION['flash_message'])) {
-    $flashMessage = $_SESSION['flash_message'];
+//správy ked nieje prihláseny použivateľ
+$flashError = null;
+if (!empty($_SESSION['flash_error'])) {
+    $flashError = $_SESSION['flash_error'];
+    unset($_SESSION['flash_error']);
 }
-if (!empty($flashMessage)): ?>
-    <div class="container-fluid">
-        <div class="alert alert-warning alert-dismissible fade show" role="alert">
-            <?= htmlspecialchars($flashMessage) ?>
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
+if ($flashError): ?>
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <?= htmlspecialchars($flashError) ?>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
-    <?php if (session_status() === PHP_SESSION_ACTIVE) { unset($_SESSION['flash_message']); }
-endif;
+<?php endif;
 ?>
 
 <div class="row align-items-center mb-3">
