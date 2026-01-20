@@ -9,22 +9,26 @@ use App\Models\Post;
 
 class CommentController extends BaseController
 {
-    // Return empty JSON array when no post_id provided, otherwise comments for post.
+    // --- Vráti zoznam komentárov pre daný post ---
+    // Ak nie je zadaný post_id, vráti prázdne pole
     public function list(Request $request): \Framework\Http\Responses\JsonResponse
     {
         $postId = $request->get('post_id') ?? $request->value('post_id');
         if ($postId === null) {
-            return $this->json([]);
+            return $this->json([]); // prázdny JSON, ak nevieme post
         }
 
+        // Načíta všetky komentáre pre daný post
         $comments = Comment::getByPost((int)$postId);
-        $currentUserId = $this->getCurrentUserId();
-        $isAdmin = $this->isCurrentUserAdmin();
 
+        $currentUserId = $this->getCurrentUserId(); // ID aktuálneho používateľa
+        $isAdmin = $this->isCurrentUserAdmin();     // kontrola admin/moderátor
+
+        // Pre každý komentár pripravíme pole údajov pre JSON
         $out = array_map(function($c) use ($currentUserId, $isAdmin) {
             $user = $c->getUser();
             $uid = $c->getUserId();
-            $can = $isAdmin || ($currentUserId !== null && $uid === $currentUserId);
+            $can = $isAdmin || ($currentUserId !== null && $uid === $currentUserId); // môže upravovať/zmazať
             return [
                 'id' => $c->getId(),
                 'content' => $c->getContent(),
@@ -39,35 +43,50 @@ class CommentController extends BaseController
         return $this->json($out);
     }
 
-    // Create comment (POST). Supports AJAX or regular POST.
+    // --- Vytvorenie komentára (POST) ---
+    // Podporuje AJAX alebo klasický POST
     public function create(Request $request): Response
     {
         if (!$request->isPost()) {
-            return $request->isAjax() ? $this->json(['error' => 'Invalid method']) : $this->redirect($this->url('home.forum'));
+            // Ak nie je POST, vrátime chybu pre AJAX alebo redirect pre klasický request
+            return $request->isAjax()
+                ? $this->json(['error' => 'Invalid method'])
+                : $this->redirect($this->url('home.forum'));
         }
 
         $currentUserId = $this->getCurrentUserId();
         if ($currentUserId === null) {
-            return $request->isAjax() ? $this->json(['error' => 'Unauthorized'], 401) : $this->redirect($this->url('auth.login'));
+            // Ak nie je prihlásený, vrátime 401 pre AJAX alebo presmerujeme na login
+            return $request->isAjax()
+                ? $this->json(['error' => 'Unauthorized'], 401)
+                : $this->redirect($this->url('auth.login'));
         }
 
         $postId = (int)($request->post('post_id') ?? 0);
         $content = trim((string)($request->post('content') ?? ''));
         if ($postId <= 0 || $content === '') {
-            return $request->isAjax() ? $this->json(['error' => 'Invalid input'], 400) : $this->redirect($request->server('HTTP_REFERER') ?? $this->url('home.forum'));
+            // kontrola vstupu
+            return $request->isAjax()
+                ? $this->json(['error' => 'Invalid input'], 400)
+                : $this->redirect($request->server('HTTP_REFERER') ?? $this->url('home.forum'));
         }
 
         $post = Post::getOne($postId);
         if ($post === null) {
-            return $request->isAjax() ? $this->json(['error' => 'Post not found'], 404) : $this->redirect($this->url('home.forum'));
+            // kontrola existencie postu
+            return $request->isAjax()
+                ? $this->json(['error' => 'Post not found'], 404)
+                : $this->redirect($this->url('home.forum'));
         }
 
+        // Vytvorenie nového komentára
         $comment = new Comment();
         $comment->setPostId($postId);
         $comment->setUserId($currentUserId);
         $comment->setContent($content);
         $comment->save();
 
+        // Príprava dát pre JSON
         $user = $comment->getUser();
         $out = [
             'id' => $comment->getId(),
@@ -79,33 +98,50 @@ class CommentController extends BaseController
             'can_edit' => true,
         ];
 
-        return $request->isAjax() ? $this->json($out) : $this->redirect($request->server('HTTP_REFERER') ?? $this->url('home.forum'));
+        return $request->isAjax()
+            ? $this->json($out)
+            : $this->redirect($request->server('HTTP_REFERER') ?? $this->url('home.forum'));
     }
 
-    // Edit: GET shows form, POST updates comment.
+    // --- Úprava komentára ---
+    // GET zobrazuje formulár, POST aktualizuje komentár
     public function edit(Request $request): Response
     {
-        $id = $request->isPost() ? (int)($request->post('id') ?? 0) : (int)($request->get('id') ?? $request->value('id'));
+        $id = $request->isPost()
+            ? (int)($request->post('id') ?? 0)
+            : (int)($request->get('id') ?? $request->value('id'));
+
         if ($id <= 0) {
-            return $request->isAjax() ? $this->json(['error' => 'Invalid id'], 400) : $this->redirect($request->server('HTTP_REFERER') ?? $this->url('home.forum'));
+            return $request->isAjax()
+                ? $this->json(['error' => 'Invalid id'], 400)
+                : $this->redirect($request->server('HTTP_REFERER') ?? $this->url('home.forum'));
         }
 
         $comment = Comment::getOne($id);
         if ($comment === null) {
-            return $request->isAjax() ? $this->json(['error' => 'Not found'], 404) : $this->redirect($request->server('HTTP_REFERER') ?? $this->url('home.forum'));
+            return $request->isAjax()
+                ? $this->json(['error' => 'Not found'], 404)
+                : $this->redirect($request->server('HTTP_REFERER') ?? $this->url('home.forum'));
         }
 
         $currentUserId = $this->getCurrentUserId();
         $isAdmin = $this->isCurrentUserAdmin();
+
+        // kontrola oprávnenia: len admin alebo vlastník môže upraviť
         if (!$isAdmin && ($currentUserId === null || $comment->getUserId() !== $currentUserId)) {
-            return $request->isAjax() ? $this->json(['error' => 'Forbidden'], 403) : $this->redirect($request->server('HTTP_REFERER') ?? $this->url('home.forum'));
+            return $request->isAjax()
+                ? $this->json(['error' => 'Forbidden'], 403)
+                : $this->redirect($request->server('HTTP_REFERER') ?? $this->url('home.forum'));
         }
 
         if ($request->isPost()) {
             $content = trim((string)($request->post('content') ?? ''));
             $referer = $request->post('referer') ?? $request->server('HTTP_REFERER') ?? $this->url('home.forum');
+
             if ($content === '') {
-                return $request->isAjax() ? $this->json(['error' => 'Invalid content'], 400) : $this->redirect($referer);
+                return $request->isAjax()
+                    ? $this->json(['error' => 'Invalid content'], 400)
+                    : $this->redirect($referer);
             }
 
             $comment->setContent($content);
@@ -125,7 +161,7 @@ class CommentController extends BaseController
             return $request->isAjax() ? $this->json($out) : $this->redirect($referer);
         }
 
-        // GET -> show simple edit view
+        // GET -> zobrazenie jednoduchého edit formulára
         $cUser = $comment->getUser();
         $commentArr = [
             'id' => (int)$comment->getId(),
@@ -138,28 +174,37 @@ class CommentController extends BaseController
         return $this->html(['comment' => $commentArr, 'referer' => $this->url('home.forum')], 'edit');
     }
 
-    // Delete comment (POST only)
+    // --- Zmazanie komentára (POST) ---
     public function delete(Request $request): Response
     {
         if (!$request->isPost()) {
-            return $request->isAjax() ? $this->json(['error' => 'Invalid method']) : $this->redirect($request->server('HTTP_REFERER') ?? $this->url('home.forum'));
+            return $request->isAjax()
+                ? $this->json(['error' => 'Invalid method'])
+                : $this->redirect($request->server('HTTP_REFERER') ?? $this->url('home.forum'));
         }
-
 
         $id = (int)($request->post('id') ?? 0);
         if ($id <= 0) {
-            return $request->isAjax() ? $this->json(['error' => 'Invalid id'], 400) : $this->redirect($request->server('HTTP_REFERER') ?? $this->url('home.forum'));
+            return $request->isAjax()
+                ? $this->json(['error' => 'Invalid id'], 400)
+                : $this->redirect($request->server('HTTP_REFERER') ?? $this->url('home.forum'));
         }
 
         $comment = Comment::getOne($id);
         if ($comment === null) {
-            return $request->isAjax() ? $this->json(['error' => 'Not found'], 404) : $this->redirect($request->server('HTTP_REFERER') ?? $this->url('home.forum'));
+            return $request->isAjax()
+                ? $this->json(['error' => 'Not found'], 404)
+                : $this->redirect($request->server('HTTP_REFERER') ?? $this->url('home.forum'));
         }
 
         $currentUserId = $this->getCurrentUserId();
         $isAdmin = $this->isCurrentUserAdmin();
+
+        // kontrola oprávnenia: len admin alebo vlastník môže zmazať
         if (!$isAdmin && ($currentUserId === null || $comment->getUserId() !== $currentUserId)) {
-            return $request->isAjax() ? $this->json(['error' => 'Forbidden'], 403) : $this->redirect($request->server('HTTP_REFERER') ?? $this->url('home.forum'));
+            return $request->isAjax()
+                ? $this->json(['error' => 'Forbidden'], 403)
+                : $this->redirect($request->server('HTTP_REFERER') ?? $this->url('home.forum'));
         }
 
         $comment->delete();
@@ -167,7 +212,7 @@ class CommentController extends BaseController
         return $request->isAjax() ? $this->json(['ok' => true]) : $this->redirect($request->server('HTTP_REFERER') ?? $this->url('home.forum'));
     }
 
-    // Simple helper to get current user id or null
+    // --- Pomocná funkcia na získanie ID aktuálneho používateľa alebo null ---
     private function getCurrentUserId(): ?int
     {
         if (!isset($this->user) || !$this->user->isLoggedIn()) {
@@ -190,7 +235,7 @@ class CommentController extends BaseController
         return null;
     }
 
-    // Simple role check
+    // --- Pomocná funkcia: kontrola, či je aktuálny používateľ admin/moderátor ---
     private function isCurrentUserAdmin(): bool
     {
         if (!isset($this->user) || !$this->user->isLoggedIn()) {
@@ -215,7 +260,7 @@ class CommentController extends BaseController
         return false;
     }
 
-    // Minimal index to satisfy BaseController
+    // --- Minimal index pre BaseController ---
     public function index(Request $request): Response
     {
         return $this->json([]);
