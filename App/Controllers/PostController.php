@@ -16,7 +16,8 @@ class PostController extends BaseController
         $currentUserId = $this->getCurrentUserId();
         if ($currentUserId === null) {
             try {
-                $this->app->getSession()->set('flash_error', 'Pre túto akciu musíte byť prihlásený.');
+                // unify flash key to 'flash_message' (layouts read this)
+                $this->app->getSession()->set('flash_message', 'Pre túto akciu musíte byť prihlásený.');
             } catch (\Throwable $e) {
                 // ignorovať chyby session
             }
@@ -30,15 +31,15 @@ class PostController extends BaseController
         if ($resp = $this->denyIfCannotAdd()) {
             return $resp;
         }
-        $currentUserId = $this->getCurrentUserId();
-        if ($currentUserId === null) {
-            try { $this->app->getSession()->set('flash_message', 'Musíte byť prihlásený, aby ste mohli pridávať príspevky.'); } catch (\Throwable $e) {}
-            return $this->redirect($this->url('home.forum'));
-        }
         $view = $this->preparePostData(null, []);
         // load categories and pass to view
         $categories = $this->loadCategories();
-        return $this->html(['post' => $view['post'], 'errors' => $view['errors'], 'categories' => $categories], 'add');
+        return $this->html([
+            'post' => $view['post'],
+            'errors' => $view['errors'],
+            'categories' => $categories,
+            'formAction' => $this->url('post.save'),
+        ], 'add');
     }
 
     public function edit(Request $request): Response
@@ -67,7 +68,12 @@ class PostController extends BaseController
 
         $view = $this->preparePostData($post, []);
         $categories = $this->loadCategories();
-        return $this->html(['post' => $view['post'], 'errors' => $view['errors'], 'categories' => $categories], 'edit');
+        return $this->html([
+            'post' => $view['post'],
+            'errors' => $view['errors'],
+            'categories' => $categories,
+            'formAction' => $this->url('post.save'),
+        ], 'edit');
     }
 
     private function preparePostData($post, array $errors): array
@@ -137,7 +143,12 @@ class PostController extends BaseController
                 'content' => $content,
             ];
             $categories = $this->loadCategories();
-            return $this->html(['post' => $postData, 'errors' => $errors, 'categories' => $categories], 'add');
+            return $this->html([
+                'post' => $postData,
+                'errors' => $errors,
+                'categories' => $categories,
+                'formAction' => $this->url('post.save'),
+            ], 'add');
         }
 
         // Update alebo nový príspevok

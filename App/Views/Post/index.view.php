@@ -1,13 +1,7 @@
 <?php
 /** @var array $post  // keys: title, category_id, content, picture, id */
 /** @var Framework\Support\LinkGenerator $link */
-
-$titleVal = $post['title'] ?? '';
-$categoryIdVal = $post['category_id'] ?? null;
-$contentVal = $post['content'] ?? '';
-$pictureVal = $post['picture'] ?? '';
-$idVal = $post['id'] ?? null;
-$formAction = $idVal !== null ? $link->url('post.save') : $link->url('post.save');
+/** @var string $formAction */
 ?>
 
 
@@ -26,17 +20,17 @@ $formAction = $idVal !== null ? $link->url('post.save') : $link->url('post.save'
 </header>
 
 <div class="container mt-4">
-    <h2><?= $idVal ? 'Upraviť príspevok' : 'Pridať príspevok' ?></h2>
+    <h2><?= !empty($post['id']) ? 'Upraviť príspevok' : 'Pridať príspevok' ?></h2>
     <form method="post" action="<?= $formAction ?>" enctype="multipart/form-data">
         <?= csrf_field() ?>
-        <?php if ($idVal !== null) { ?>
-            <input type="hidden" name="id" value="<?= htmlspecialchars((string)$idVal) ?>">
+        <?php if (!empty($post['id'])) { ?>
+            <input type="hidden" name="id" value="<?= htmlspecialchars((string)$post['id']) ?>">
         <?php } ?>
 
         <div class="mb-3">
             <label for="post-title" class="form-label">Názov</label>
             <input id="post-title" name="title" type="text" class="form-control" required
-                   value="<?= htmlspecialchars($titleVal) ?>">
+                   value="<?= htmlspecialchars($post['title'] ?? '') ?>">
         </div>
 
         <div class="mb-3">
@@ -45,34 +39,34 @@ $formAction = $idVal !== null ? $link->url('post.save') : $link->url('post.save'
                 <option value="">Vybrať kategóriu</option>
                 <?php if (!empty($categories) && is_array($categories)) {
                     foreach ($categories as $cid => $cname) {
-                        $selected = ((string)$cid === (string)$categoryIdVal) ? 'selected' : '';
+                        $selected = ((string)$cid === (string)($post['category_id'] ?? '')) ? 'selected' : '';
                         echo '<option value="' . htmlspecialchars((string)$cid) . '" ' . $selected . '>' . htmlspecialchars($cname) . '</option>';
                     }
                 } else {
                     // fallback static options if categories not provided
                     ?>
-                    <option value="tech" <?= $categoryIdVal === 'tech' ? 'selected' : '' ?>>Technické problémy</option>
-                    <option value="autoservisy" <?= $categoryIdVal === 'autoservisy' ? 'selected' : '' ?>>Autoservisy</option>
-                    <option value="tuning" <?= $categoryIdVal === 'tuning' ? 'selected' : '' ?>>Tuning a modifikácie</option>
+                    <option value="tech" <?= ((string)($post['category_id'] ?? '') === 'tech') ? 'selected' : '' ?>>Technické problémy</option>
+                    <option value="autoservisy" <?= ((string)($post['category_id'] ?? '') === 'autoservisy') ? 'selected' : '' ?>>Autoservisy</option>
+                    <option value="tuning" <?= ((string)($post['category_id'] ?? '') === 'tuning') ? 'selected' : '' ?>>Tuning a modifikácie</option>
                 <?php } ?>
             </select>
         </div>
 
         <div class="mb-3">
             <label for="post-content" class="form-label">Text</label>
-            <textarea id="post-content" name="content" class="form-control" rows="6" required><?= htmlspecialchars($contentVal) ?></textarea>
+            <textarea id="post-content" name="content" class="form-control" rows="6" required><?= htmlspecialchars($post['content'] ?? '') ?></textarea>
         </div>
 
         <div class="mb-3">
             <label for="post-picture" class="form-label">Obrázok (voliteľné)</label>
             <!-- file input name must match controller expectation: picture_file -->
             <input id="post-picture" name="picture_file" type="file" class="form-control">
-            <?php if ($pictureVal) { ?>
-                <small>Aktuálny obrázok: <a href="<?= htmlspecialchars($pictureVal) ?>" target="_blank">zobraziť</a></small>
+            <?php if (!empty($post['picture'])) { ?>
+                <small>Aktuálny obrázok: <a href="<?= htmlspecialchars($post['picture']) ?>" target="_blank">zobraziť</a></small>
             <?php } ?>
         </div>
 
-        <button type="submit" class="btn btn-orange"><?= $idVal ? 'Uložiť zmeny' : 'Vytvoriť príspevok' ?></button>
+        <button type="submit" class="btn btn-orange"><?= !empty($post['id']) ? 'Uložiť zmeny' : 'Vytvoriť príspevok' ?></button>
         <a href="<?= $link->url('home.forum') ?>" class="btn btn-outline-secondary">Zrušiť</a>
     </form>
 </div>
