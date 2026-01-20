@@ -2,11 +2,6 @@
 
 /** @var \Framework\Support\LinkGenerator $link */
 ?>
-<!-- Put the file at: `public/css/style.css` -->
-<head>
-    <link rel="stylesheet" href="/css/styl.css?v=1.0">
-    <link rel="stylesheet" href="<?= $link->asset('css/contact.css') ?>">
-</head>
 
 <section class="hero">
     <div class="container">
@@ -24,6 +19,7 @@
                     <a class="btn btn-outline-light btn-lg ms-2 my-2" href="<?= $link->url('auth.login') ?>">Prihlásiť sa</a>
                     <a class="btn btn-outline-light btn-lg ms-2 my-2" href="<?= $link->url('home.contact') ?>">Kontakt</a>
                     <a class="btn btn-outline-light btn-lg ms-2 my-2" href="<?= $link->url('user.index') ?>">Užívatelia</a>
+                    <a id="settingsLink" class="btn btn-outline-light btn-lg ms-2 my-2" href="<?= $link->url('home.carTests') ?>">Testy aút</a>
                 </div>
 
                 <div class="d-flex gap-4 mt-4 stats-box">

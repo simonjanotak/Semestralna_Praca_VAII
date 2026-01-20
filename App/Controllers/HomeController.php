@@ -7,6 +7,7 @@ use Framework\Http\Request;
 use Framework\Http\Responses\Response;
 use App\Models\Post;
 use App\Models\Comment;
+use App\Configuration;
 
 /**
  * Class HomeController
@@ -200,6 +201,16 @@ class HomeController extends BaseController
         }, $posts);
 
         return new \Framework\Http\Responses\JsonResponse($out);
+    }
+
+    // Settings page: basic user settings (requires login)
+    public function settings(Request $request): Response
+    {
+        if (! $this->user || ! $this->user->isLoggedIn()) {
+            return $this->redirect(Configuration::LOGIN_URL);
+        }
+
+        return $this->html();
     }
 
 }

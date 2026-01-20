@@ -84,6 +84,15 @@ class PostController extends BaseController
     // Uloženie príspevku (pridanie alebo editácia)
     public function save(Request $request): Response
     {
+        // CSRF protection: accept token in POST body or X-CSRF-Token header
+        $csrf = $request->post('csrf_token') ?? $request->server('HTTP_X_CSRF_TOKEN') ?? null;
+        $sessionCsrf = $this->app->getSession()->get('csrf_token') ?? null;
+        if (!$csrf || !$sessionCsrf || !hash_equals((string)$sessionCsrf, (string)$csrf)) {
+            // invalid request - redirect to forum with message
+            try { $this->app->getSession()->set('flash_message', 'Neplatný CSRF token.'); } catch (\Throwable $_) {}
+            return $this->redirect($this->url('home.forum'));
+        }
+
         $title = trim($request->post('title') ?? '');
         // read category_id instead of category text
         $categoryIdRaw = $request->post('category_id') ?? '';
@@ -153,6 +162,14 @@ class PostController extends BaseController
     public function delete(Request $request): Response
     {
         if (!$request->isPost()) {
+            return $this->redirect($this->url('post.index'));
+        }
+
+        // CSRF protection for delete
+        $csrf = $request->post('csrf_token') ?? $request->server('HTTP_X_CSRF_TOKEN') ?? null;
+        $sessionCsrf = $this->app->getSession()->get('csrf_token') ?? null;
+        if (!$csrf || !$sessionCsrf || !hash_equals((string)$sessionCsrf, (string)$csrf)) {
+            try { $this->app->getSession()->set('flash_message', 'Neplatný CSRF token.'); } catch (\Throwable $_) {}
             return $this->redirect($this->url('post.index'));
         }
 

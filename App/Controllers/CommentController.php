@@ -46,6 +46,13 @@ class CommentController extends BaseController
             return $request->isAjax() ? $this->json(['error' => 'Invalid method']) : $this->redirect($this->url('home.forum'));
         }
 
+        // CSRF protection
+        $csrf = $request->post('csrf_token') ?? $request->server('HTTP_X_CSRF_TOKEN') ?? null;
+        $sessionCsrf = $this->app->getSession()->get('csrf_token') ?? null;
+        if (!$csrf || !$sessionCsrf || !hash_equals((string)$sessionCsrf, (string)$csrf)) {
+            return $request->isAjax() ? $this->json(['error' => 'Invalid CSRF token'], 403) : $this->redirect($this->url('home.forum'));
+        }
+
         $currentUserId = $this->getCurrentUserId();
         if ($currentUserId === null) {
             return $request->isAjax() ? $this->json(['error' => 'Unauthorized'], 401) : $this->redirect($this->url('auth.login'));
@@ -102,6 +109,13 @@ class CommentController extends BaseController
         }
 
         if ($request->isPost()) {
+            // CSRF protection for edit POST
+            $csrf = $request->post('csrf_token') ?? $request->server('HTTP_X_CSRF_TOKEN') ?? null;
+            $sessionCsrf = $this->app->getSession()->get('csrf_token') ?? null;
+            if (!$csrf || !$sessionCsrf || !hash_equals((string)$sessionCsrf, (string)$csrf)) {
+                return $request->isAjax() ? $this->json(['error' => 'Invalid CSRF token'], 403) : $this->redirect($this->url('home.forum'));
+            }
+
             $content = trim((string)($request->post('content') ?? ''));
             $referer = $request->post('referer') ?? $request->server('HTTP_REFERER') ?? $this->url('home.forum');
             if ($content === '') {
@@ -143,6 +157,13 @@ class CommentController extends BaseController
     {
         if (!$request->isPost()) {
             return $request->isAjax() ? $this->json(['error' => 'Invalid method']) : $this->redirect($request->server('HTTP_REFERER') ?? $this->url('home.forum'));
+        }
+
+        // CSRF protection for delete
+        $csrf = $request->post('csrf_token') ?? $request->server('HTTP_X_CSRF_TOKEN') ?? null;
+        $sessionCsrf = $this->app->getSession()->get('csrf_token') ?? null;
+        if (!$csrf || !$sessionCsrf || !hash_equals((string)$sessionCsrf, (string)$csrf)) {
+            return $request->isAjax() ? $this->json(['error' => 'Invalid CSRF token'], 403) : $this->redirect($this->url('home.forum'));
         }
 
         $id = (int)($request->post('id') ?? 0);

@@ -4,12 +4,17 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="3ccddef7-0eb4-421a-b898-a22c0e3fca64" name="Changes" comment="csrf token">
+    <list default="true" id="3ccddef7-0eb4-421a-b898-a22c0e3fca64" name="Changes" comment="komentáre úpravy">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/App/Controllers/AuthController.php" beforeDir="false" afterPath="$PROJECT_DIR$/App/Controllers/AuthController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/App/Views/Auth/register.view.php" beforeDir="false" afterPath="$PROJECT_DIR$/App/Views/Auth/register.view.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/js/register.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/js/register.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/js/registerAjax.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/js/registerAjax.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/App/Controllers/CommentController.php" beforeDir="false" afterPath="$PROJECT_DIR$/App/Controllers/CommentController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/App/Controllers/HomeController.php" beforeDir="false" afterPath="$PROJECT_DIR$/App/Controllers/HomeController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/App/Controllers/PostController.php" beforeDir="false" afterPath="$PROJECT_DIR$/App/Controllers/PostController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/App/Views/Home/forum.view.php" beforeDir="false" afterPath="$PROJECT_DIR$/App/Views/Home/forum.view.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/App/Views/Home/index.view.php" beforeDir="false" afterPath="$PROJECT_DIR$/App/Views/Home/index.view.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/App/Views/Layouts/root.layout.view.php" beforeDir="false" afterPath="$PROJECT_DIR$/App/Views/Layouts/root.layout.view.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Framework/Core/Model.php" beforeDir="false" afterPath="$PROJECT_DIR$/Framework/Core/Model.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/css/styl.css" beforeDir="false" afterPath="$PROJECT_DIR$/public/css/styl.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/js/forum.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/js/forum.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -130,7 +135,7 @@
       <workItem from="1768639121687" duration="25176000" />
       <workItem from="1768727501264" duration="18171000" />
       <workItem from="1768853166509" duration="6798000" />
-      <workItem from="1768898138090" duration="9920000" />
+      <workItem from="1768898138090" duration="18849000" />
     </task>
     <task id="LOCAL-00001" summary="zreparovane">
       <option name="closed" value="true" />
@@ -372,14 +377,21 @@
       <option name="project" value="LOCAL" />
       <updated>1768907088685</updated>
     </task>
-    <option name="localTasksCounter" value="31" />
+    <task id="LOCAL-00031" summary="komentáre úpravy">
+      <option name="closed" value="true" />
+      <created>1768910184822</created>
+      <option name="number" value="00031" />
+      <option name="presentableId" value="LOCAL-00031" />
+      <option name="project" value="LOCAL" />
+      <updated>1768910184822</updated>
+    </task>
+    <option name="localTasksCounter" value="32" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="tabulka prispevkov,formular" />
     <MESSAGE value="pridavanie mazanie edit prispevkov" />
     <MESSAGE value="aa" />
     <MESSAGE value="spravny obrazok" />
@@ -404,6 +416,7 @@
     <MESSAGE value="stranka s uživatelmi" />
     <MESSAGE value="drobnosti vylepsenia" />
     <MESSAGE value="csrf token" />
-    <option name="LAST_COMMIT_MESSAGE" value="csrf token" />
+    <MESSAGE value="komentáre úpravy" />
+    <option name="LAST_COMMIT_MESSAGE" value="komentáre úpravy" />
   </component>
 </project>
