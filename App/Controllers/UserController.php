@@ -46,6 +46,16 @@ class UserController extends BaseController
             return $this->redirect(Configuration::LOGIN_URL);
         }
 
+        // CSRF check: token may be sent in POST body or X-CSRF-Token header
+        $csrf = $request->post('csrf_token') ?? $request->server('HTTP_X_CSRF_TOKEN') ?? null;
+        $sessionCsrf = $this->app->getSession()->get('csrf_token') ?? null;
+        if (!$csrf || !$sessionCsrf || !hash_equals((string)$sessionCsrf, (string)$csrf)) {
+            if ($request->isAjax()) {
+                return $this->json(['success' => false, 'error' => 'csrf']);
+            }
+            return $this->redirect($this->url('user.index'));
+        }
+
         // require admin
         $role = '';
         try {
@@ -89,6 +99,28 @@ class UserController extends BaseController
                     return $this->json(['success' => false, 'error' => 'not_found']);
                 }
                 return $this->redirect($this->url('user.index'));
+            }
+
+            // Prevent deleting the last remaining admin
+            if ($target->getRole() === 'admin') {
+                $admins = User::getCount('role = ?', ['admin']);
+                if ($admins <= 1) {
+                    if ($request->isAjax()) {
+                        return $this->json(['success' => false, 'error' => 'cannot_delete_last_admin']);
+                    }
+                    return $this->redirect($this->url('user.index'));
+                }
+            }
+
+            // Audit log: record actor and target
+            try {
+                $actorId = (int)($this->user->getId() ?? 0);
+                $logDir = dirname(__DIR__, 3) . '/storage/logs';
+                if (!is_dir($logDir)) @mkdir($logDir, 0755, true);
+                $line = sprintf("[%s] actor=%d action=delete_user target=%d\n", date('c'), $actorId, (int)$target->getId());
+                file_put_contents($logDir . '/admin-actions.log', $line, FILE_APPEND | LOCK_EX);
+            } catch (Exception $e) {
+                // ignore logging errors
             }
 
             // delete and respond

@@ -82,6 +82,13 @@ class AuthController extends BaseController
             // Successful login: create identity and store in session
             $identity = new UserIdentity((int)$user->getId(), $user->getUsername(), $user->getRole(), $user->getEmail());
             $this->app->getSession()->set(Configuration::IDENTITY_SESSION_KEY, $identity);
+            // generate CSRF token for the session
+            try {
+                $csrf = bin2hex(random_bytes(32));
+                $this->app->getSession()->set('csrf_token', $csrf);
+            } catch (\Throwable $e) {
+                // ignore CSRF generation error
+            }
 
             // redirect to forum/home
             return $this->redirect($this->url('home.forum'));
@@ -132,6 +139,11 @@ class AuthController extends BaseController
                 // auto-login: create identity and store in session
                 $identity = new UserIdentity((int)$user->getId(), $user->getUsername(), $user->getRole(), $user->getEmail());
                 $this->app->getSession()->set(Configuration::IDENTITY_SESSION_KEY, $identity);
+                // generate CSRF token for the session
+                try {
+                    $csrf = bin2hex(random_bytes(32));
+                    $this->app->getSession()->set('csrf_token', $csrf);
+                } catch (\Throwable $e) { }
 
                 return $this->redirect($this->url('home.forum'));
             }

@@ -23,6 +23,9 @@
             crossorigin="anonymous"></script>
     <link rel="stylesheet" href="<?= $link->asset('css/styl.css') ?>">
 
+    <?php // expose CSRF token to client JS if present in session ?>
+    <script>window.CSRF_TOKEN = '<?= htmlspecialchars($_SESSION['csrf_token'] ?? '') ?>';</script>
+
 </head>
 <body>
 <nav class="navbar navbar-expand-lg navbar-light bg-light mb-3">
