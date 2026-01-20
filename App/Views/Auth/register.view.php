@@ -4,6 +4,7 @@
 /** @var string|null $message */
 /** @var \Framework\Support\LinkGenerator $link */
 /** @var \Framework\Support\View $view */
+/** @var string $csrf */
 
 $view->setLayout('auth');
 ?>
@@ -24,6 +25,7 @@ $view->setLayout('auth');
 
                         <form id="registerForm" class="needs-validation" novalidate method="post" action="<?= $link->url('auth.register') ?>">
                             <input type="hidden" name="submit" value="1">
+                            <input type="hidden" name="_csrf" value="<?= htmlspecialchars($csrf, ENT_QUOTES) ?>">
                             <?php if (!empty($message)): ?>
                                 <div class="alert alert-danger"><?= $message ?></div>
                             <?php endif; ?>

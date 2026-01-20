@@ -23,9 +23,6 @@
             integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
             crossorigin="anonymous"></script>
     <link rel="stylesheet" href="<?= $link->asset('css/styl.css') ?>">
-    <?php // ensure CSRF token and expose via meta tag; JS moved to public/js/csrf.js ?>
-    <?= csrf_meta() ?>
-    <script src="<?= $link->asset('js/csrf.js', true) ?>"></script>
 </head>
 <body>
 <div class="container-fluid mt-3">

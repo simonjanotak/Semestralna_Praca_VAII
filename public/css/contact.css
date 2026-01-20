@@ -1,100 +1,127 @@
-/* Minimal contact.css for contact page */
+/* Minimalistický štýl pre kontaktnú stránku */
+
+/* CSS premenné – farby projektu */
 :root{
-  --brand-orange: #ff6a00;
-  --muted: #6c757d;
+    --brand-orange: #ff6a00;   /* hlavná oranžová farba */
+    --muted: #6c757d;          /* tlmená sivá pre pomocný text */
 }
 
-/* Card and wrapper */
+/* Karta s obsahom kontaktu */
 .contact-card {
-    border-radius:8px;
-    background:#fff;
-    border:1px solid rgba(0,0,0,0.04);
+    border-radius: 8px;
+    background: #fff;
+    border: 1px solid rgba(0,0,0,0.04);
 }
+
+/* Vnútorné odsadenie obsahu */
 .contact-wrap {
-    padding:12px;
-    box-sizing:border-box;
+    padding: 12px;
+    box-sizing: border-box;
 }
 
-/* Headings and small text */
+/* Meta informácie / pomocný text */
 .contact-meta {
-    color:var(--muted); font-size:0.95rem;
-    margin-bottom:0.5rem;
+    color: var(--muted);
+    font-size: 0.95rem;
+    margin-bottom: 0.5rem;
 }
 
-/* Departments list: buttons look clean and clickable */
+/* Zoznam oddelení (klikateľné položky) */
 #departments-list {
-    display:flex; flex-direction:column;
-    gap:6px; margin-top:8px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-top: 8px;
 }
+
+/* Jedna položka zoznamu */
 #departments-list .list-group-item {
-    padding:10px 12px; border-radius:6px;
-    border:1px solid rgba(0,0,0,0.04);
-    background:transparent; text-align:left;
+    padding: 10px 12px;
+    border-radius: 6px;
+    border: 1px solid rgba(0,0,0,0.04);
+    background: transparent;
+    text-align: left;
 }
+
+/* Hover efekt – jemné zvýraznenie */
 #departments-list .list-group-item:hover {
-    background:rgba(255,106,0,0.04);
-    cursor:pointer;
+    background: rgba(255,106,0,0.04);
+    cursor: pointer;
 }
 
-/* Small contact preview box */
+/* Box s detailmi kontaktu vybraného oddelenia */
 #department-contact {
-    display:block;
-    margin-top:10px;
-    padding:10px;
-    border-left:3px solid var(--brand-orange);
-    background:#fffaf6; border-radius:4px;
+    display: block;
+    margin-top: 10px;
+    padding: 10px;
+    border-left: 3px solid var(--brand-orange);
+    background: #fffaf6;
+    border-radius: 4px;
 }
+
+/* Nadpis v kontaktnom boxe */
 #department-contact h6{
-    margin:0 0 6px 0;
+    margin: 0 0 6px 0;
 }
 
-/* Buttons used on the page (simple variants) */
+/* Oranžové tlačidlo */
 .btn-orange{
-    background:var(--brand-orange);
-    color:#fff; border:none;
-    padding:8px 12px;
-    border-radius:6px;
-    text-decoration:none;
-    display:inline-block;
+    background: var(--brand-orange);
+    color: #fff;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 6px;
+    text-decoration: none;
+    display: inline-block;
 }
+
+/* Oranžové tlačidlo – obrysová verzia */
 .btn-outline-orange{
-    border:1px solid var(--brand-orange);
-    color:var(--brand-orange);
-    padding:8px 12px;
-    border-radius:6px;
-    text-decoration:none;
-    display:inline-block;
+    border: 1px solid var(--brand-orange);
+    color: var(--brand-orange);
+    padding: 8px 12px;
+    border-radius: 6px;
+    text-decoration: none;
+    display: inline-block;
 }
 
-/* Focus outlines for keyboard users */
-#departments-list .list-group-item:focus, #departments-list .list-group-item:active {
-    outline:3px solid rgba(255,106,0,0.14);
-    outline-offset:2px;
+/* Fokus pre klávesnicu (accessibility) */
+#departments-list .list-group-item:focus,
+#departments-list .list-group-item:active {
+    outline: 3px solid rgba(255,106,0,0.14);
+    outline-offset: 2px;
 }
 
-/* Ensure no overflow from long words */
+/* Zabraňuje rozbitiu layoutu pri dlhých slovách */
 .list-group-item {
     word-break: break-word;
 }
 
-/* Keep hero with background image and subtle overlay */
+/* Hero sekcia s obrázkom */
 .contact-hero {
-    height:160px;
-    border-radius:8px;
-    margin-top:12px;
+    height: 160px;
+    border-radius: 8px;
+    margin-top: 12px;
     background-image: url('../images/porsak2.png');
     background-size: cover;
     background-position: center center;
     position: relative;
     overflow: hidden;
 }
+
+/* Tmavý prekryv pre lepšiu čitateľnosť textu */
 .contact-hero-overlay {
     position: absolute;
     inset: 0;
-    background: linear-gradient(180deg, rgba(0,0,0,0.25), rgba(0,0,0,0.45));
+    background: linear-gradient(
+            180deg,
+            rgba(0,0,0,0.25),
+            rgba(0,0,0,0.45)
+    );
 }
 
-@media (max-width:576px){
-  .contact-wrap{ padding:10px; }
-  .contact-hero{ height:120px; }
+/* Responzívne úpravy pre mobily */
+@media (max-width: 576px){
+    .contact-wrap { padding: 10px; }
+    .contact-hero { height: 120px; }
 }

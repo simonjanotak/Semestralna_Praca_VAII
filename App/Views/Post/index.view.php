@@ -22,7 +22,6 @@
 <div class="container mt-4">
     <h2><?= !empty($post['id']) ? 'Upraviť príspevok' : 'Pridať príspevok' ?></h2>
     <form method="post" action="<?= $formAction ?>" enctype="multipart/form-data">
-        <?= csrf_field() ?>
         <?php if (!empty($post['id'])) { ?>
             <input type="hidden" name="id" value="<?= htmlspecialchars((string)$post['id']) ?>">
         <?php } ?>

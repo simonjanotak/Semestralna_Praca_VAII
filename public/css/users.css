@@ -1,30 +1,111 @@
-/* Minimal orange-themed styles for users list */
-.users-hero{
-    background: linear-gradient(90deg,#fff7f0,#fff2e6);
+/* ===== MINIMÁLNE ORANŽOVÉ ŠTÝLY PRE ZOZNAM UŽÍVATEĽOV ===== */
+
+/* Hero sekcia používateľov s gradientom a spodným oranžovým pásom */
+.users-hero {
+    background: linear-gradient(90deg, #fff7f0, #fff2e6);
     border-bottom: 4px solid #ff9800;
     padding: 18px 0;
 }
-.users-hero h1{ color:#d35400; margin:0; font-size:1.6rem }
-.users-hero .muted{ color:#6c6c6c; margin:0; }
-.small-logo{ max-height:48px; opacity:0.95 }
-.users-table tbody tr td{ vertical-align:middle }
-.btn-danger{ background:#ff5722; border-color:#ff5722 }
-.btn-danger:hover{ background:#e64a19; border-color:#e64a19 }
-.table thead th{ background: #fff3e0 }
-.container{ max-width:980px }
 
-/* Responsive tweaks */
-@media (max-width: 767.98px) {
-    .users-hero { padding: 14px 0; }
-    .users-hero .container { display:flex; flex-direction:column; gap:8px; align-items:flex-start }
-    .users-hero h1 { font-size:1.3rem }
-    .small-logo{ max-height:36px }
-    .users-table { font-size:0.95rem }
-    .btn-sm { padding: .25rem .5rem; font-size: .8rem }
+/* Nadpis v hero sekcii – tmavšia oranžová */
+.users-hero h1 {
+    color: #d35400;
+    margin: 0;
+    font-size: 1.6rem;
 }
 
+/* Menší text (muted) v hero sekcii – šedá farba */
+.users-hero .muted {
+    color: #6c6c6c;
+    margin: 0;
+}
+
+/* Malé logo – maximálna výška a mierna priehľadnosť */
+.small-logo {
+    max-height: 48px;
+    opacity: 0.95;
+}
+
+/* Vertikálne vycentrovanie buniek tabuľky */
+.users-table tbody tr td {
+    vertical-align: middle;
+}
+
+/* Oranžovo-červené tlačidlo pre nebezpečné akcie (zmazať) */
+.btn-danger {
+    background: #ff5722;
+    border-color: #ff5722;
+}
+
+/* Hover efekt pre nebezpečné tlačidlo */
+.btn-danger:hover {
+    background: #e64a19;
+    border-color: #e64a19;
+}
+
+/* Hlavička tabuľky svetlo-oranžová */
+.table thead th {
+    background: #fff3e0;
+}
+
+/* Maximálna šírka kontajnera pre desktop */
+.container {
+    max-width: 980px;
+}
+
+/* ===== RESPONZÍVNE ÚPRAVY PRE TABLETY ===== */
+@media (max-width: 767.98px) {
+    /* menej paddingu v hero sekcii */
+    .users-hero {
+        padding: 14px 0;
+    }
+
+    /* Hero container – stĺpce pod seba a medzera */
+    .users-hero .container {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        align-items: flex-start;
+    }
+
+    /* menší nadpis */
+    .users-hero h1 {
+        font-size: 1.3rem;
+    }
+
+    /* zmenšené logo */
+    .small-logo {
+        max-height: 36px;
+    }
+
+    /* menší text v tabuľke */
+    .users-table {
+        font-size: 0.95rem;
+    }
+
+    /* malé tlačidlá – padding a font menšie */
+    .btn-sm {
+        padding: 0.25rem 0.5rem;
+        font-size: 0.8rem;
+    }
+}
+
+/* ===== RESPONZÍVNE ÚPRAVY PRE MOBILY ===== */
 @media (max-width: 479.98px) {
-    .users-hero .container { align-items:center; text-align:center }
-    .users-hero .muted { font-size:0.95rem }
-    .users-table td, .users-table th { white-space: nowrap }
+    /* Hero container – centrovanie textu */
+    .users-hero .container {
+        align-items: center;
+        text-align: center;
+    }
+
+    /* Muted text – mierne zmenšený font */
+    .users-hero .muted {
+        font-size: 0.95rem;
+    }
+
+    /* Tabuľka – zabráni zalomeniu textu */
+    .users-table td,
+    .users-table th {
+        white-space: nowrap;
+    }
 }

@@ -8,11 +8,7 @@ if (session_status() !== PHP_SESSION_ACTIVE) {
     session_start();
 }
 
-// Load global helpers (csrf helpers etc.)
-require_once __DIR__ . '/../App/helpers.php';
-
-// Ensure CSRF token exists for the session
-try { csrf_token(); } catch (\Throwable $e) { /* ignore if session not available */ }
+// NOTE: CSRF helpers removed - no automatic token generation on every request
 
 use Framework\Core\App;
 

@@ -31,7 +31,7 @@
     usernameInput.addEventListener('input', function() {
         const q = this.value.trim();
         if (q.length < 2) {
-            learTimeout(timer);
+            clearTimeout(timer);
             clearStatus();
             return;
         }

@@ -11,50 +11,52 @@ use Framework\Http\Responses\Response;
 
 class UserController extends BaseController
 {
-    // show users list - only for logged-in users
+    // Zobrazí zoznam používateľov – iba pre prihlásených
     public function index(Request $request): Response
     {
-        // require login
-        if (! $this->user || ! $this->user->isLoggedIn()) {
+        // Vyžaduje prihlásenie
+        if (!$this->user || !$this->user->isLoggedIn()) {
             return $this->redirect($this->url('auth.login'));
         }
 
         try {
-            // load all users, newest first
+            // Načíta všetkých používateľov (najnovší prví)
             $users = User::getAll(null, [], 'created_at DESC');
         } catch (Exception $e) {
-            // fail gracefully - show empty list and message
+            // Pri chybe zobrazí prázdny zoznam
             $users = [];
         }
 
         return $this->html(compact('users'));
     }
 
-    // delete user (expects POST). Admin only. Returns JSON for AJAX or redirects on non-AJAX.
+    // Zmaže používateľa (iba POST). Iba admin.
+    // Pri AJAX volaní vracia JSON, inak presmeruje
     public function delete(Request $request): Response
     {
-        // must be POST
-        if (! $request->isPost()) {
+        // Povolená je iba POST metóda
+        if (!$request->isPost()) {
             return $this->redirect($this->url('user.index'));
         }
 
-        // require login
-        if (! $this->user || ! $this->user->isLoggedIn()) {
+        // Vyžaduje prihlásenie
+        if (!$this->user || !$this->user->isLoggedIn()) {
             if ($request->isAjax()) {
                 return $this->json(['success' => false, 'error' => 'unauthenticated']);
             }
             return $this->redirect(Configuration::LOGIN_URL);
         }
 
-        // CSRF validation is handled by global middleware
+        // Kontrola CSRF tokenu je riešená globálnym middleware
 
-        // require admin
+        // Vyžaduje rolu admin
         $role = '';
         try {
             $role = $this->user->getRole();
         } catch (Exception $e) {
-            // ignore
+            // ignorujeme chybu
         }
+
         if ($role !== 'admin') {
             if ($request->isAjax()) {
                 return $this->json(['success' => false, 'error' => 'forbidden']);
@@ -62,6 +64,7 @@ class UserController extends BaseController
             return $this->redirect($this->url('user.index'));
         }
 
+        // ID používateľa na zmazanie
         $id = (int) ($request->post('id') ?? 0);
         if ($id <= 0) {
             if ($request->isAjax()) {
@@ -70,14 +73,15 @@ class UserController extends BaseController
             return $this->redirect($this->url('user.index'));
         }
 
-        // Prevent deleting currently logged-in admin
+        // Zabráni zmazaniu práve prihláseného administrátora
         $currentId = null;
         try {
             $currentId = $this->user->getId();
         } catch (Exception $e) {
-            // ignore
+            // ignorujeme chybu
         }
-        if ($currentId !== null && (int) $currentId === $id) {
+
+        if ($currentId !== null && (int)$currentId === $id) {
             if ($request->isAjax()) {
                 return $this->json(['success' => false, 'error' => 'cannot_delete_self']);
             }
@@ -86,14 +90,14 @@ class UserController extends BaseController
 
         try {
             $target = User::getOne($id);
-            if (! $target) {
+            if (!$target) {
                 if ($request->isAjax()) {
                     return $this->json(['success' => false, 'error' => 'not_found']);
                 }
                 return $this->redirect($this->url('user.index'));
             }
 
-            // Prevent deleting the last remaining admin
+            // Zabráni zmazaniu posledného administrátora
             if ($target->getRole() === 'admin') {
                 $admins = User::getCount('role = ?', ['admin']);
                 if ($admins <= 1) {
@@ -104,18 +108,32 @@ class UserController extends BaseController
                 }
             }
 
-            // Audit log: record actor and target
+            // Audit log – zaznamená kto a koho zmazal
             try {
                 $actorId = (int)($this->user->getId() ?? 0);
                 $logDir = dirname(__DIR__, 3) . '/storage/logs';
-                if (!is_dir($logDir)) @mkdir($logDir, 0755, true);
-                $line = sprintf("[%s] actor=%d action=delete_user target=%d\n", date('c'), $actorId, (int)$target->getId());
-                file_put_contents($logDir . '/admin-actions.log', $line, FILE_APPEND | LOCK_EX);
+
+                if (!is_dir($logDir)) {
+                    @mkdir($logDir, 0755, true);
+                }
+
+                $line = sprintf(
+                    "[%s] actor=%d action=delete_user target=%d\n",
+                    date('c'),
+                    $actorId,
+                    (int)$target->getId()
+                );
+
+                file_put_contents(
+                    $logDir . '/admin-actions.log',
+                    $line,
+                    FILE_APPEND | LOCK_EX
+                );
             } catch (Exception $e) {
-                // ignore logging errors
+                // chyby logovania ignorujeme
             }
 
-            // delete and respond
+            // Zmazanie používateľa
             $target->delete();
 
             if ($request->isAjax()) {
@@ -126,8 +144,13 @@ class UserController extends BaseController
 
         } catch (Exception $e) {
             if ($request->isAjax()) {
-                return $this->json(['success' => false, 'error' => 'exception', 'message' => $e->getMessage()]);
+                return $this->json([
+                    'success' => false,
+                    'error' => 'exception',
+                    'message' => $e->getMessage()
+                ]);
             }
+
             return $this->redirect($this->url('user.index'));
         }
     }

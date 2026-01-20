@@ -5,49 +5,66 @@ use Framework\Core\BaseController;
 use Framework\Http\Request;
 use Framework\Http\Responses\Response;
 use App\Models\Post;
-use App\Models\User;
 use App\Models\Category;
 
 class PostController extends BaseController
 {
-
+    /**
+     * Zamedzí prístup neprihláseným používateľom
+     * Používa sa pri add / edit / delete
+     */
     private function denyIfCannotAdd(): ?Response
     {
         $currentUserId = $this->getCurrentUserId();
+
         if ($currentUserId === null) {
             try {
-                // unify flash key to 'flash_message' (layouts read this)
-                $this->app->getSession()->set('flash_message', 'Pre túto akciu musíte byť prihlásený.');
+                // Flash správa pre layout
+                $this->app->getSession()->set(
+                    'flash_message',
+                    'Pre túto akciu musíte byť prihlásený.'
+                );
             } catch (\Throwable $e) {
-                // ignorovať chyby session
+                // ignorujeme chyby session
             }
+
             return $this->redirect($this->url('home.forum'));
         }
+
         return null;
     }
-    // Zobrazenie formulára na pridanie nového príspevku
+
+    /**
+     * Zobrazenie formulára na pridanie nového príspevku
+     */
     public function add(Request $request): Response
     {
         if ($resp = $this->denyIfCannotAdd()) {
             return $resp;
         }
+
+        // Prázdne dáta formulára
         $view = $this->preparePostData(null, []);
-        // load categories and pass to view
         $categories = $this->loadCategories();
+
         return $this->html([
-            'post' => $view['post'],
-            'errors' => $view['errors'],
+            'post'       => $view['post'],
+            'errors'     => $view['errors'],
             'categories' => $categories,
             'formAction' => $this->url('post.save'),
         ], 'add');
     }
 
+    /**
+     * Zobrazenie formulára na úpravu príspevku
+     */
     public function edit(Request $request): Response
     {
         if ($resp = $this->denyIfCannotAdd()) {
             return $resp;
         }
-        $id = $request->get('id') ?? $request->post('id') ?? null;
+
+        $id = $request->get('id') ?? $request->post('id');
         if ($id === null) {
             return $this->redirect($this->url('post.index'));
         }
@@ -57,299 +74,231 @@ class PostController extends BaseController
             return $this->redirect($this->url('post.index'));
         }
 
-        // Authorization: only owner or admin can edit
+        // Autorizácia: iba autor alebo admin
         $currentUserId = $this->getCurrentUserId();
         $isAdmin = $this->isCurrentUserAdmin();
-        if (!$isAdmin && ($currentUserId === null || $post->getUserId() !== $currentUserId)) {
-            // set flash message and redirect to forum
-            try { $this->app->getSession()->set('flash_message', 'Nemáte oprávnenie upravovať tento príspevok.'); } catch (\Throwable $e) {}
+
+        if (!$isAdmin && $post->getUserId() !== $currentUserId) {
+            try {
+                $this->app->getSession()->set(
+                    'flash_message',
+                    'Nemáte oprávnenie upravovať tento príspevok.'
+                );
+            } catch (\Throwable $e) {}
+
             return $this->redirect($this->url('home.forum'));
         }
 
         $view = $this->preparePostData($post, []);
         $categories = $this->loadCategories();
+
         return $this->html([
-            'post' => $view['post'],
-            'errors' => $view['errors'],
+            'post'       => $view['post'],
+            'errors'     => $view['errors'],
             'categories' => $categories,
             'formAction' => $this->url('post.save'),
         ], 'edit');
     }
 
+    /**
+     * Pripraví dáta pre view (add/edit)
+     */
     private function preparePostData($post, array $errors): array
     {
         $postArr = [
-            'title' => '',
-            // now use category_id (int or null)
+            'title'       => '',
             'category_id' => null,
-            'content' => '',
-            'picture' => '',
-            'id' => null,
+            'content'     => '',
+            'picture'     => '',
+            'id'          => null,
         ];
 
-        if (is_array($post)) {
-            // merge and ensure category_id exists
-            $postArr = array_merge($postArr, $post);
-            if (array_key_exists('category', $post) && !array_key_exists('category_id', $post)) {
-                // keep backward compatibility if controller passes category string
-                $postArr['category'] = $post['category'];
-            }
-        } elseif ($post instanceof \App\Models\Post) {
+        if ($post instanceof Post) {
             $postArr = [
-                'title' => $post->getTitle() ?? '',
-                'category_id' => $post->getCategoryId() ?? null,
-                'content' => $post->getContent() ?? '',
-                'picture' => $post->getPicture() ?? '',
-                'id' => $post->getId(),
+                'title'       => $post->getTitle() ?? '',
+                'category_id' => $post->getCategoryId(),
+                'content'     => $post->getContent() ?? '',
+                'picture'     => $post->getPicture() ?? '',
+                'id'          => $post->getId(),
             ];
         }
 
-        return ['post' => $postArr, 'errors' => $errors];
+        return [
+            'post'   => $postArr,
+            'errors' => $errors
+        ];
     }
 
-    // Uloženie príspevku (pridanie alebo editácia)
+    /**
+     * Uloženie príspevku (nový alebo editovaný)
+     */
     public function save(Request $request): Response
     {
-        $id = $request->post('id') ?? null;
-        if (!$id) { // creation flow
-            if ($resp = $this->denyIfCannotAdd()) {
-                return $resp;
-            }
+        $id = $request->post('id');
+
+        // Pri vytváraní vyžadujeme prihlásenie
+        if (!$id && ($resp = $this->denyIfCannotAdd())) {
+            return $resp;
         }
 
-        $title = trim($request->post('title') ?? '');
-        // read category_id instead of category text
-        $categoryIdRaw = $request->post('category_id') ?? '';
-        $categoryId = ($categoryIdRaw === '' ? null : (int)$categoryIdRaw);
-        $content = trim($request->post('content') ?? '');
-        $pictureFile = $request->file('picture_file');
-        $id = $request->post('id') ?? null;
+        $title      = trim($request->post('title') ?? '');
+        $content    = trim($request->post('content') ?? '');
+        $categoryId = (int)($request->post('category_id') ?? 0);
+        $file       = $request->file('picture_file');
 
-        // Prevent unauthenticated users from creating new posts
-        $currentUserId = $this->getCurrentUserId();
-        if (!$id && $currentUserId === null) {
-            try { $this->app->getSession()->set('flash_message', 'Musíte byť prihlásený, aby ste mohli pridávať príspevky.'); } catch (\Throwable $e) {}
-            return $this->redirect($this->url('home.forum'));
-        }
-
-        // Validácia
-        $errors = $this->validateForm($title, $content, $categoryId, $pictureFile);
+        // Validácia formulára
+        $errors = $this->validateForm($title, $content, $categoryId, $file);
 
         if (!empty($errors)) {
-            $postData = [
-                'id' => $id,
-                'title' => $title,
-                'category_id' => $categoryId,
-                'content' => $content,
-            ];
-            $categories = $this->loadCategories();
             return $this->html([
-                'post' => $postData,
-                'errors' => $errors,
-                'categories' => $categories,
+                'post' => [
+                    'id'          => $id,
+                    'title'       => $title,
+                    'category_id' => $categoryId,
+                    'content'     => $content,
+                ],
+                'errors'     => $errors,
+                'categories' => $this->loadCategories(),
                 'formAction' => $this->url('post.save'),
             ], 'add');
         }
 
-        // Update alebo nový príspevok
+        // Vytvorenie alebo načítanie príspevku
         $post = $id ? Post::getOne($id) : new Post();
         $post->setTitle($title);
-        // set normalized category id
-        $post->setCategoryId($categoryId);
         $post->setContent($content);
+        $post->setCategoryId($categoryId);
 
-        // Set owner when creating a new post (if user is logged in)
-        if (!$id && $currentUserId !== null) {
-            $post->setUserId($currentUserId);
+        // Nastavenie autora pri novom príspevku
+        if (!$id) {
+            $post->setUserId($this->getCurrentUserId());
         }
 
-        // Upload obrázka
-        if ($pictureFile && $pictureFile->isOk() && $pictureFile->getSize() > 0) {
+        // Upload obrázka (ak existuje)
+        if ($file && $file->isOk() && $file->getSize() > 0) {
+            $dir = dirname(__DIR__, 3) . '/html/public/uploads/';
+            $name = 'img_' . uniqid() . '.' . pathinfo($file->getName(), PATHINFO_EXTENSION);
 
-            $uploadDir = dirname(__DIR__, 3) . '/html/public/uploads/';
-            $ext = pathinfo($pictureFile->getName(), PATHINFO_EXTENSION) ?: 'jpg';
-            $filename = 'img_' . uniqid() . '.' . $ext;
-            $destination = $uploadDir . $filename;
-
-            // store() returns bool - check result and handle failure
-            if (!$pictureFile->store($destination)) {
-                $postData = [
-                    'id' => $id,
-                    'title' => $title,
-                    'category_id' => $categoryId,
-                    'content' => $content,
-                ];
-                $errors = ['Nahrávanie súboru sa nepodarilo. Skontrolujte práva na priečinok uploads alebo konfiguráciu PHP.'];
-                $categories = $this->loadCategories();
-                return $this->html(['post' => $postData, 'errors' => $errors, 'categories' => $categories], 'add');
+            if ($file->store($dir . $name)) {
+                $post->setPicture('/uploads/' . $name);
             }
-
-            $post->setPicture('/uploads/' . $filename);
         }
-
 
         $post->save();
 
         return $this->redirect($this->url('home.forum'));
     }
 
-    // Zmazanie príspevku
+    /**
+     * Zmazanie príspevku
+     */
     public function delete(Request $request): Response
     {
         if ($resp = $this->denyIfCannotAdd()) {
             return $resp;
         }
-        // Only allow POST and require id; otherwise show forum with message
+
         if (!$request->isPost()) {
             return $this->redirect($this->url('home.forum'));
         }
 
-        $id = $request->post('id') ?? null;
-        if ($id === null) {
-            try { $this->app->getSession()->set('flash_message', 'Neplatná požiadavka na zmazanie príspevku.'); } catch (\Throwable $e) {}
-            return $this->redirect($this->url('home.forum'));
-        }
-
+        $id = $request->post('id');
         $post = Post::getOne($id);
-        if ($post === null) {
-            try { $this->app->getSession()->set('flash_message', 'Príspevok nebol nájdený.'); } catch (\Throwable $e) {}
+
+        if (!$post) {
             return $this->redirect($this->url('home.forum'));
         }
 
-        // Authorization: only owner or admin can delete
-        $currentUserId = $this->getCurrentUserId();
-        $isAdmin = $this->isCurrentUserAdmin();
-        if (!$isAdmin && ($currentUserId === null || $post->getUserId() !== $currentUserId)) {
-            // set flash message and redirect to forum
-            try { $this->app->getSession()->set('flash_message', 'Nemáte oprávnenie zmazať tento príspevok.'); } catch (\Throwable $e) {}
+        // Autorizácia: autor alebo admin
+        if (
+            !$this->isCurrentUserAdmin() &&
+            $post->getUserId() !== $this->getCurrentUserId()
+        ) {
             return $this->redirect($this->url('home.forum'));
         }
 
-        // Odstráni lokálny obrázok, ak existuje
-        $pic = $post->getPicture();
-        if (!empty($pic) && !str_starts_with($pic, 'http')) {
-            $path = dirname(__DIR__, 3) . '/public/' . ltrim($pic, '/');
-            if (is_file($path)) {
-                @unlink($path);
-            }
+        // Odstránenie obrázka zo servera
+        if ($post->getPicture()) {
+            @unlink(dirname(__DIR__, 3) . '/public/' . ltrim($post->getPicture(), '/'));
         }
 
         $post->delete();
-        try { $this->app->getSession()->set('flash_message', 'Príspevok bol odstránený.'); } catch (\Throwable $e) {}
+
         return $this->redirect($this->url('home.forum'));
     }
 
-    // Zobrazenie všetkých príspevkov
+    /**
+     * Zoznam príspevkov
+     */
     public function index(Request $request): Response
     {
-        $posts = Post::getAll();
-        return $this->html(['posts' => $posts]);
+        return $this->html([
+            'posts' => Post::getAll()
+        ]);
     }
 
-    // Pomocná validácia formulára
-    private function validateForm(string $title, string $content, $categoryId, $uploaded): array
-    {
+    /**
+     * Validácia formulára
+     */
+    private function validateForm(
+        string $title,
+        string $content,
+        int $categoryId,
+               $file
+    ): array {
         $errors = [];
 
-        if (trim($title) === '' || mb_strlen(trim($title)) < 3) {
-            $errors[] = 'Názov musí obsahovať aspoň 3 znaky.';
+        if (mb_strlen($title) < 3) {
+            $errors[] = 'Názov musí mať aspoň 3 znaky.';
         }
-        if (trim($content) === '' || mb_strlen(trim($content)) < 5) {
-            $errors[] = 'Text príspevku musí obsahovať aspoň 5 znakov.';
+
+        if (mb_strlen($content) < 5) {
+            $errors[] = 'Text musí mať aspoň 5 znakov.';
         }
-        // categoryId must be numeric and not null
-        if ($categoryId === null || !is_int($categoryId) || $categoryId <= 0) {
+
+        if ($categoryId <= 0) {
             $errors[] = 'Vyber kategóriu.';
-        }
-        // Voliteľný obrázok: kontrolujeme len ak súbor existuje
-        // Use isOk() and getSize() from UploadedFile
-        if ($uploaded && method_exists($uploaded, 'isOk') && $uploaded->isOk() && $uploaded->getSize() > 0) {
-            if ($uploaded->getError() !== UPLOAD_ERR_OK) {
-                $errors[] = $this->translateUploadError($uploaded) ?? 'Chyba pri nahrávaní súboru.';
-            }
         }
 
         return $errors;
     }
 
-
-
-    private function translateUploadError($uploaded)
-    {
-        if (!is_object($uploaded)) return null;
-
-        if (method_exists($uploaded, 'getErrorMessage')) {
-            return $uploaded->getErrorMessage();
-        }
-
-        if (method_exists($uploaded, 'getError')) {
-            $err = $uploaded->getError();
-            return is_string($err) ? $err : null;
-        }
-
-        return null;
-    }
-
-    // Helper: try to read current user id from AppUser/identity
+    /**
+     * Získa ID aktuálne prihláseného používateľa
+     */
     private function getCurrentUserId(): ?int
     {
         try {
-            if ($this->user->isLoggedIn()) {
-                $identity = $this->user->getIdentity();
-                if (is_object($identity)) {
-                    if (method_exists($identity, 'getId')) {
-                        return (int)$identity->getId();
-                    }
-                    if (property_exists($identity, 'id')) {
-                        return (int)$identity->id;
-                    }
-                }
-                // fallback to forwarded call (AppUser->__call)
-                if (method_exists($this->user, 'getId')) {
-                    return (int)$this->user->getId();
-                }
-            }
+            return $this->user->isLoggedIn()
+                ? (int)$this->user->getIdentity()->getId()
+                : null;
         } catch (\Throwable $e) {
-            // ignore and return null
+            return null;
         }
-        return null;
     }
 
-    // Helper: check if current user has role 'admin'
+    /**
+     * Zistí, či je používateľ admin
+     */
     private function isCurrentUserAdmin(): bool
     {
         try {
-            if ($this->user->isLoggedIn()) {
-                $identity = $this->user->getIdentity();
-                if (is_object($identity)) {
-                    if (method_exists($identity, 'getRole')) {
-                        return ($identity->getRole() === 'admin');
-                    }
-                    if (property_exists($identity, 'role')) {
-                        return ($identity->role === 'admin');
-                    }
-                }
-                if (method_exists($this->user, 'getRole')) {
-                    return ($this->user->getRole() === 'admin');
-                }
-            }
+            return $this->user->isLoggedIn()
+                && $this->user->getIdentity()->getRole() === 'admin';
         } catch (\Throwable $e) {
-            // ignore
+            return false;
         }
-        return false;
     }
 
-    // Load categories as id => name map for views
+    /**
+     * Načíta kategórie vo formáte id => názov
+     */
     private function loadCategories(): array
     {
-        $items = Category::getAll();
         $map = [];
-        foreach ($items as $c) {
-            if (is_object($c) && method_exists($c, 'getId')) {
-                $map[$c->getId()] = $c->getName();
-            }
+        foreach (Category::getAll() as $c) {
+            $map[$c->getId()] = $c->getName();
         }
         return $map;
     }
-
 }

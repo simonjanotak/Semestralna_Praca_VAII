@@ -127,12 +127,6 @@
             var postId = form.querySelector('input[name="post_id"]')?.value;
             var fd = new FormData(form);
 
-            // pridanie CSRF tokenu, ak je nastavený
-            try {
-                if (typeof window !== 'undefined' && window.CSRF_TOKEN && !fd.has('csrf_token'))
-                    fd.append('csrf_token', window.CSRF_TOKEN);
-            } catch(e){}
-
             var resp = await fetch(CREATE, {
                 method:'POST',
                 body: fd,
@@ -159,7 +153,7 @@
             if (json && json.id) {
                 var list = qs('#comments-list-'+postId);
                 if (list) list.insertBefore(renderComment(json), list.firstChild); // vložíme hore
-                form.reset(); // vyprázdnime formulár
+                form.reset(); // vyprázdnieme formulár
             }
 
         } catch(err){
@@ -183,9 +177,6 @@
 
             var fd = new FormData();
             fd.append('id', id);
-
-            // pridanie CSRF tokenu pre delete
-            try { if (typeof window !== 'undefined' && window.CSRF_TOKEN) fd.append('csrf_token', window.CSRF_TOKEN); } catch(e){}
 
             var resp = await fetch(endpoint.toString(), {
                 method: 'POST',

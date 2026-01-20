@@ -26,6 +26,8 @@ class AuthController extends BaseController
 
     /**
      * Prihlásenie používateľa
+     *
+     *
      */
     public function login(Request $request): Response
     {
@@ -33,6 +35,14 @@ class AuthController extends BaseController
 
         // Ak bol odoslaný formulár
         if ($request->hasValue('submit')) {
+
+            // Minimalistická CSRF validácia
+            $posted = (string)$request->value('_csrf');
+            $sessionToken = $this->app->getSession()->get(Configuration::CSRF_TOKEN_KEY);
+            if (!is_string($sessionToken) || $sessionToken === '' || !hash_equals($sessionToken, $posted)) {
+                $message = 'Neplatný CSRF token.';
+                return $this->html(compact('message'));
+            }
 
             // Načítanie a orezanie vstupov
             $email = trim((string)$request->value('email'));
@@ -83,6 +93,11 @@ class AuthController extends BaseController
             // Uloženie identity do session
             $this->app->getSession()->set(Configuration::IDENTITY_SESSION_KEY, $identity);
 
+            // Regenerovať session id po prihlásení (prevencia session fixation)
+            if (function_exists('session_regenerate_id')) {
+                @session_regenerate_id(true);
+            }
+
             // Presmerovanie po prihlásení
             return $this->redirect($this->url('home.forum'));
         }
@@ -100,6 +115,14 @@ class AuthController extends BaseController
 
         // Ak bol odoslaný formulár
         if ($request->hasValue('submit')) {
+
+            // Minimalistická CSRF validácia
+            $posted = (string)$request->value('_csrf');
+            $sessionToken = $this->app->getSession()->get(Configuration::CSRF_TOKEN_KEY);
+            if (!is_string($sessionToken) || $sessionToken === '' || !hash_equals($sessionToken, $posted)) {
+                $message = 'Neplatný CSRF token.';
+                return $this->html(compact('message'));
+            }
 
             // Načítanie údajov z formulára
             $username = trim((string)$request->value('username'));
@@ -154,6 +177,10 @@ class AuthController extends BaseController
 
                 $this->app->getSession()->set(Configuration::IDENTITY_SESSION_KEY, $identity);
 
+                // Regenerovať session id po registrácii/prihlásení (prevencia session fixation)
+                if (function_exists('session_regenerate_id')) {
+                    @session_regenerate_id(true);
+                }
 
                 return $this->redirect($this->url('home.forum'));
             }

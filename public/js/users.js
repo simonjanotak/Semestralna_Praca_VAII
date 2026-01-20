@@ -19,10 +19,6 @@ document.addEventListener('click', function (e) {
 
     const form = new FormData();
     form.append('id', id);
-    // include CSRF token if available
-    if (typeof window !== 'undefined' && window.CSRF_TOKEN) {
-        form.append('csrf_token', window.CSRF_TOKEN);
-    }
 
     fetch(url, {
         method: 'POST',

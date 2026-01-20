@@ -17,7 +17,10 @@ if (!function_exists('cat_slug')) {
 }
 //správy ked nieje prihláseny použivateľ
 $flashError = null;
-if (!empty($_SESSION['flash_error'])) {
+if (!empty($_SESSION['flash_message'])) {
+    $flashError = $_SESSION['flash_message'];
+    unset($_SESSION['flash_message']);
+} elseif (!empty($_SESSION['flash_error'])) {
     $flashError = $_SESSION['flash_error'];
     unset($_SESSION['flash_error']);
 }
@@ -102,7 +105,6 @@ if ($flashError): ?>
                                         <div class="btn-group btn-group-sm me-3" role="group" aria-label="Actions">
                                             <a href="<?= $link->url('post.edit', ['id' => $post['id']]) ?>" class="btn btn-success me-1 rounded" title="Upraviť">Upraviť</a>
                                             <form method="post" action="<?= $link->url('post.delete') ?>" style="display:inline;margin:0;">
-                                                <?= csrf_field() ?>
                                                 <input type="hidden" name="id" value="<?= (int)$post['id'] ?>">
                                                 <button type="submit" class="btn btn-danger rounded" onclick="return confirm('Naozaj zmazať tento príspevok?');">Zmazať</button>
                                             </form>
@@ -145,7 +147,6 @@ if ($flashError): ?>
                                                         <?php endif; ?>
                                                         <?php if (!empty($c['can_delete'])): ?>
                                                             <form method="post" action="<?= $link->url('comment.delete') ?>" style="display:inline;margin:0;" onsubmit="return confirm('Naozaj zmazať tento komentár?');">
-                                                                <?= csrf_field() ?>
                                                                 <input type="hidden" name="id" value="<?= (int)$c['id'] ?>">
                                                                 <button type="submit" class="btn btn-sm btn-outline-danger ms-2">Zmazať</button>
                                                             </form>
@@ -161,7 +162,6 @@ if ($flashError): ?>
                                     </div>
                                     <!-- Formulár na pridanie komentára -->
                                     <form class="comment-form" method="post" action="<?= $link->url('comment.create') ?>">
-                                        <?= csrf_field() ?>
                                         <input type="hidden" name="post_id" value="<?= (int)$post['id'] ?>">
                                         <div class="mb-2">
                                             <label for="comment-content-<?= (int)$post['id'] ?>" class="visually-hidden">Komentár</label>

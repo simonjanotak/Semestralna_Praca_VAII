@@ -1,30 +1,77 @@
-# About
+# PitStop.sk — inštalácia a rýchly štart
 
-This framework was created to support the teaching of the subject Development of intranet and intranet applications 
-(VAII) at the [Faculty of Management Science and Informatics](https://www.fri.uniza.sk/) of
-[University of Žilina](https://www.uniza.sk/). Framework demonstrates how the MVC architecture works.
+Obsah
+- Úvod
+- Rýchle spustenie pomocou Docker Compose
+- Vzorový súbor `.env`
+- Databázové skripty (import)
+- Spustenie bez Dockeru (lokálny PHP)
+- Tipy na ladieie a bezpečnosť
+- Kontakt / ďalšie informácie
 
-# Instructions and documentation 
+Úvod
+----
+Aplikácia beží vo webovom root-e `public/`. V projekte je pripravené Docker prostredie (v priečinku `docker/`) — obsahuje službu web (Apache + PHP 8.3), MariaDB a Adminer pre jednoduchú správu DB.
 
-The framework source code is fully commented. In case you need additional information to understand,
-visit the [WIKI stránky](https://github.com/thevajko/vaiicko/wiki/00-%C3%9Avodn%C3%A9-inform%C3%A1cie) (only in Slovak).
+Rýchle spustenie pomocou Docker Compose (Windows / cmd.exe)
+---------------------------------------------------------
+1) Skopírujte alebo vytvorte súbor s premennými prostredia pre Docker Compose. Odporúčame vytvoriť súbor `docker/.env` s nastaveniami pre MariaDB (príklad ďalej).
 
-# Docker configuration
+2) Otvorte príkazový riadok (cmd.exe) a spustite kontajnery:
 
-The Framework has a basic configuration for running and debugging web applications in the `<root>/docker` directory. 
-All necessary services are set in `docker-compose.yml` file. After starting them, it creates the following services:
+    cd docker
+    docker-compose up -d
 
-- web server (Apache) with the __PHP 8.3__ 
-- MariaDB database server with a created _database_ named according `MYSQL_DATABASE` environment variable
-- Adminer application for MariaDB administration
+3) Počkajte, kým sa kontajnery spustia. Webová aplikácia bude dostupná na:
 
-## Other notes:
+    http://localhost/
 
-- __WWW document root__ is set to the `public` in the project directory.
-- The website is available at [http://localhost/](http://localhost/).
-- The server includes an extension for PHP code debugging [__Xdebug 3__](https://xdebug.org/), uses the  
-  port __9003__ and works in "auto-start" mode.
-- PHP contains the __PDO__ extension.
-- The database server is available locally on the port __3306__. The default login details can be found in `.env` file.
-- Adminer is available at [http://localhost:8080/](http://localhost:8080/)
+   Adminer (webový DB klient) bude dostupný na:
 
+    http://localhost:8080/
+
+   Prihláste sa do Adminer pomocou údajov z `docker/.env` (server: `db`, používateľ a heslo podľa `.env`).
+
+Vzorový súbor `docker/.env`
+---------------------------
+Vytvorte súbor `docker/.env` (s rovnakým názvom a umiestnením, kde je `docker-compose.yml`) s niečím podobným:
+
+    MARIADB_ROOT_PASSWORD=changeme_root_password
+    MARIADB_DATABASE=vaiicko_db
+    MARIADB_USER=vaiicko_user
+    MARIADB_PASSWORD=dtb456
+
+Poznámky:
+- Hodnoty zvoľte bezpečne (nepoužívajte v produkcii jednoduché heslá).
+- Ak zmeníte názov DB / používateľa / hesla, upravte podľa potreby aj `App/Configuration.php` alebo nechajte tieto hodnoty a používajte rovnaké v konfigu.
+
+Databázové skripty
+------------------
+V priečinku `docker/sql/` sú pripravené SQL skripty, ktoré sa pri prvom štarte MariaDB kontajnera automaticky importujú (vďaka mountu do `/docker-entrypoint-initdb.d`). Obsahuje napr. `create_users.sql` a `create_posts.sql`.
+
+Ak chcete importovať ručne, môžete v Adminer vykonať obsah týchto súborov alebo v konteineri spustiť psql/mysql cli.
+
+Tipy na ladieie a bezpečnosť
+----------------------------
+- CSRF ochrana: projekt obsahuje minimalistickú CSRF ochranu pre HTML formuláre (token v session a hidden `_csrf` input vo vybraných formách).
+- Session cookies: ak nasadzujete na HTTPS, zabezpečte, aby `session.cookie_secure` bolo zapnuté a `httponly` + `samesite` boli nastavené podľa potreby.
+- Heslá: používame `password_hash()` a `password_verify()` pre nové heslá. Projekt obsahuje fallback pre staré plaintext heslá (automatické prehashovanie pri prvom prihlásení).
+- Režim vývoja: v `App/Configuration.php` je možnosť zapnúť detailné výpisy SQL a chýb (používajte len pri lokálnom vývoji).
+
+Najčastejšie problémy a riešenia
+--------------------------------
+- Kontajnery sa nespustia: skontrolujte `docker-compose logs` alebo `docker-compose -f docker\docker-compose.yml logs -f`.
+- MariaDB neprijíma spojenie: overte hodnoty v `docker/.env` a že kontajner DB je zdravý (`docker ps`).
+- Súbory v `public/` sa neukazujú: overte, že `APACHE_DOCUMENT_ROOT` a mount v `docker/docker-compose.yml` sú správne a že spúšťate `docker-compose` v priečinku `docker` (alebo použijete -f s absolútnou cestou).
+
+Ďalšie informácie
+-----------------
+- Projekt obsahuje komentovaný zdroj a jednoduchú dokumentáciu vo WIKI autora (odkazy v pôvodnom repozitári). Pre interné úpravy preštudujte `Framework/` a `App/` priečinky.
+
+Kontakt
+-------
+Ak potrebuješ pomôcť s inštaláciou alebo chceš, aby som pridal automatické kroky (napr. skript `start-local.bat` pre Windows, single-use CSRF token, alebo meta tag pre AJAX CSRF), napíš čo presne chceš a implementujem to.
+
+
+---
+Automaticky vygenerované inštrukcie pre tento projekt. Uprav ich podľa vlastných preferencií pred zdieľaním ďalej.

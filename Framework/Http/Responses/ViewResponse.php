@@ -68,6 +68,7 @@ class ViewResponse extends Response
         $viewHelpers = [
             'user' => $this->app->getAppUser(),
             'link' => $this->app->getLinkGenerator(),
+            'csrf' => $this->app->getSession()->getCsrfToken(),
         ];
 
         // Selected layout is controlled by the helper via reference; default to root layout

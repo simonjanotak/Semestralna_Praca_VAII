@@ -2,6 +2,8 @@
 
 namespace Framework\Http;
 
+use App\Configuration;
+
 /**
  * Class Session
  *
@@ -131,5 +133,21 @@ class Session
             );
         }
         return session_destroy();
+    }
+
+    /**
+     * Returns a CSRF token stored in session. If one does not exist, a new cryptographically secure token is
+     * generated, stored and returned.
+     */
+    public function getCsrfToken(): string
+    {
+        $key = Configuration::CSRF_TOKEN_KEY;
+        $token = $this->get($key);
+        if (!is_string($token) || $token === '') {
+            // 32 bytes -> 64 hex chars
+            $token = bin2hex(random_bytes(32));
+            $this->set($key, $token);
+        }
+        return $token;
     }
 }
