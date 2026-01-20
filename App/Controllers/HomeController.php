@@ -161,6 +161,12 @@ class HomeController extends BaseController
         ], 'forum');
     }
 
+    // Simple car tests page
+    public function carTests(Request $request): Response
+    {
+        return $this->html([], 'carTests');
+    }
+
     /**
      * AJAX: search posts by title (GET param q)
      * Returns JSON array: [{id,title,content,category,created_at},...]
@@ -202,15 +208,4 @@ class HomeController extends BaseController
 
         return new \Framework\Http\Responses\JsonResponse($out);
     }
-
-    // Settings page: basic user settings (requires login)
-    public function settings(Request $request): Response
-    {
-        if (! $this->user || ! $this->user->isLoggedIn()) {
-            return $this->redirect(Configuration::LOGIN_URL);
-        }
-
-        return $this->html();
-    }
-
 }

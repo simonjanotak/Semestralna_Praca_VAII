@@ -28,6 +28,7 @@ $formAction = $idVal !== null ? $link->url('post.save') : $link->url('post.save'
 <div class="container mt-4">
     <h2><?= $idVal ? 'Upraviť príspevok' : 'Pridať príspevok' ?></h2>
     <form method="post" action="<?= $formAction ?>" enctype="multipart/form-data">
+        <?= csrf_field() ?>
         <?php if ($idVal !== null) { ?>
             <input type="hidden" name="id" value="<?= htmlspecialchars((string)$idVal) ?>">
         <?php } ?>

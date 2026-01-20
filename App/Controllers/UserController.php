@@ -46,15 +46,7 @@ class UserController extends BaseController
             return $this->redirect(Configuration::LOGIN_URL);
         }
 
-        // CSRF check: token may be sent in POST body or X-CSRF-Token header
-        $csrf = $request->post('csrf_token') ?? $request->server('HTTP_X_CSRF_TOKEN') ?? null;
-        $sessionCsrf = $this->app->getSession()->get('csrf_token') ?? null;
-        if (!$csrf || !$sessionCsrf || !hash_equals((string)$sessionCsrf, (string)$csrf)) {
-            if ($request->isAjax()) {
-                return $this->json(['success' => false, 'error' => 'csrf']);
-            }
-            return $this->redirect($this->url('user.index'));
-        }
+        // CSRF validation is handled by global middleware
 
         // require admin
         $role = '';

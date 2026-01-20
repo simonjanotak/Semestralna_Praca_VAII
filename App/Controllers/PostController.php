@@ -84,14 +84,6 @@ class PostController extends BaseController
     // Uloženie príspevku (pridanie alebo editácia)
     public function save(Request $request): Response
     {
-        // CSRF protection: accept token in POST body or X-CSRF-Token header
-        $csrf = $request->post('csrf_token') ?? $request->server('HTTP_X_CSRF_TOKEN') ?? null;
-        $sessionCsrf = $this->app->getSession()->get('csrf_token') ?? null;
-        if (!$csrf || !$sessionCsrf || !hash_equals((string)$sessionCsrf, (string)$csrf)) {
-            // invalid request - redirect to forum with message
-            try { $this->app->getSession()->set('flash_message', 'Neplatný CSRF token.'); } catch (\Throwable $_) {}
-            return $this->redirect($this->url('home.forum'));
-        }
 
         $title = trim($request->post('title') ?? '');
         // read category_id instead of category text
@@ -100,6 +92,13 @@ class PostController extends BaseController
         $content = trim($request->post('content') ?? '');
         $pictureFile = $request->file('picture_file');
         $id = $request->post('id') ?? null;
+
+        // Prevent unauthenticated users from creating new posts
+        $currentUserId = $this->getCurrentUserId();
+        if (!$id && $currentUserId === null) {
+            try { $this->app->getSession()->set('flash_message', 'Musíte byť prihlásený, aby ste mohli pridávať príspevky.'); } catch (\Throwable $e) {}
+            return $this->redirect($this->url('home.forum'));
+        }
 
         // Validácia
         $errors = $this->validateForm($title, $content, $categoryId, $pictureFile);
@@ -123,7 +122,6 @@ class PostController extends BaseController
         $post->setContent($content);
 
         // Set owner when creating a new post (if user is logged in)
-        $currentUserId = $this->getCurrentUserId();
         if (!$id && $currentUserId !== null) {
             $post->setUserId($currentUserId);
         }
@@ -161,26 +159,21 @@ class PostController extends BaseController
     // Zmazanie príspevku
     public function delete(Request $request): Response
     {
+        // Only allow POST and require id; otherwise show forum with message
         if (!$request->isPost()) {
-            return $this->redirect($this->url('post.index'));
-        }
-
-        // CSRF protection for delete
-        $csrf = $request->post('csrf_token') ?? $request->server('HTTP_X_CSRF_TOKEN') ?? null;
-        $sessionCsrf = $this->app->getSession()->get('csrf_token') ?? null;
-        if (!$csrf || !$sessionCsrf || !hash_equals((string)$sessionCsrf, (string)$csrf)) {
-            try { $this->app->getSession()->set('flash_message', 'Neplatný CSRF token.'); } catch (\Throwable $_) {}
-            return $this->redirect($this->url('post.index'));
+            return $this->redirect($this->url('home.forum'));
         }
 
         $id = $request->post('id') ?? null;
         if ($id === null) {
-            return $this->redirect($this->url('post.index'));
+            try { $this->app->getSession()->set('flash_message', 'Neplatná požiadavka na zmazanie príspevku.'); } catch (\Throwable $e) {}
+            return $this->redirect($this->url('home.forum'));
         }
 
         $post = Post::getOne($id);
         if ($post === null) {
-            return $this->redirect($this->url('post.index'));
+            try { $this->app->getSession()->set('flash_message', 'Príspevok nebol nájdený.'); } catch (\Throwable $e) {}
+            return $this->redirect($this->url('home.forum'));
         }
 
         // Authorization: only owner or admin can delete
@@ -202,6 +195,7 @@ class PostController extends BaseController
         }
 
         $post->delete();
+        try { $this->app->getSession()->set('flash_message', 'Príspevok bol odstránený.'); } catch (\Throwable $e) {}
         return $this->redirect($this->url('home.forum'));
     }
 

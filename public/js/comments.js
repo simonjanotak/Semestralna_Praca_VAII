@@ -102,10 +102,12 @@
     try{
       var postId = form.querySelector('input[name="post_id"]')?.value;
       var fd = new FormData(form);
+      // Ensure CSRF token is present when submitting via AJAX
+      try { if (typeof window !== 'undefined' && window.CSRF_TOKEN && !fd.has('csrf_token')) fd.append('csrf_token', window.CSRF_TOKEN); } catch(e){}
       var resp = await fetch(CREATE, { method:'POST', body: fd, credentials:'same-origin', headers:{'X-Requested-With':'XMLHttpRequest'} });
       if (resp.status === 401) { alert('Pre pridanie komentára sa musíš prihlásiť.'); return; }
       var ct = (resp.headers.get('content-type')||'').toLowerCase();
-      if (ct.indexOf('application/json') === -1) { var txt=await resp.text(); alert('Server odpovedal neočakávanou odpoveďou.'); return; }
+      if (ct.indexOf('application/json') === -1) { const txt = await resp.text(); alert('Server odpovedal neočakávanou odpoveďou: '+txt); return; }
       var json = await resp.json();
       if (json && json.error) { alert(json.error); return; }
       if (json && json.id) {
@@ -130,10 +132,12 @@
       var endpoint;
       try { endpoint = new URL(DELETE, window.location.href); } catch (err) { endpoint = new URL(window.location.origin + DELETE); }
       var fd = new FormData(); fd.append('id', id);
+      // append CSRF token for delete
+      try { if (typeof window !== 'undefined' && window.CSRF_TOKEN) fd.append('csrf_token', window.CSRF_TOKEN); } catch(e){}
       var resp = await fetch(endpoint.toString(), { method: 'POST', body: fd, credentials: 'same-origin', headers: {'X-Requested-With':'XMLHttpRequest'} });
       if (!resp.ok) {
-        var txt = await resp.text();
-        alert('Chyba pri mazaní komentára.');
+        const txt = await resp.text();
+        alert('Chyba pri mazaní komentára: '+txt);
         return;
       }
       var json = await resp.json();

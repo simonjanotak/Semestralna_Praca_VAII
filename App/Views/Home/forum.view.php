@@ -17,15 +17,18 @@ if (!function_exists('cat_slug')) {
 }
 
 // Zobrazenie "flash" správy zo session (napr. "Príspevok pridaný") a následné vymazanie
-if (session_status() !== PHP_SESSION_ACTIVE) { @session_start(); }
-if (!empty($_SESSION['flash_message'])): ?>
+$flashMessage = null;
+if (session_status() === PHP_SESSION_ACTIVE && !empty($_SESSION['flash_message'])) {
+    $flashMessage = $_SESSION['flash_message'];
+}
+if (!empty($flashMessage)): ?>
     <div class="container-fluid">
         <div class="alert alert-warning alert-dismissible fade show" role="alert">
-            <?= htmlspecialchars($_SESSION['flash_message']) ?>
+            <?= htmlspecialchars($flashMessage) ?>
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
     </div>
-    <?php unset($_SESSION['flash_message']);
+    <?php if (session_status() === PHP_SESSION_ACTIVE) { unset($_SESSION['flash_message']); }
 endif;
 ?>
 
@@ -102,7 +105,8 @@ endif;
                                         <div class="btn-group btn-group-sm me-3" role="group" aria-label="Actions">
                                             <a href="<?= $link->url('post.edit', ['id' => $post['id']]) ?>" class="btn btn-success me-1 rounded" title="Upraviť">Upraviť</a>
                                             <form method="post" action="<?= $link->url('post.delete') ?>" style="display:inline;margin:0;">
-                                                <input type="hidden" name="id" value="<?= htmlspecialchars((string)$post['id']) ?>">
+                                                <?= csrf_field() ?>
+                                                <input type="hidden" name="id" value="<?= (int)$post['id'] ?>">
                                                 <button type="submit" class="btn btn-danger rounded" onclick="return confirm('Naozaj zmazať tento príspevok?');">Zmazať</button>
                                             </form>
                                         </div>
@@ -144,6 +148,7 @@ endif;
                                                         <?php endif; ?>
                                                         <?php if (!empty($c['can_delete'])): ?>
                                                             <form method="post" action="<?= $link->url('comment.delete') ?>" style="display:inline;margin:0;" onsubmit="return confirm('Naozaj zmazať tento komentár?');">
+                                                                <?= csrf_field() ?>
                                                                 <input type="hidden" name="id" value="<?= (int)$c['id'] ?>">
                                                                 <button type="submit" class="btn btn-sm btn-outline-danger ms-2">Zmazať</button>
                                                             </form>
@@ -159,6 +164,7 @@ endif;
                                     </div>
                                     <!-- Formulár na pridanie komentára -->
                                     <form class="comment-form" method="post" action="<?= $link->url('comment.create') ?>">
+                                        <?= csrf_field() ?>
                                         <input type="hidden" name="post_id" value="<?= (int)$post['id'] ?>">
                                         <div class="mb-2">
                                             <label for="comment-content-<?= (int)$post['id'] ?>" class="visually-hidden">Komentár</label>
@@ -177,14 +183,15 @@ endif;
 
                 </div> <!-- /#postsContainer -->
 
-                <script>
-                    // Exportujeme URL pre AJAX volania do JS
-                    window.SEARCH_URL = "<?= $link->url('home.searchPosts', [], true) ?>";
-                    window.COMMENT_URL_LIST = "<?= $link->url('comment.list', [], true) ?>";
-                    window.COMMENT_URL_CREATE = "<?= $link->url('comment.create', [], true) ?>";
-                    window.COMMENT_URL_DELETE = "<?= $link->url('comment.delete', [], true) ?>";
-                    window.COMMENT_URL_EDIT = "<?= $link->url('comment.edit', [], true) ?>";
-                </script>
+                <!-- configuration for forum JS (no inline JS) -->
+                <div id="app-urls" style="display:none;"
+                     data-search-url="<?= htmlspecialchars($link->url('home.searchPosts', [], true)) ?>"
+                     data-comment-list="<?= htmlspecialchars($link->url('comment.list', [], true)) ?>"
+                     data-comment-create="<?= htmlspecialchars($link->url('comment.create', [], true)) ?>"
+                     data-comment-delete="<?= htmlspecialchars($link->url('comment.delete', [], true)) ?>"
+                     data-comment-edit="<?= htmlspecialchars($link->url('comment.edit', [], true)) ?>"
+                ></div>
+                <script src="<?= $link->asset('js/forum.boot.js', true) ?>"></script>
                 <script src="<?= $link->asset('js/forum.js', true) ?>"></script>
                 <script src="<?= $link->asset('js/comments.js', true) ?>"></script>
 

@@ -1,4 +1,4 @@
-<?php /** @var array $comment */ /** @var string $referer */ ?>
+<?php /** @var array $comment */ /** @var string $referer */ /** @var \Framework\Support\LinkGenerator $link */ ?>
 
 <div class="card">
     <div class="card-body">
@@ -6,6 +6,7 @@
         <p class="text-muted small">Autor: <?= htmlspecialchars($comment['user']) ?> • <?= htmlspecialchars($comment['created_at']) ?></p>
 
         <form method="post" action="<?= $link->url('comment.edit') ?>">
+            <?= csrf_field() ?>
             <input type="hidden" name="id" value="<?= (int)$comment['id'] ?>">
             <!-- Always send back the forum URL as referer so we reliably return to the forum page -->
             <input type="hidden" name="referer" value="<?= htmlspecialchars($link->url('home.forum')) ?>">

@@ -1,0 +1,16 @@
+/* Local quick styles to enforce orange theme for this view */
+.text-orange { color: #ff4e00; }
+.card-orange { border-left: 4px solid rgba(255,78,0,0.18); }
+/* enlarged orange button variant */
+.btn-orange { background: linear-gradient(180deg,#ff7a18,#ff4e00); color: #fff; border: none; }
+.btn-orange.param-btn { text-align: left; }
+.param-card { background: #fff8f1; border: 1px solid rgba(255,120,40,0.08); padding: .6rem .8rem; border-radius: 8px; }
+
+/* New helper to make buttons larger and more prominent */
+.btn-large { padding: .6rem 1rem; font-size: 1.05rem; border-radius: .375rem; }
+
+/* Gray variant (use if you prefer gray instead of orange) */
+.btn-gray { background: linear-gradient(180deg,#6c757d,#5a6268); color: #fff; border: none; }
+
+/* Hover slight effect for both variants */
+.btn-orange:hover, .btn-gray:hover { opacity: 0.95; }

@@ -11,6 +11,7 @@ use Framework\Http\Responses\RedirectResponse;
 use Framework\Http\Responses\Response;
 use Framework\Http\Session;
 use Framework\Support\LinkGenerator;
+use Framework\Core\Middleware\CsrfMiddleware;
 
 /**
  * Class App
@@ -99,6 +100,16 @@ class App
 
             // Attempt to authorize the requested action.
             if ($this->router->getController()->authorize($this->request, $this->router->getAction())) {
+                // Run CSRF middleware to validate mutating requests (POST/PUT/PATCH/DELETE)
+                try {
+                    CsrfMiddleware::handle($this, $this->request);
+                } catch (\Framework\Http\HttpException $he) {
+                    // Convert HttpException thrown by middleware into appropriate response
+                    $errorHandler = new (Configuration::ERROR_HANDLER_CLASS)();
+                    $errorHandler->handleError($this, $he)->send();
+                    ob_end_flush();
+                    return;
+                }
                 // Call the specified action method on the controller with Request as required parameter (no reflection)
                 $response = call_user_func([$this->router->getController(), $this->router->getAction()], $this->request);
 

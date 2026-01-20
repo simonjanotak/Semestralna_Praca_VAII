@@ -23,12 +23,16 @@ class Session
     /**
      * Initializes a session.
      *
-     * This constructor starts a new session or resumes the current one by calling `session_start()`. It also creates
-     * a reference to the global `$_SESSION` array, allowing for easy access and manipulation of session data.
+     * This constructor starts a new session or resumes the current one by calling `session_start()` if a session is
+     * not already active. It also creates a reference to the global `$_SESSION` array, allowing for easy access and
+     * manipulation of session data.
      */
     public function __construct()
     {
-        session_start();
+        // Only start a session if none is active to avoid "session_start(): Ignoring session_start() because a session is already active" warnings
+        if (session_status() !== PHP_SESSION_ACTIVE) {
+            session_start();
+        }
         $this->sessionData = &$_SESSION;
     }
 

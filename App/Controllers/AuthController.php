@@ -83,14 +83,6 @@ class AuthController extends BaseController
             // Uloženie identity do session
             $this->app->getSession()->set(Configuration::IDENTITY_SESSION_KEY, $identity);
 
-            // Vygenerovanie CSRF tokenu
-            try {
-                $csrf = bin2hex(random_bytes(32));
-                $this->app->getSession()->set('csrf_token', $csrf);
-            } catch (\Throwable $e) {
-                // ignorujeme chybu
-            }
-
             // Presmerovanie po prihlásení
             return $this->redirect($this->url('home.forum'));
         }
@@ -162,11 +154,6 @@ class AuthController extends BaseController
 
                 $this->app->getSession()->set(Configuration::IDENTITY_SESSION_KEY, $identity);
 
-                // CSRF token
-                try {
-                    $csrf = bin2hex(random_bytes(32));
-                    $this->app->getSession()->set('csrf_token', $csrf);
-                } catch (\Throwable $e) { }
 
                 return $this->redirect($this->url('home.forum'));
             }
