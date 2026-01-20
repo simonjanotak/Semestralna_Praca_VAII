@@ -30,8 +30,16 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function updateMeter() {
         const s = scorePassword(pwd.value);
+
         const labels = ['velmi slabe','slabe','ok','dobre','silne'];
         const colors = ['#c00', '#d66', '#e6a', '#3a9', '#0a0'];
+
+        if (s === 0) {
+            pwdMeter.textContent = '';
+            pwdMeter.style.color = '';
+            return;
+        }
+
         pwdMeter.textContent = 'Sila: ' + labels[s];
         pwdMeter.style.color = colors[s];
     }

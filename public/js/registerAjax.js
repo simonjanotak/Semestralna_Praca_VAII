@@ -30,8 +30,11 @@
     }
     usernameInput.addEventListener('input', function() {
         const q = this.value.trim();
-        if (q.length < 2) { clearTimeout(timer); clearStatus(); return; }
-
+        if (q.length < 2) {
+            learTimeout(timer);
+            clearStatus();
+            return;
+        }
         clearTimeout(timer);
         timer = setTimeout(() => checkUsername(q), 300);
     });

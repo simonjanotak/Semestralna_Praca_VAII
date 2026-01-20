@@ -12,22 +12,12 @@ use App\Models\User;
 use Framework\Auth\UserIdentity;
 
 /**
- * Class AuthController
- *
- * This controller handles authentication actions such as login, logout, and redirection to the login page. It manages
- * user sessions and interactions with the authentication system.
- *
- * @package App\Controllers
+ * Controller pre autentifikáciu (login, register, logout)
  */
 class AuthController extends BaseController
 {
     /**
-     * Redirects to the login page.
-     *
-     * This action serves as the default landing point for the authentication section of the application, directing
-     * users to the login URL specified in the configuration.
-     *
-     * @return Response The response object for the redirection to the login page.
+     * Predvolená akcia – presmeruje na login
      */
     public function index(Request $request): Response
     {
@@ -35,111 +25,144 @@ class AuthController extends BaseController
     }
 
     /**
-     * Authenticates a user and processes the login request.
-     *
-     * This action handles user login attempts. If the login form is submitted, it attempts to authenticate the user
-     * with the provided credentials. Upon successful login, the user is redirected to the admin dashboard.
-     * If authentication fails, an error message is displayed on the login page.
-     *
-     * @return Response The response object which can either redirect on success or render the login view with
-     *                  an error message on failure.
-     * @throws Exception If the parameter for the URL generator is invalid throws an exception.
+     * Prihlásenie používateľa
      */
     public function login(Request $request): Response
     {
         $message = null;
+
+        // Ak bol odoslaný formulár
         if ($request->hasValue('submit')) {
+
+            // Načítanie a orezanie vstupov
             $email = trim((string)$request->value('email'));
             $password = (string)$request->value('password');
 
+            // Základná kontrola
             if ($email === '' || $password === '') {
                 $message = 'Zadajte email a heslo.';
                 return $this->html(compact('message'));
             }
 
+            // Vyhľadanie používateľa podľa emailu
             $user = User::findByEmail($email);
             if ($user === null) {
                 $message = 'Nesprávny email alebo heslo.';
                 return $this->html(compact('message'));
             }
 
-            // Normal check: verify hashed password. Handle failure (including legacy plaintext) inside the if
+            // Overenie hesla (password_verify)
             if (!$user->verifyPassword($password)) {
-                // Fallback for legacy/hand-inserted plaintext passwords in DB:
-                // Detect common bcrypt prefix. If stored value does NOT look like a bcrypt hash,
-                // and equals the provided password, upgrade it to a proper hash and allow login.
+
+                // Fallback pre staré plaintext heslá v DB
                 $stored = $user->getPasswordHash();
                 $looksHashed = (bool)preg_match('/^\$2[aby]\$[0-9]{2}\$/', $stored);
+
                 if (!$looksHashed && $stored !== '' && hash_equals((string)$stored, $password)) {
-                    // Re-hash and save securely so next login uses password_verify
+                    // Prehashovanie hesla do bezpečnej podoby
                     $user->setPassword($password);
-                    try { $user->save(); } catch (\Throwable $e) { /* ignore save error, continue to login */ }
+                    try {
+                        $user->save();
+                    } catch (\Throwable $e) {
+                        // chyba uloženia sa ignoruje
+                    }
                 } else {
                     $message = 'Nesprávny email alebo heslo.';
                     return $this->html(compact('message'));
                 }
             }
-            // Successful login: create identity and store in session
-            $identity = new UserIdentity((int)$user->getId(), $user->getUsername(), $user->getRole(), $user->getEmail());
+
+            // Vytvorenie identity používateľa
+            $identity = new UserIdentity(
+                (int)$user->getId(),
+                $user->getUsername(),
+                $user->getRole(),
+                $user->getEmail()
+            );
+
+            // Uloženie identity do session
             $this->app->getSession()->set(Configuration::IDENTITY_SESSION_KEY, $identity);
-            // generate CSRF token for the session
+
+            // Vygenerovanie CSRF tokenu
             try {
                 $csrf = bin2hex(random_bytes(32));
                 $this->app->getSession()->set('csrf_token', $csrf);
             } catch (\Throwable $e) {
-                // ignore CSRF generation error
+                // ignorujeme chybu
             }
 
-            // redirect to forum/home
+            // Presmerovanie po prihlásení
             return $this->redirect($this->url('home.forum'));
         }
 
+        // Zobrazenie login stránky
         return $this->html(compact('message'));
     }
+
+    /**
+     * Registrácia nového používateľa
+     */
     public function register(Request $request): Response
     {
         $message = null;
+
+        // Ak bol odoslaný formulár
         if ($request->hasValue('submit')) {
+
+            // Načítanie údajov z formulára
             $username = trim((string)$request->value('username'));
             $email = trim((string)$request->value('email'));
             $password = (string)$request->value('password');
             $passwordConfirm = (string)$request->value('passwordConfirm');
 
             $errors = [];
-            // basic validation
+
+            // Validácia vstupov
             if ($username === '' || mb_strlen($username) < 3) {
                 $errors[] = 'Username musí obsahovať aspoň 3 znaky.';
             }
+
             if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
                 $errors[] = 'Neplatný e-mail.';
             }
+
             if ($password === '' || mb_strlen($password) < 6) {
                 $errors[] = 'Heslo musí obsahovať aspoň 6 znakov.';
             }
+
             if ($password !== $passwordConfirm) {
                 $errors[] = 'Heslá sa nezhodujú.';
             }
 
-            // Unique checks
+            // Kontrola unikátnosti
             if (User::getCount('username = ?', [$username]) > 0) {
                 $errors[] = 'Užívateľské meno už existuje.';
             }
+
             if (User::getCount('email = ?', [$email]) > 0) {
                 $errors[] = 'E-mail už je registrovaný.';
             }
 
+            // Ak nie sú chyby → uložíme používateľa
             if (empty($errors)) {
                 $user = new User();
                 $user->setUsername($username);
                 $user->setEmail($email);
-                $user->setPassword($password); // hashes with password_hash
+                $user->setPassword($password); // zahashuje heslo
                 $user->setRole('user');
                 $user->save();
 
-                // auto-login: create identity and store in session
-                $identity = new UserIdentity((int)$user->getId(), $user->getUsername(), $user->getRole(), $user->getEmail());
+                // Automatické prihlásenie po registrácii
+                $identity = new UserIdentity(
+                    (int)$user->getId(),
+                    $user->getUsername(),
+                    $user->getRole(),
+                    $user->getEmail()
+                );
+
                 $this->app->getSession()->set(Configuration::IDENTITY_SESSION_KEY, $identity);
-                // generate CSRF token for the session
+
+                // CSRF token
                 try {
                     $csrf = bin2hex(random_bytes(32));
                     $this->app->getSession()->set('csrf_token', $csrf);
@@ -148,18 +171,16 @@ class AuthController extends BaseController
                 return $this->redirect($this->url('home.forum'));
             }
 
+            // Spojenie chýb do jednej správy
             $message = implode('<br>', $errors);
         }
 
+        // Zobrazenie registračnej stránky
         return $this->html(compact('message'));
     }
+
     /**
-     * Logs out the current user.
-     *
-     * This action terminates the user's session and redirects them to a view. It effectively clears any authentication
-     * tokens or session data associated with the user.
-     *
-     * @return ViewResponse The response object that renders the logout view.
+     * Odhlásenie používateľa
      */
     public function logout(Request $request): Response
     {
@@ -168,13 +189,14 @@ class AuthController extends BaseController
     }
 
     /**
-     * AJAX: check if a username is available (case-insensitive).
-     * GET param q
-     * Returns JSON: { available: bool, message: string }
+     * AJAX – kontrola dostupnosti používateľského mena
+     * GET parameter: q
      */
     public function checkUsernameAvailability(Request $request): \Framework\Http\Responses\JsonResponse
     {
         $q = trim((string)$request->value('q'));
+
+        // Príliš krátke meno
         if ($q === '' || mb_strlen($q) < 2) {
             return new \Framework\Http\Responses\JsonResponse([
                 'available' => false,
@@ -182,6 +204,7 @@ class AuthController extends BaseController
             ]);
         }
 
+        // Kontrola existencie v databáze
         $exists = User::existsByUsername($q);
         if ($exists) {
             return new \Framework\Http\Responses\JsonResponse([
@@ -190,6 +213,7 @@ class AuthController extends BaseController
             ]);
         }
 
+        // Meno je voľné
         return new \Framework\Http\Responses\JsonResponse([
             'available' => true,
             'message' => 'Používateľské meno je voľné'

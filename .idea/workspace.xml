@@ -4,13 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="3ccddef7-0eb4-421a-b898-a22c0e3fca64" name="Changes" comment="drobnosti vylepsenia">
+    <list default="true" id="3ccddef7-0eb4-421a-b898-a22c0e3fca64" name="Changes" comment="csrf token">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/App/Controllers/AuthController.php" beforeDir="false" afterPath="$PROJECT_DIR$/App/Controllers/AuthController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/App/Controllers/UserController.php" beforeDir="false" afterPath="$PROJECT_DIR$/App/Controllers/UserController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/App/Views/Layouts/auth.layout.view.php" beforeDir="false" afterPath="$PROJECT_DIR$/App/Views/Layouts/auth.layout.view.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/App/Views/Layouts/root.layout.view.php" beforeDir="false" afterPath="$PROJECT_DIR$/App/Views/Layouts/root.layout.view.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/js/users.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/js/users.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/App/Views/Auth/register.view.php" beforeDir="false" afterPath="$PROJECT_DIR$/App/Views/Auth/register.view.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/js/register.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/js/register.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/js/registerAjax.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/js/registerAjax.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -131,7 +130,7 @@
       <workItem from="1768639121687" duration="25176000" />
       <workItem from="1768727501264" duration="18171000" />
       <workItem from="1768853166509" duration="6798000" />
-      <workItem from="1768898138090" duration="6774000" />
+      <workItem from="1768898138090" duration="9920000" />
     </task>
     <task id="LOCAL-00001" summary="zreparovane">
       <option name="closed" value="true" />
@@ -365,14 +364,21 @@
       <option name="project" value="LOCAL" />
       <updated>1768905627167</updated>
     </task>
-    <option name="localTasksCounter" value="30" />
+    <task id="LOCAL-00030" summary="csrf token">
+      <option name="closed" value="true" />
+      <created>1768907088685</created>
+      <option name="number" value="00030" />
+      <option name="presentableId" value="LOCAL-00030" />
+      <option name="project" value="LOCAL" />
+      <updated>1768907088685</updated>
+    </task>
+    <option name="localTasksCounter" value="31" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="forum formular" />
     <MESSAGE value="tabulka prispevkov,formular" />
     <MESSAGE value="pridavanie mazanie edit prispevkov" />
     <MESSAGE value="aa" />
@@ -397,6 +403,7 @@
     <MESSAGE value="kontakt podstranka" />
     <MESSAGE value="stranka s uživatelmi" />
     <MESSAGE value="drobnosti vylepsenia" />
-    <option name="LAST_COMMIT_MESSAGE" value="drobnosti vylepsenia" />
+    <MESSAGE value="csrf token" />
+    <option name="LAST_COMMIT_MESSAGE" value="csrf token" />
   </component>
 </project>

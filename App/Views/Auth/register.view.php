@@ -35,8 +35,7 @@ $view->setLayout('auth');
                                     <div class="invalid-feedback">Zadajte užívateľské meno (aspoň 3 znaky).</div>
 
                                     <!-- Username availability status (updated by JS) -->
-                                    <div id="usernameStatus" class="form-text mt-1" style="display:block; color:green;">Takéto meno ešte neexistuje ✔</div>
-                                    <div id="usernameDebug" class="form-text text-muted mt-1" style="display:block; color:#666; font-size:0.9em;"></div>
+                                    <div id="usernameStatus" class="form-text mt-1"></div>
                                 </div>
 
                                 <div class="col-12">
