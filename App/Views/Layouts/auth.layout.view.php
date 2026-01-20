@@ -12,11 +12,11 @@
     <!-- ensure responsive on mobile devices -->
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- Favicons -->
-    <link rel="apple-touch-icon" sizes="180x180" href="<?= $link->asset('favicons/apple-touch-icon.png') ?>">
-    <link rel="icon" type="image/png" sizes="32x32" href="<?= $link->asset('favicons/favicon-32x32.png') ?>">
-    <link rel="icon" type="image/png" sizes="16x16" href="<?= $link->asset('favicons/favicon-16x16.png') ?>">
-    <link rel="manifest" href="<?= $link->asset('favicons/site.webmanifest') ?>">
-    <link rel="shortcut icon" href="<?= $link->asset('favicons/favicon.ico') ?>">
+    <link rel="apple-touch-icon" sizes="180x180" href="<?= $link->asset('images/porsak2.png') ?>">
+    <link rel="icon" type="image/png" sizes="32x32" href="<?= $link->asset('images/porsak2.png') ?>">
+    <link rel="icon" type="image/png" sizes="16x16" href="<?= $link->asset('images/porsak2.png') ?>">
+    <link rel="manifest" href="<?= $link->asset('images/porsak2.png') ?>">
+    <link rel="shortcut icon" href="<?= $link->asset('images/porsak2.png') ?>">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"

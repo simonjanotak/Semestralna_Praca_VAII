@@ -22,6 +22,7 @@
                 <a class="btn btn-outline-light btn-lg" href="<?= $link->url('auth.register') ?>">Registrovať sa</a>
                 <a class="btn btn-outline-light btn-lg ms-2" href="<?= $link->url('auth.login') ?>">Prihlásiť sa</a>
                 <a class="btn btn-outline-light btn-lg ms-2" href="<?= $link->url('home.contact') ?>">Kontakt</a>
+                <a class="btn btn-outline-light btn-lg ms-2" href="<?= $link->url('user.index') ?>">Užívatelia</a>
 
                 <div class="d-flex gap-4 mt-4 stats-box">
                     <div><span>2,500+</span><br>Členov</div>

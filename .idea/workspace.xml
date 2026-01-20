@@ -4,12 +4,16 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="3ccddef7-0eb4-421a-b898-a22c0e3fca64" name="Changes" comment="responzivny dizajn">
-      <change afterPath="$PROJECT_DIR$/public/css/contact.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/public/js/contact.js" afterDir="false" />
+    <list default="true" id="3ccddef7-0eb4-421a-b898-a22c0e3fca64" name="Changes" comment="kontakt podstranka">
+      <change afterPath="$PROJECT_DIR$/App/Controllers/UserController.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/App/Views/User/index.view.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/public/css/users.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/public/js/users.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/App/Views/Home/contact.view.php" beforeDir="false" afterPath="$PROJECT_DIR$/App/Views/Home/contact.view.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/App/Views/Home/index.view.php" beforeDir="false" afterPath="$PROJECT_DIR$/App/Views/Home/index.view.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/App/Views/Layouts/auth.layout.view.php" beforeDir="false" afterPath="$PROJECT_DIR$/App/Views/Layouts/auth.layout.view.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/App/Views/Layouts/root.layout.view.php" beforeDir="false" afterPath="$PROJECT_DIR$/App/Views/Layouts/root.layout.view.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/css/styl.css" beforeDir="false" afterPath="$PROJECT_DIR$/public/css/styl.css" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -129,7 +133,8 @@
       <workItem from="1768576008345" duration="5099000" />
       <workItem from="1768639121687" duration="25176000" />
       <workItem from="1768727501264" duration="18171000" />
-      <workItem from="1768853166509" duration="6714000" />
+      <workItem from="1768853166509" duration="6798000" />
+      <workItem from="1768898138090" duration="2937000" />
     </task>
     <task id="LOCAL-00001" summary="zreparovane">
       <option name="closed" value="true" />
@@ -339,14 +344,21 @@
       <option name="project" value="LOCAL" />
       <updated>1768857000694</updated>
     </task>
-    <option name="localTasksCounter" value="27" />
+    <task id="LOCAL-00027" summary="kontakt podstranka">
+      <option name="closed" value="true" />
+      <created>1768860006587</created>
+      <option name="number" value="00027" />
+      <option name="presentableId" value="LOCAL-00027" />
+      <option name="project" value="LOCAL" />
+      <updated>1768860006587</updated>
+    </task>
+    <option name="localTasksCounter" value="28" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="zakladny js pre login" />
     <MESSAGE value="zakladny js pre register" />
     <MESSAGE value="forum zakladna stranka a styly" />
     <MESSAGE value="forum formular" />
@@ -371,6 +383,7 @@
     <MESSAGE value="komentare pod prispevky" />
     <MESSAGE value="tabulka categories potrebne zmeny" />
     <MESSAGE value="responzivny dizajn" />
-    <option name="LAST_COMMIT_MESSAGE" value="responzivny dizajn" />
+    <MESSAGE value="kontakt podstranka" />
+    <option name="LAST_COMMIT_MESSAGE" value="kontakt podstranka" />
   </component>
 </project>
