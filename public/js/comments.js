@@ -23,6 +23,7 @@
         a.textContent = 'Upraviť';
         h.appendChild(a);
       } catch (err) {
+        // silent on failure
       }
     }
 
@@ -89,7 +90,7 @@
 
         } catch(e){
             container.innerHTML='<p class="text-muted text-danger">Chyba pri načítaní komentárov.</p>';
-            console.error(e);
+            // removed debug output to console
         }
     }
 
@@ -104,7 +105,7 @@
       var resp = await fetch(CREATE, { method:'POST', body: fd, credentials:'same-origin', headers:{'X-Requested-With':'XMLHttpRequest'} });
       if (resp.status === 401) { alert('Pre pridanie komentára sa musíš prihlásiť.'); return; }
       var ct = (resp.headers.get('content-type')||'').toLowerCase();
-      if (ct.indexOf('application/json') === -1) { var txt=await resp.text(); console.warn('create non-json',txt); alert('Server odpovedal neočakávanou odpoveďou.'); return; }
+      if (ct.indexOf('application/json') === -1) { var txt=await resp.text(); alert('Server odpovedal neočakávanou odpoveďou.'); return; }
       var json = await resp.json();
       if (json && json.error) { alert(json.error); return; }
       if (json && json.id) {
@@ -112,7 +113,7 @@
         if (list) list.insertBefore(renderComment(json), list.firstChild);
         form.reset();
       }
-    }catch(err){ console.error('comment submit',err); alert('Chyba pri odoslaní komentára.'); }
+    }catch(err){ alert('Chyba pri odoslaní komentára.'); }
   }, false);
 
   // Event delegation for delete buttons
@@ -133,7 +134,6 @@
       if (!resp.ok) {
         var txt = await resp.text();
         alert('Chyba pri mazaní komentára.');
-        console.error('delete failed', resp.status, txt);
         return;
       }
       var json = await resp.json();
@@ -143,7 +143,6 @@
         if (commentEl) commentEl.remove();
       }
     } catch (err) {
-      console.error('delete error', err);
       alert('Chyba pri mazaní komentára.');
     }
   }, false);

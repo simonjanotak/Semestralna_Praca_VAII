@@ -20,7 +20,6 @@
     const categoryLinks = document.querySelectorAll('.list-group-item[data-category]');
 
     if (!container) {
-      console.warn('forum.js: #postsContainer not found, aborting search init');
       return;
     }
 
@@ -96,7 +95,6 @@
         renderPosts(json);
         if (info) info.textContent = 'Zobrazené výsledky pre: "' + q + '"';
       } catch (err) {
-        console.error('Search fetch error', err);
         if (info) info.textContent = 'Chyba sieťového spojenia';
         renderPosts([]);
       }
@@ -106,7 +104,6 @@
     function applyCategoryFilter() {
       var articles = container.querySelectorAll('article');
       var target = norm(activeCategory);
-      if (console && console.info) console.info('forum.js: applying category filter ->', target, 'articles:', articles.length);
       Array.prototype.forEach.call(articles, function (article) {
         var postCategory = norm((article.dataset && article.dataset.category) ? article.dataset.category : '');
         if (!target || target === 'all') {
@@ -114,7 +111,6 @@
         } else {
           article.style.display = (postCategory === target) ? '' : 'none';
         }
-        if (console && console.debug) console.debug('forum.js: article category', postCategory, 'visible=', article.style.display !== 'none');
       });
     }
 
@@ -134,8 +130,6 @@
 
     if (input) {
       input.addEventListener('input', debounced);
-    } else {
-      console.warn('forum.js: #postSearch input not found');
     }
 
     // Category click handling
@@ -148,7 +142,6 @@
           this.classList.add('active');
           // update activeCategory and filter
           activeCategory = this.getAttribute('data-category') || 'all';
-          if (console && console.info) console.info('forum.js: category clicked ->', activeCategory);
           applyCategoryFilter();
         });
       });

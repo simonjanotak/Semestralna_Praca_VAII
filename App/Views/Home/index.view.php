@@ -18,11 +18,13 @@
                 <p class="mb-4">Zdieľajte skúsenosti, riešte technické problémy, hodnotte servisy a objavujte svet áut.</p>
 
                 <!-- use route helpers -->
-                <a class="btn btn-dark btn-lg me-2" href="<?= $link->url('home.forum') ?>">Vstúpiť do fóra</a>
-                <a class="btn btn-outline-light btn-lg" href="<?= $link->url('auth.register') ?>">Registrovať sa</a>
-                <a class="btn btn-outline-light btn-lg ms-2" href="<?= $link->url('auth.login') ?>">Prihlásiť sa</a>
-                <a class="btn btn-outline-light btn-lg ms-2" href="<?= $link->url('home.contact') ?>">Kontakt</a>
-                <a class="btn btn-outline-light btn-lg ms-2" href="<?= $link->url('user.index') ?>">Užívatelia</a>
+                <div class="hero-actions d-flex flex-wrap align-items-center">
+                    <a class="btn btn-dark btn-lg me-2 my-2" href="<?= $link->url('home.forum') ?>">Vstúpiť do fóra</a>
+                    <a class="btn btn-outline-light btn-lg my-2" href="<?= $link->url('auth.register') ?>">Registrovať sa</a>
+                    <a class="btn btn-outline-light btn-lg ms-2 my-2" href="<?= $link->url('auth.login') ?>">Prihlásiť sa</a>
+                    <a class="btn btn-outline-light btn-lg ms-2 my-2" href="<?= $link->url('home.contact') ?>">Kontakt</a>
+                    <a class="btn btn-outline-light btn-lg ms-2 my-2" href="<?= $link->url('user.index') ?>">Užívatelia</a>
+                </div>
 
                 <div class="d-flex gap-4 mt-4 stats-box">
                     <div><span>2,500+</span><br>Členov</div>

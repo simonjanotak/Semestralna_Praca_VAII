@@ -35,8 +35,7 @@ document.addEventListener('click', function (e) {
             const msg = (data && data.error) ? data.error : (data && data.message) ? data.message : 'Chyba';
             alert('Nebolo možné odstrániť používateľa: ' + msg);
         }
-    }).catch(err => {
-        console.error(err);
+    }).catch(function(){
         alert('Chyba pri kontakte so serverom.');
     });
 });

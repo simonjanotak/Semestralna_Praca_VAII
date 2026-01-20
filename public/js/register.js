@@ -1,7 +1,6 @@
 document.addEventListener('DOMContentLoaded', function() {
     'use strict';
 
-    console.log('[register.js] loaded');
 
     // --- DOM elementy ---
     const form = document.getElementById('registerForm');

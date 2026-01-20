@@ -35,7 +35,7 @@
 @media (max-width: 767.98px) {
     /* When buttons wrap into a column on small screens, give them breathing room */
     .hero .btn, .users-hero .btn { margin-left: 0 !important; }
-    .hero .btn + .btn, .users-hero .btn + .btn { margin-top: 0.5rem !important; }
-    /* ensure the button group has space from the text above */
-    .hero .btn, .users-hero .btn { margin-top: 0.75rem !important; }
+    /* use the wrapper to add spacing when the group stacks */
+    .hero-actions { gap: 0.5rem; margin-top: 0.75rem; }
+    .hero-actions .btn, .users-hero .btn { margin-left: 0 !important; }
 }
