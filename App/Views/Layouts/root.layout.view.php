@@ -34,7 +34,6 @@
                     <button type="submit" class="btn btn-outline-secondary btn-sm">Odhlásiť sa</button>
                 </form>
             <?php else: ?>
-
             <?php endif; ?>
         </div>
     </div>

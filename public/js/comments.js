@@ -7,7 +7,7 @@
     var DELETE = window.COMMENT_URL_DELETE || '/?c=comment&a=delete'; // zmazanie komentára
     var EDIT = window.COMMENT_URL_EDIT || '/?c=comment&a=edit';       // úprava komentára
 
-    // --- Pomocné funkcie ---
+    // AI --- Pomocné funkcie ---
     function qs(s,p){ return (p||document).querySelector(s) } // skrátené querySelector
     function qsa(s,p){ return Array.prototype.slice.call((p||document).querySelectorAll(s)) } // querySelectorAll do poľa
     function esc(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;') }
@@ -24,7 +24,7 @@
         h.className = 'small text-muted mb-1';
         h.textContent = (c.user || 'Neznámy') + ' • ' + (c.created_at || '');
 
-        // --- Pridanie linku "Upraviť", ak je povolené ---
+        // AI --- Pridanie linku "Upraviť", ak je povolené ---
         if (c.can_edit) {
             try {
                 var editUrl = new URL(EDIT, window.location.href);
@@ -83,7 +83,7 @@
                 headers:{'Accept':'application/json','X-Requested-With':'XMLHttpRequest'},
                 credentials:'same-origin'
             });
-
+            //AI - riešEnie chýb pri načítaní
             if(!res.ok){
                 container.innerHTML='<p class="text-muted text-danger">Chyba pri načítaní komentárov.</p>';
                 return;
@@ -202,7 +202,7 @@
         }
     }, false);
 
-    // --- Po načítaní stránky, načítanie všetkých komentárov ---
+    // AI --- Po načítaní stránky, načítanie všetkých komentárov ---
     document.addEventListener('DOMContentLoaded', function(){
         qsa('.comments').forEach(function(b){
             var id = b.getAttribute('data-post-id');

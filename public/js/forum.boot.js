@@ -1,4 +1,4 @@
-(function(){
+(function(){   /* AI Praca  - Zjednodušenie pre trasovanie url nastavuje ich*/
   'use strict';
   function boot(){
     try{

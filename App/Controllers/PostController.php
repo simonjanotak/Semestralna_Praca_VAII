@@ -248,11 +248,12 @@ class PostController extends BaseController
     ): array {
         $errors = [];
 
-        if (mb_strlen($title) < 3) {
+        if (mb_strlen($title) < 3 && mb_strlen($title) < 100)
+        {
             $errors[] = 'Názov musí mať aspoň 3 znaky.';
         }
 
-        if (mb_strlen($content) < 5) {
+        if (mb_strlen($content) < 5 && mb_strlen($content) < 5000) {
             $errors[] = 'Text musí mať aspoň 5 znakov.';
         }
 

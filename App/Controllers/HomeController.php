@@ -47,7 +47,7 @@ class HomeController extends BaseController
     }
 
     /**
-     * Fórum – zoznam príspevkov + komentáre
+     *  AI Metóda s vlatnými úpravami .. Fórum – zoznam príspevkov + komentáre
      */
     public function forum(Request $request): Response
     {
@@ -107,10 +107,10 @@ class HomeController extends BaseController
                 // Autor komentára
                 try {
                     $cUser = $c->getUser();
+
                 } catch (\Throwable $_) {
                     $cUser = null;
                 }
-
                 $uid = $c->getUserId();
 
                 // Právo na zmazanie / úpravu

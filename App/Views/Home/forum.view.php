@@ -35,6 +35,7 @@ if ($flashError): ?>
 <div class="row align-items-center mb-3">
     <div class="col-12 col-md-6">
         <!-- Nadpis sekcie príspevkov -->
+        <!--Logiku zobrazovania na mobile riesiel AI -->
         <h5 class="mb-0">Všetky príspevky</h5>
     </div>
     <div class="col-12 col-md-6 text-md-end mt-2 mt-md-0">
@@ -88,7 +89,7 @@ if ($flashError): ?>
                     <div id="postSearchInfo" class="form-text text-muted"></div>
                 </div>
 
-                <!-- Kontajner pre príspevky (renderované serverom) -->
+                <!-- AI COPILOT parsovanie príspevkov ,Kontajner pre príspevky (renderované serverom) -->
                 <div id="postsContainer">
 
                     <?php /** @var array[] $posts (id, title, content, category, created_at, picture, author) */ ?>
@@ -125,7 +126,7 @@ if ($flashError): ?>
                                     </div>
                                 <?php endif; ?>
 
-                                <!-- Obsah príspevku -->
+                                <!-- Obsah príspevku  nl2br nove riadky-->
                                 <p><?= nl2br(htmlspecialchars($post['content'])) ?></p>
 
                                 <!-- Komentáre k príspevku -->

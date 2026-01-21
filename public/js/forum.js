@@ -6,7 +6,7 @@
         window.SEARCH_URL :
         (window.location.origin + '/?c=home&a=searchPosts');
 
-    // Funkcia na spustenie callbacku až po načítaní DOM
+    //  AI Funkcia na spustenie callbacku až po načítaní DOM
     function onReady(fn) {
         if (document.readyState === 'loading') {
             document.addEventListener('DOMContentLoaded', fn);
@@ -60,7 +60,7 @@
             try { return String(s || '').trim().toLowerCase(); } catch (e) { return ''; }
         }
 
-        // Funkcia na vykreslenie príspevkov do DOM po AJAX vyhľadávaní
+        //Funkcia na vykreslenie príspevkov do DOM po AJAX vyhľadávaní
         function renderPosts(posts) {
             if (!Array.isArray(posts) || posts.length === 0) {
                 container.innerHTML = '<p class="text-muted">Neboli nájdené žiadne príspevky.</p>';
@@ -84,7 +84,7 @@
             applyCategoryFilter(); // aplikujeme aktuálny filter kategórie
         }
 
-        // Funkcia na vyhľadávanie príspevkov cez AJAX
+        // ÚPRAVY OD AI Funkcia na vyhľadávanie príspevkov cez AJAX
         async function searchQuery(q) {
             if (info) info.textContent = 'Hľadám...';
             try {
@@ -107,7 +107,7 @@
             }
         }
 
-        // Funkcia na filtrovanie príspevkov podľa kategórie
+        // AI Funkcia na filtrovanie príspevkov podľa kategórie
         function applyCategoryFilter() {
             var articles = container.querySelectorAll('article');
             var target = norm(activeCategory);
