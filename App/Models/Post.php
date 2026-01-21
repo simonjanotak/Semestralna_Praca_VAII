@@ -8,15 +8,14 @@ class Post extends Model
     protected static ?string $tableName = 'posts';
 
     protected ?int $id = null;
-    // foreign key to users.id
     protected ?int $user_id = null;
     protected string $picture = '';
     protected string $title = '';
     protected string $content = '';
-    // legacy string category (keeps compatibility with existing DB schema)
+
     protected string $category = '';
 
-    // new fields to support normalized relationship-based model
+
     protected ?int $category_id = null;
     protected ?string $created_at = null;
     protected ?string $updated_at = null;
@@ -34,15 +33,13 @@ class Post extends Model
     public function getUpdatedAt(): ?string { return $this->updated_at; }
     public function setUpdatedAt(?string $dt): void { $this->updated_at = $dt; }
 
-    // category_id accessors (nullable to allow SET NULL semantics)
     public function getCategoryId(): ?int { return $this->category_id; }
     public function setCategoryId(?int $id): void { $this->category_id = $id; }
 
-    // user_id accessors
     public function getUserId(): ?int { return $this->user_id; }
     public function setUserId(?int $userId): void { $this->user_id = $userId; }
 
-    // Relations
+    // AI pomocne funkcie
     /**
      * Return owner User of this Post
      * @return \App\Models\User|null

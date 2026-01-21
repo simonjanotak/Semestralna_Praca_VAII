@@ -1,5 +1,5 @@
 <?php /** @var array $comment */ /** @var string $referer */ /** @var \Framework\Support\LinkGenerator $link */ ?>
-
+<!--AI - copilot práca -->
 <div class="card">
     <div class="card-body">
         <h5 class="card-title">Upraviť komentár</h5>

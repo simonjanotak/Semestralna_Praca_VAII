@@ -9,7 +9,7 @@ use App\Models\Post;
 
 class CommentController extends BaseController
 {
-    // --- Vráti zoznam komentárov pre daný post ---
+    //  PRIMARNE AI COPILOT --- Vráti zoznam komentárov pre daný post ---
     // Ak nie je zadaný post_id, vráti prázdne pole
     public function list(Request $request): \Framework\Http\Responses\JsonResponse
     {
@@ -43,7 +43,7 @@ class CommentController extends BaseController
         return $this->json($out);
     }
 
-    // --- Vytvorenie komentára (POST) ---
+    // Kontroly vstupov od COPILOT --- Vytvorenie komentára (POST) ---
     // Podporuje AJAX alebo klasický POST
     public function create(Request $request): Response
     {
@@ -103,7 +103,7 @@ class CommentController extends BaseController
             : $this->redirect($request->server('HTTP_REFERER') ?? $this->url('home.forum'));
     }
 
-    // --- Úprava komentára ---
+    //  AI COPILOT --- Úprava komentára ---
     // GET zobrazuje formulár, POST aktualizuje komentár
     public function edit(Request $request): Response
     {

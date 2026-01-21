@@ -5,11 +5,9 @@ use Framework\Core\Model;
 
 class Comment extends Model
 {
-    // explicit table name
+
     protected static ?string $tableName = 'comments';
 
-    // map DB columns that may exist in the database but don't match model property names
-    // this handles common camelCase variants (postId, userId, createdAt) or alternate names
     protected static array $columnsMap = [
         'postId'    => 'post_id',
         'userId'    => 'user_id',
@@ -19,11 +17,11 @@ class Comment extends Model
 
     protected ?int $id = null;
     protected ?int $post_id = null;
-    protected ?int $user_id = null; // allow NULL for SET NULL semantics
+    protected ?int $user_id = null;
     protected string $content = '';
     protected ?string $created_at = null;
 
-    // Optional simple constructor to initialize properties
+    // AI helper constructor
     public function __construct(array $data = [])
     {
         foreach ($data as $k => $v) {
@@ -42,7 +40,7 @@ class Comment extends Model
     public function setContent(string $c): void { $this->content = $c; }
     public function getCreatedAt(): ?string { return $this->created_at; }
 
-    /**
+    /**  AI pomocne funkcie
      * Return owner User of this Comment
      * @return \App\Models\User|null
      */

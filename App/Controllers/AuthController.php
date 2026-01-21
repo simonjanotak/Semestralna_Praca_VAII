@@ -36,7 +36,7 @@ class AuthController extends BaseController
         // Ak bol odoslaný formulár
         if ($request->hasValue('submit')) {
 
-            // Minimalistická CSRF validácia
+            //  AI  - Minimalistická CSRF validácia
             $posted = (string)$request->value('_csrf');
             $sessionToken = $this->app->getSession()->get(Configuration::CSRF_TOKEN_KEY);
             if (!is_string($sessionToken) || $sessionToken === '' || !hash_equals($sessionToken, $posted)) {
@@ -116,7 +116,7 @@ class AuthController extends BaseController
         // Ak bol odoslaný formulár
         if ($request->hasValue('submit')) {
 
-            // Minimalistická CSRF validácia
+            // AI Minimalistická CSRF validácia
             $posted = (string)$request->value('_csrf');
             $sessionToken = $this->app->getSession()->get(Configuration::CSRF_TOKEN_KEY);
             if (!is_string($sessionToken) || $sessionToken === '' || !hash_equals($sessionToken, $posted)) {
@@ -177,7 +177,7 @@ class AuthController extends BaseController
 
                 $this->app->getSession()->set(Configuration::IDENTITY_SESSION_KEY, $identity);
 
-                // Regenerovať session id po registrácii/prihlásení (prevencia session fixation)
+                //  AI Regenerovať session id po registrácii/prihlásení (prevencia session fixation)
                 if (function_exists('session_regenerate_id')) {
                     @session_regenerate_id(true);
                 }

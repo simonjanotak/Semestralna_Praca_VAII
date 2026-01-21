@@ -5,10 +5,8 @@ use Framework\Core\Model;
 
 class User extends Model
 {
-    // explicitly set table name
     protected static ?string $tableName = 'users';
 
-    // properties must match DB column names (DefaultConventions)
     protected ?int $id = null;
     protected string $username = '';
     protected string $email = '';
@@ -17,7 +15,6 @@ class User extends Model
     protected ?string $created_at = null;
     protected ?string $updated_at = null;
 
-    // --- getters / setters ---
     public function getId(): ?int { return $this->id; }
 
     public function getUsername(): string { return $this->username; }
