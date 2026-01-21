@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded', function() {
         return;
     }
 
-    // --- Password strength meter ---
+    // ---COPILOT Password strength meter  ---
     function scorePassword(p) {
         let score = 0;
         if (!p) return 0;
@@ -51,7 +51,7 @@ document.addEventListener('DOMContentLoaded', function() {
         return pwd.value === pwdConfirm.value && pwdConfirm.value.length >= 6;
     }
 
-    // --- Form submit validation ---
+    // --- AI Form submit validation ---
     form.addEventListener('submit', function(event) {
         if (!form.checkValidity() || !passwordsMatch()) {
             event.preventDefault();

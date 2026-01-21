@@ -120,7 +120,7 @@
     );
 }
 
-/* Responzívne úpravy pre mobily */
+/* AI Responzívne úpravy pre mobily */
 @media (max-width: 576px){
     .contact-wrap { padding: 10px; }
     .contact-hero { height: 120px; }

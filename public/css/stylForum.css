@@ -78,7 +78,7 @@ body{
     padding: 0 16px;
 }
 
-/* ===== FORMULÁROVÉ PRVKY NA PLNÚ ŠÍRKU ===== */
+/* AI ===== FORMULÁROVÉ PRVKY NA PLNÚ ŠÍRKU ===== */
 .form-control,
 .form-select,
 input[type="file"],
@@ -100,7 +100,7 @@ img {
     white-space: normal;
 }
 
-/* ===== MOBILNÉ ÚPRAVY ===== */
+/* AI ===== MOBILNÉ ÚPRAVY ===== */
 @media (max-width: 576px) {
     .container { padding: 0 12px; }
     .btn {
@@ -112,7 +112,7 @@ img {
     h2 { font-size: 1.25rem; }
 }
 
-/* ===== PREVENCIA HORIZONTÁLNEHO SCROLLU ===== */
+/* AI ===== PREVENCIA HORIZONTÁLNEHO SCROLLU ===== */
 .fixed-width,
 .card,
 .some-sidebar {
@@ -125,7 +125,7 @@ img {
     flex-wrap: wrap !important;
 }
 
-/* ===== STĹPCE SA MÔŽU ZMENŠOVAŤ ===== */
+/* AI ===== STĹPCE SA MÔŽU ZMENŠOVAŤ ===== */
 [class*="col-"] {
     min-width: 0;
 }

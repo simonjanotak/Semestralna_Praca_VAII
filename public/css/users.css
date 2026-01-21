@@ -1,4 +1,4 @@
-/* ===== MINIMÁLNE ORANŽOVÉ ŠTÝLY PRE ZOZNAM UŽÍVATEĽOV ===== */
+
 
 /* Hero sekcia používateľov s gradientom a spodným oranžovým pásom */
 .users-hero {
@@ -53,7 +53,7 @@
     max-width: 980px;
 }
 
-/* ===== RESPONZÍVNE ÚPRAVY PRE TABLETY ===== */
+/* AI ===== RESPONZÍVNE ÚPRAVY PRE TABLETY ===== */
 @media (max-width: 767.98px) {
     /* menej paddingu v hero sekcii */
     .users-hero {
@@ -90,7 +90,7 @@
     }
 }
 
-/* ===== RESPONZÍVNE ÚPRAVY PRE MOBILY ===== */
+/* AI  ===== RESPONZÍVNE ÚPRAVY PRE MOBILY ===== */
 @media (max-width: 479.98px) {
     /* Hero container – centrovanie textu */
     .users-hero .container {

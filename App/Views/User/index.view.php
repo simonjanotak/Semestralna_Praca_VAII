@@ -3,6 +3,7 @@
 /** @var \Framework\Support\LinkGenerator $link */
 /** @var \App\Models\User[] $users */
 ?>
+<!-- AI responzivny dizajn  -->
 <link rel="stylesheet" href="<?= $link->asset('css/users.css') ?>">
 <script src="<?= $link->asset('js/users.js') ?>" defer></script>
 

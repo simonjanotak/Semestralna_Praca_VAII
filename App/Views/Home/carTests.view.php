@@ -5,10 +5,9 @@
     <link rel="stylesheet" href="<?= $link->asset('css/stylTests.css') ?>">
 </header>
 <div class="container car-tests my-4">
-    <!-- Added Home button linking to home.index -->
+    <!-- Responzivny dizajn praca od AI -->
     <div class="mb-3">
         <a href="<?= $link->url('home.index') ?>" class="btn btn-orange btn-large">Domov</a>
-        <!-- Alternatively, use gray: <a href="<?= $link->url('home.index') ?>" class="btn btn-gray btn-large">Domov</a> -->
     </div>
     <div class="row g-4">
         <div class="col-lg-6">

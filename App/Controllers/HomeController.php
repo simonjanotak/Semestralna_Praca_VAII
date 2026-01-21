@@ -182,7 +182,7 @@ class HomeController extends BaseController
     }
 
     /**
-     * AJAX vyhľadávanie príspevkov podľa názvu
+     * HLAVNE  AI COPILOT  - AJAX vyhľadávanie príspevkov podľa názvu
      *
      * GET parameter: q
      * Vracia JSON pole príspevkov

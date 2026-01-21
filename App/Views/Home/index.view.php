@@ -3,6 +3,8 @@
 /** @var \Framework\Support\LinkGenerator $link */
 ?>
 
+
+<!-- AI responzivny dizajn domovska stranka -->
 <section class="hero">
     <div class="container">
         <div class="row align-items-center">
@@ -12,7 +14,6 @@
                 <p class="lead">Miesto, kde sa stretávajú automobiloví nadšenci</p>
                 <p class="mb-4">Zdieľajte skúsenosti, riešte technické problémy, hodnotte servisy a objavujte svet áut.</p>
 
-                <!-- use route helpers -->
                 <div class="hero-actions d-flex flex-wrap align-items-center">
                     <a class="btn btn-dark btn-lg me-2 my-2" href="<?= $link->url('home.forum') ?>">Vstúpiť do fóra</a>
                     <a class="btn btn-outline-light btn-lg my-2" href="<?= $link->url('auth.register') ?>">Registrovať sa</a>

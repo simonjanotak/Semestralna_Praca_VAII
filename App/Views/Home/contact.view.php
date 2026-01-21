@@ -12,7 +12,7 @@
     <div class="col-12">
         <div class="contact-card">
             <div class="contact-wrap">
-                <!-- Very small: headline + short intro + simple department buttons -->
+                <!-- POMOC OD AI github copilot -->
                 <section id="contact-info">
                     <h3 style="color:var(--brand-orange)">PitStop — svet automobilov</h3>
                     <p class="contact-meta">Máte otázku? Vyberte oddelenie nižšie pre rýchly kontakt alebo napíšte na <a href="mailto:info@pitstop.sk">info@pitstop.sk</a>.</p>
@@ -44,8 +44,8 @@
                     </div>
                 </div>
 
-            </div> <!-- .contact-wrap -->
-        </div> <!-- .contact-card -->
+            </div>
+        </div>
 
         <div class="contact-hero mt-3" role="img" aria-label="Obrázok porsak">
             <div class="contact-hero-overlay"></div>

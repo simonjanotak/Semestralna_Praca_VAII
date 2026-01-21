@@ -212,7 +212,7 @@ class CommentController extends BaseController
         return $request->isAjax() ? $this->json(['ok' => true]) : $this->redirect($request->server('HTTP_REFERER') ?? $this->url('home.forum'));
     }
 
-    // --- Pomocná funkcia na získanie ID aktuálneho používateľa alebo null ---
+    // --- AI COPILOT Pomocná funkcia na získanie ID aktuálneho používateľa alebo null ---
     private function getCurrentUserId(): ?int
     {
         if (!isset($this->user) || !$this->user->isLoggedIn()) {
@@ -235,7 +235,7 @@ class CommentController extends BaseController
         return null;
     }
 
-    // --- Pomocná funkcia: kontrola, či je aktuálny používateľ admin/moderátor ---
+    // --- AI COPILOT  Pomocná funkcia: kontrola, či je aktuálny používateľ admin/moderátor ---
     private function isCurrentUserAdmin(): bool
     {
         if (!isset($this->user) || !$this->user->isLoggedIn()) {

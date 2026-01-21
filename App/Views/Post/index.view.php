@@ -15,6 +15,7 @@
     </div>
 <?php } ?>
 
+<!-- AI prevažne --->
 <header>
     <link rel="stylesheet" href="<?= $link->asset('css/stylForum.css') ?>">
 </header>

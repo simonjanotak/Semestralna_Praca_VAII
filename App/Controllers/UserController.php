@@ -47,8 +47,6 @@ class UserController extends BaseController
             return $this->redirect(Configuration::LOGIN_URL);
         }
 
-        // Kontrola CSRF tokenu je riešená globálnym middleware
-
         // Vyžaduje rolu admin
         $role = '';
         try {
@@ -73,7 +71,7 @@ class UserController extends BaseController
             return $this->redirect($this->url('user.index'));
         }
 
-        // Zabráni zmazaniu práve prihláseného administrátora
+        // AI COPILOT FUNKCIA  - Zabráni zmazaniu práve prihláseného administrátora
         $currentId = null;
         try {
             $currentId = $this->user->getId();
@@ -107,32 +105,6 @@ class UserController extends BaseController
                     return $this->redirect($this->url('user.index'));
                 }
             }
-
-            // Audit log – zaznamená kto a koho zmazal
-            try {
-                $actorId = (int)($this->user->getId() ?? 0);
-                $logDir = dirname(__DIR__, 3) . '/storage/logs';
-
-                if (!is_dir($logDir)) {
-                    @mkdir($logDir, 0755, true);
-                }
-
-                $line = sprintf(
-                    "[%s] actor=%d action=delete_user target=%d\n",
-                    date('c'),
-                    $actorId,
-                    (int)$target->getId()
-                );
-
-                file_put_contents(
-                    $logDir . '/admin-actions.log',
-                    $line,
-                    FILE_APPEND | LOCK_EX
-                );
-            } catch (Exception $e) {
-                // chyby logovania ignorujeme
-            }
-
             // Zmazanie používateľa
             $target->delete();
 

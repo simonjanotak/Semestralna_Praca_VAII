@@ -10,6 +10,7 @@ use App\Models\Category;
 class PostController extends BaseController
 {
     /**
+     * AI METODA
      * Zamedzí prístup neprihláseným používateľom
      * Používa sa pri add / edit / delete
      */
@@ -56,7 +57,7 @@ class PostController extends BaseController
     }
 
     /**
-     * Zobrazenie formulára na úpravu príspevku
+     *  AI metoda  - Zobrazenie formulára na úpravu príspevku
      */
     public function edit(Request $request): Response
     {
@@ -148,7 +149,7 @@ class PostController extends BaseController
 
         // Validácia formulára
         $errors = $this->validateForm($title, $content, $categoryId, $file);
-
+        //AI Osetrenie ked je chyba
         if (!empty($errors)) {
             return $this->html([
                 'post' => [
@@ -174,7 +175,7 @@ class PostController extends BaseController
             $post->setUserId($this->getCurrentUserId());
         }
 
-        // Upload obrázka (ak existuje)
+        // AI - Upload obrázka (ak existuje)
         if ($file && $file->isOk() && $file->getSize() > 0) {
             $dir = dirname(__DIR__, 3) . '/html/public/uploads/';
             $name = 'img_' . uniqid() . '.' . pathinfo($file->getName(), PATHINFO_EXTENSION);
@@ -217,7 +218,7 @@ class PostController extends BaseController
             return $this->redirect($this->url('home.forum'));
         }
 
-        // Odstránenie obrázka zo servera
+        // AI Odstránenie obrázka zo servera
         if ($post->getPicture()) {
             @unlink(dirname(__DIR__, 3) . '/public/' . ltrim($post->getPicture(), '/'));
         }

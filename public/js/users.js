@@ -1,4 +1,4 @@
-// Minimal users list JS: handles delete confirmation and AJAX delete
+// AI copilot funkcia
 document.addEventListener('click', function (e) {
     const btn = e.target.closest('.delete-user');
     if (!btn) return;
